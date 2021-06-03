@@ -215,12 +215,12 @@ void CANFD_SendMessage(CANFD_FD_MSG_T *psTxMsg, E_CANFD_ID_TYPE eIdType, uint32_
     else
         printf("Send to transmit message 0x%08x (29-bit)\n", psTxMsg->u32Id);
 
-    printf("Data Message(%02d bytes) : ", psTxMsg->u32DLC);
+    printf("Data Message(%02u bytes) : ", psTxMsg->u32DLC);
 
     for (u8Cnt = 0; u8Cnt < psTxMsg->u32DLC; u8Cnt++)
     {
         psTxMsg->au8Data[u8Cnt] = u8Cnt;
-        printf("%02d,", psTxMsg->au8Data[u8Cnt]);
+        printf("%02u,", psTxMsg->au8Data[u8Cnt]);
     }
 
     printf("\n");
@@ -265,11 +265,11 @@ void CANFD_ShowRecvMessage(void)
     else
         printf("Rx FIFO1(Extended ID) ID = 0x%08X\n", g_sRxMsgFrame.u32Id);
 
-    printf("Message Data(%02d bytes) : ", g_sRxMsgFrame.u32DLC);
+    printf("Message Data(%02u bytes) : ", g_sRxMsgFrame.u32DLC);
 
     for (u8Cnt = 0; u8Cnt <  g_sRxMsgFrame.u32DLC; u8Cnt++)
     {
-        printf("%02d ,", g_sRxMsgFrame.au8Data[u8Cnt]);
+        printf("%02u ,", g_sRxMsgFrame.au8Data[u8Cnt]);
     }
 
     printf("\n\n");

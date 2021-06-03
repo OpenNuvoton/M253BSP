@@ -192,7 +192,7 @@ int32_t main(void)
     /* Init UART4 for printf */
     UART4_Init();
 
-    printf("\n\nCPU @ %dHz\n", SystemCoreClock);
+    printf("\n\nCPU @ %u Hz\n", SystemCoreClock);
     printf("+---------------------------------------+\n");
     printf("|         Power Mode Sample Code        |\n");
     printf("+---------------------------------------+\n");

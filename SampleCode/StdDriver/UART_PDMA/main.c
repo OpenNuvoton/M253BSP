@@ -292,11 +292,13 @@ void UART_PDMATest(void)
  */
 void UART1_IRQHandler(void)
 {
-    uint32_t u32Data;
+
     uint32_t u32IntSts = UART1->INTSTS;
 
     if (u32IntSts & UART_INTSTS_HWRLSIF_Msk)
     {
+        uint32_t u32Data;
+
         if (UART1->FIFOSTS & UART_FIFOSTS_BIF_Msk)
             printf("\n BIF \n");
 

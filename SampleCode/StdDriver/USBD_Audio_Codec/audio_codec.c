@@ -350,7 +350,7 @@ void NAU88L25_ConfigSampleRate(uint32_t u32SampleRate)
 
     s_u32OldSampleRate = u32SampleRate;
 
-    printf("[NAU88L25] Configure Sampling Rate to %d\n", u32SampleRate);
+    printf("[NAU88L25] Configure Sampling Rate to %u\n", u32SampleRate);
 
     I2C_WriteNAU88L25(0x0003,  0x8053);
     I2C_WriteNAU88L25(0x0004,  0x0001);
@@ -397,7 +397,7 @@ void NAU88L25_ConfigSampleRate(uint32_t u32SampleRate)
             break;
 
         default:
-            printf("do not support %d sampling rate\n", u32SampleRate);
+            printf("do not support %u sampling rate\n", u32SampleRate);
     }
 }
 

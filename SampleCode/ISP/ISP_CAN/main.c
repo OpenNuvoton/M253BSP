@@ -144,7 +144,6 @@ void CAN_Init(void)
 /*---------------------------------------------------------------------------------------------------------*/
 int main(void)
 {
-    uint32_t  Address, Data;
 
     /* Unlock protected registers */
     SYS_UnlockReg();

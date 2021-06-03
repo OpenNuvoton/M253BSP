@@ -156,7 +156,7 @@ int main(void)
     for (u32Idx = 0; u32Idx < 256; u32Idx++)
     {
         if (au8TxBuf[u32Idx] != au8RDataBuf[u32Idx])
-            printf("Data compare fail... R[%d] Data: 0x%X\n", u32Idx, au8RDataBuf[u32Idx]);
+            printf("Data compare fail... R[%u] Data: 0x%X\n", u32Idx, au8RDataBuf[u32Idx]);
     }
 
     printf("Multi bytes Read access Pass.....\n");

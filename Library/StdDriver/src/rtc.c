@@ -365,14 +365,14 @@ void RTC_GetAlarmDateAndTime(S_RTC_TIME_DATA_T *psPt)
   */
 void RTC_SetDateAndTime(S_RTC_TIME_DATA_T *psPt)
 {
-    uint32_t u32RegCAL, u32RegTIME;
-
     if (psPt == NULL)
     {
         /* No RTC date/time data */
     }
     else
     {
+        uint32_t u32RegCAL, u32RegTIME;
+
         /*-----------------------------------------------------------------------------------------------------*/
         /* Set RTC 24/12 hour setting and Day of the Week                                                      */
         /*-----------------------------------------------------------------------------------------------------*/
@@ -445,14 +445,14 @@ void RTC_SetDateAndTime(S_RTC_TIME_DATA_T *psPt)
   */
 void RTC_SetAlarmDateAndTime(S_RTC_TIME_DATA_T *psPt)
 {
-    uint32_t u32RegCALM, u32RegTALM;
-
     if (psPt == NULL)
     {
         /* No RTC date/time data */
     }
     else
     {
+        uint32_t u32RegCALM, u32RegTALM;
+
         /*-----------------------------------------------------------------------------------------------------*/
         /* Set RTC 24/12 hour setting and Day of the Week                                                      */
         /*-----------------------------------------------------------------------------------------------------*/

@@ -90,7 +90,6 @@ void UART4_IRQHandler(void)
 {
     uint32_t u32IntStatus;
     uint8_t bInChar;
-    int32_t size;
 
     u32IntStatus = UART4->INTSTS;
 
@@ -127,7 +126,7 @@ void UART4_IRQHandler(void)
         if (g_u16ComTbytes && (UART4->INTEN & UART_INTEN_THREIEN_Msk))
         {
             /* Fill the TX FIFO */
-            size = g_u16ComTbytes;
+            int32_t size = g_u16ComTbytes;
 
             if (size >= TX_FIFO_SIZE)
             {
@@ -136,11 +135,11 @@ void UART4_IRQHandler(void)
 
             while (size)
             {
-                bInChar = g_au8ComTbuf[g_u16ComThead++];
-                UART4->DAT = bInChar;
-
                 if (g_u16ComThead >= TXBUFSIZE)
                     g_u16ComThead = 0;
+
+                bInChar = g_au8ComTbuf[g_u16ComThead++];
+                UART4->DAT = bInChar;
 
                 g_u16ComTbytes--;
                 size--;
@@ -157,11 +156,13 @@ void UART4_IRQHandler(void)
 
 void VCOM_TransferData(void)
 {
-    int32_t i, i32Len;
+    int32_t i;
 
     /* Check wether USB is ready for next packet or not*/
     if (g_u32TxSize == 0)
     {
+        int32_t i32Len;
+
         /* Check wether we have new COM Rx data to send to USB or not */
         if (g_u16ComRbytes)
         {
@@ -172,10 +173,10 @@ void VCOM_TransferData(void)
 
             for (i = 0; i < i32Len; i++)
             {
-                g_au8RxBuf[i] = g_au8ComRbuf[g_u16ComRhead++];
-
                 if (g_u16ComRhead >= RXBUFSIZE)
                     g_u16ComRhead = 0;
+
+                g_au8RxBuf[i] = g_au8ComRbuf[g_u16ComRhead++];
             }
 
             __set_PRIMASK(1);
@@ -225,13 +226,13 @@ void VCOM_TransferData(void)
         /* Check if TX is working */
         if ((UART4->INTEN & UART_INTEN_THREIEN_Msk) == 0)
         {
-            /* Send one bytes out */
-            UART4->DAT = g_au8ComTbuf[g_u16ComThead++];
-
             if (g_u16ComThead >= TXBUFSIZE)
             {
                 g_u16ComThead = 0;
             }
+
+            /* Send one bytes out */
+            UART4->DAT = g_au8ComTbuf[g_u16ComThead++];
 
             g_u16ComTbytes--;
 

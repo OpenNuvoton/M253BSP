@@ -149,7 +149,7 @@ int main(void)
         if (u8Data != u8Tmp)
         {
             u8Err = 1;
-            printf("%03d: Single byte write data fail,  W(0x%X)/R(0x%X) \n", u32Idx, u8Tmp, u8Data);
+            printf("%03u: Single byte write data fail,  W(0x%X)/R(0x%X) \n", u32Idx, u8Tmp, u8Data);
         }
     }
 

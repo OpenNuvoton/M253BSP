@@ -700,8 +700,6 @@ void MSC_ReadFormatCapacity(void)
 
 void MSC_Read(void)
 {
-    uint32_t u32Len;
-
     if (USBD_GET_EP_BUF_ADDR(EP7) == g_u32BulkBuf1)
         USBD_SET_EP_BUF_ADDR(EP7, g_u32BulkBuf0);
     else
@@ -732,7 +730,7 @@ void MSC_Read(void)
         }
         else
         {
-            u32Len = g_u32Length;
+            uint32_t u32Len = g_u32Length;
 
             if (u32Len > STORAGE_BUFFER_SIZE)
                 u32Len = STORAGE_BUFFER_SIZE;
@@ -760,8 +758,6 @@ void MSC_Read(void)
 
 void MSC_ReadTrig(void)
 {
-    uint32_t u32Len;
-
     if (g_u32Length)
     {
         if (g_u32BytesInStorageBuf)
@@ -781,7 +777,7 @@ void MSC_ReadTrig(void)
         }
         else
         {
-            u32Len = g_u32Length;
+            uint32_t u32Len = g_u32Length;
 
             if (u32Len > STORAGE_BUFFER_SIZE)
                 u32Len = STORAGE_BUFFER_SIZE;
@@ -947,7 +943,6 @@ void MSC_ModeSense10(void)
 
 void MSC_Write(void)
 {
-    uint32_t lba, len;
 
     if (g_u32OutSkip == 0)
     {
@@ -991,10 +986,9 @@ void MSC_Write(void)
 
             if ((g_sCBW.u8OPCode == UFI_WRITE_10) || (g_sCBW.u8OPCode == UFI_WRITE_12))
             {
-                lba = get_be32(&g_sCBW.au8Data[0]);
-                len = g_sCBW.dCBWDataTransferLength;
+                uint32_t lba = get_be32(&g_sCBW.au8Data[0]);
 
-                len = lba * UDC_SECTOR_SIZE + g_sCBW.dCBWDataTransferLength - g_u32DataFlashStartAddr;
+                uint32_t len = lba * UDC_SECTOR_SIZE + g_sCBW.dCBWDataTransferLength - g_u32DataFlashStartAddr;
 
                 if (len)
                 {
@@ -1010,17 +1004,15 @@ void MSC_Write(void)
 
 void MSC_ProcessCmd(void)
 {
-    uint8_t u8Len;
-    int32_t i;
-    uint32_t Hcount, Dcount;
-
     if (g_u8EP6Ready)
     {
         g_u8EP6Ready = 0;
 
         if (g_u8BulkState == BULK_CBW)
         {
-            u8Len = USBD_GET_PAYLOAD_LEN(EP6);
+            uint32_t Hcount, Dcount;
+            int32_t i;
+            uint8_t u8Len = USBD_GET_PAYLOAD_LEN(EP6);
 
             if (u8Len > 31) u8Len = 31;
 
@@ -1540,8 +1532,6 @@ void MSC_ProcessCmd(void)
 void MSC_AckCmd(void)
 {
     /* Bulk IN */
-    int32_t volatile idx;
-
     if (g_u8BulkState == BULK_CSW)
     {
         /* Prepare to receive the CBW */
@@ -1680,10 +1670,6 @@ void MSC_AckCmd(void)
 void MSC_ReadMedia(uint32_t addr, uint32_t size, uint8_t *buffer)
 {
     DataFlashRead(addr, size, (uint32_t)buffer);
-}
-
-void MSC_WriteMedia(uint32_t addr, uint32_t size, uint8_t *buffer)
-{
 }
 
 void MSC_SetConfig(void)

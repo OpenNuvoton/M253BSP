@@ -1,7 +1,7 @@
 /**************************************************************************//**
  * @file     main.c
  * @version  V1.00
- * @brief    Transmit and receive CAN FD message through CAN interface.
+ * @brief    Transmit and receive CAN FD messages through CAN interface.
  *
  * SPDX-License-Identifier: Apache-2.0
  * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
@@ -126,10 +126,6 @@ void CANFD_TxRxTest(void)
 {
     uint8_t u8Item;
     uint8_t u8Cnt;
-    uint8_t u8ErrFlag = 0;
-    uint8_t u8TxTestNum = 0;
-    uint8_t u8RxTestNum = 0;
-    uint8_t u8RxTempLen = 0;
     CANFD_FD_MSG_T      sRxMsgFrame;
     CANFD_FD_MSG_T      sTxMsgFrame;
 
@@ -152,6 +148,8 @@ void CANFD_TxRxTest(void)
 
     if (u8Item == '0')
     {
+        uint8_t u8TxTestNum = 0;
+
         /* Send 6 messages with different ID and data size */
         for (u8TxTestNum = 0; u8TxTestNum < 6 ; u8TxTestNum++)
         {
@@ -193,7 +191,7 @@ void CANFD_TxRxTest(void)
             for (u8Cnt = 0; u8Cnt < sTxMsgFrame.u32DLC; u8Cnt++)
             {
                 sTxMsgFrame.au8Data[u8Cnt] = u8Cnt + u8TxTestNum;
-                printf("%02d,", sTxMsgFrame.au8Data[u8Cnt]);
+                printf("%02u,", sTxMsgFrame.au8Data[u8Cnt]);
             }
 
             printf("\n\n");
@@ -210,6 +208,10 @@ void CANFD_TxRxTest(void)
     }
     else
     {
+        uint8_t u8ErrFlag = 0;
+        uint8_t u8RxTestNum = 0;
+        uint8_t u8RxTempLen = 0;
+
         printf("Start to CAN FD Bus Receiver :\n");
 
         /* Receive  6 messages with different ID and data size */
@@ -223,7 +225,7 @@ void CANFD_TxRxTest(void)
 
                 for (u8Cnt = 0; u8Cnt < sRxMsgFrame.u32DLC; u8Cnt++)
                 {
-                    printf("%02d ,", sRxMsgFrame.au8Data[u8Cnt]);
+                    printf("%02u ,", sRxMsgFrame.au8Data[u8Cnt]);
 
                     if (sRxMsgFrame.au8Data[u8Cnt] != u8Cnt + u8RxTestNum)
                     {
@@ -267,7 +269,7 @@ void CANFD_TxRxTest(void)
 
                 for (u8Cnt = 0; u8Cnt < sRxMsgFrame.u32DLC; u8Cnt++)
                 {
-                    printf("%02d ,", sRxMsgFrame.au8Data[u8Cnt]);
+                    printf("%02u ,", sRxMsgFrame.au8Data[u8Cnt]);
 
                     if (sRxMsgFrame.au8Data[u8Cnt] != u8Cnt + u8RxTestNum)
                     {

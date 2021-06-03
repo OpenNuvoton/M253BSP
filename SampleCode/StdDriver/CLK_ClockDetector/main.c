@@ -137,7 +137,7 @@ int32_t main(void)
     /* Init Debug UART */
     UartDebugInit();
 
-    printf("\n\nCPU @ %d Hz\n", SystemCoreClock);
+    printf("\n\nCPU @ %u Hz\n", SystemCoreClock);
     printf("+-------------------------------------------------------------+\n");
     printf("|               Clock Detector Sample Code                    |\n");
     printf("+-------------------------------------------------------------+\n");

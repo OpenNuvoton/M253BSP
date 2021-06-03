@@ -360,12 +360,11 @@ void CLK_SetHCLK(uint32_t u32ClkSrc, uint32_t u32ClkDiv)
   */
 void CLK_SetModuleClock(uint32_t u32ModuleIdx, uint32_t u32ClkSrc, uint32_t u32ClkDiv)
 {
-    uint32_t u32Sel = 0UL, u32Div = 0UL;
-    uint32_t au32SelTbl[] = {0x0UL, 0x4UL, 0x8UL, 0xCUL};
-    uint32_t au32DivTbl[] = {0x0UL, 0x4UL, 0xCUL, 0x10UL};
-
     if (MODULE_CLKDIV_Msk(u32ModuleIdx) != MODULE_NoMsk)
     {
+        uint32_t u32Div;
+        const uint32_t au32DivTbl[] = {0x0UL, 0x4UL, 0xCUL, 0x10UL};
+
         /* Get clock divider control register address */
         u32Div = (uint32_t)&CLK->CLKDIV0 + (au32DivTbl[MODULE_CLKDIV(u32ModuleIdx)]);
         /* Apply new divider */
@@ -374,6 +373,9 @@ void CLK_SetModuleClock(uint32_t u32ModuleIdx, uint32_t u32ClkSrc, uint32_t u32C
 
     if (MODULE_CLKSEL_Msk(u32ModuleIdx) != MODULE_NoMsk)
     {
+        uint32_t u32Sel;
+        const uint32_t au32SelTbl[] = {0x0UL, 0x4UL, 0x8UL, 0xCUL};
+
         /* Get clock select control register address */
         u32Sel = (uint32_t)&CLK->CLKSEL0 + (au32SelTbl[MODULE_CLKSEL(u32ModuleIdx)]);
         /* Set new clock selection setting */
@@ -475,7 +477,7 @@ void CLK_DisableXtalRC(uint32_t u32ClkMask)
   */
 void CLK_EnableModuleClock(uint32_t u32ModuleIdx)
 {
-    uint32_t au32ClkTbl[3] = {0x0UL, 0x4UL, 0x8UL};
+    const uint32_t au32ClkTbl[3] = {0x0UL, 0x4UL, 0x8UL};
 
     *(volatile uint32_t *)((uint32_t)&CLK->AHBCLK + (au32ClkTbl[MODULE_APBCLK(u32ModuleIdx)]))  |= 1 << MODULE_IP_EN_Pos(u32ModuleIdx);
 }
@@ -518,7 +520,7 @@ void CLK_EnableModuleClock(uint32_t u32ModuleIdx)
   */
 void CLK_DisableModuleClock(uint32_t u32ModuleIdx)
 {
-    uint32_t au32ClkTbl[3] = {0x0UL, 0x4UL, 0x8UL};
+    const uint32_t au32ClkTbl[3] = {0x0UL, 0x4UL, 0x8UL};
 
     *(volatile uint32_t *)((uint32_t)&CLK->AHBCLK + (au32ClkTbl[MODULE_APBCLK(u32ModuleIdx)]))  &= ~(1 << MODULE_IP_EN_Pos(u32ModuleIdx));
 }
@@ -630,12 +632,14 @@ void CLK_SetPowerDownMode(uint32_t u32PDMode)
   */
 uint32_t CLK_GetModuleClockSource(uint32_t u32ModuleIdx)
 {
-    uint32_t u32TmpVal = 0UL, u32TmpAddr = 0UL;
-    uint32_t au32SelTbl[4] = {0x0UL, 0x4UL, 0x8UL, 0xCUL};
+    uint32_t u32TmpVal = 0UL;
 
     /* Get clock source selection setting */
     if (MODULE_CLKSEL_Msk(u32ModuleIdx) != MODULE_NoMsk)
     {
+        uint32_t u32TmpAddr;
+        const uint32_t au32SelTbl[4] = {0x0UL, 0x4UL, 0x8UL, 0xCUL};
+
         /* Get clock select control register address */
         u32TmpAddr = (uint32_t)&CLK->CLKSEL0 + (au32SelTbl[MODULE_CLKSEL(u32ModuleIdx)]);
 
@@ -661,11 +665,13 @@ uint32_t CLK_GetModuleClockSource(uint32_t u32ModuleIdx)
   */
 uint32_t CLK_GetModuleClockDivider(uint32_t u32ModuleIdx)
 {
-    uint32_t u32TmpVal = 0UL, u32TmpAddr = 0UL;
-    uint32_t au32DivTbl[4] = {0x0UL, 0x4UL, 0x8UL, 0x10UL};
+    uint32_t u32TmpVal = 0UL;
 
     if (MODULE_CLKDIV_Msk(u32ModuleIdx) != MODULE_NoMsk)
     {
+        uint32_t u32TmpAddr;
+        const uint32_t au32DivTbl[4] = {0x0UL, 0x4UL, 0x8UL, 0x10UL};
+
         /* Get clock divider control register address */
         u32TmpAddr = (uint32_t)&CLK->CLKDIV0 + (au32DivTbl[MODULE_CLKDIV(u32ModuleIdx)]);
         /* Get clock divider number setting */

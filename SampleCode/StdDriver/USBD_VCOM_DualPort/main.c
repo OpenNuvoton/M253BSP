@@ -152,7 +152,6 @@ void UART4_IRQHandler(void)
 {
     uint32_t u32IntStatus;
     uint8_t bInChar;
-    int32_t size;
 
     u32IntStatus = UART4->INTSTS;
 
@@ -190,7 +189,7 @@ void UART4_IRQHandler(void)
         if (g_u16ComTbytes0 && (UART4->INTEN & UART_INTEN_THREIEN_Msk))
         {
             /* Fill the Tx FIFO */
-            size = g_u16ComTbytes0;
+            int32_t size = g_u16ComTbytes0;
 
             if (size >= TX_FIFO_SIZE_0)
             {
@@ -199,11 +198,11 @@ void UART4_IRQHandler(void)
 
             while (size)
             {
-                bInChar = g_au8ComTbuf0[g_u16ComThead0++];
-                UART4->DAT = bInChar;
-
                 if (g_u16ComThead0 >= TXBUFSIZE)
                     g_u16ComThead0 = 0;
+
+                bInChar = g_au8ComTbuf0[g_u16ComThead0++];
+                UART4->DAT = bInChar;
 
                 g_u16ComTbytes0--;
                 size--;
@@ -222,7 +221,6 @@ void UART1_IRQHandler(void)
 {
     uint32_t u32IntStatus;
     uint8_t bInChar;
-    int32_t size;
 
     u32IntStatus = UART1->INTSTS;
 
@@ -260,7 +258,7 @@ void UART1_IRQHandler(void)
         if (g_u16ComTbytes1 && (UART1->INTEN & UART_INTEN_THREIEN_Msk))
         {
             /* Fill the Tx FIFO */
-            size = g_u16ComTbytes1;
+            int32_t size = g_u16ComTbytes1;
 
             if (size >= TX_FIFO_SIZE_1)
             {
@@ -269,11 +267,11 @@ void UART1_IRQHandler(void)
 
             while (size)
             {
-                bInChar = g_au8ComTbuf1[g_u16ComThead1++];
-                UART1->DAT = bInChar;
-
                 if (g_u16ComThead1 >= TXBUFSIZE)
                     g_u16ComThead1 = 0;
+
+                bInChar = g_au8ComTbuf1[g_u16ComThead1++];
+                UART1->DAT = bInChar;
 
                 g_u16ComTbytes1--;
                 size--;
@@ -305,10 +303,10 @@ void VCOM_TransferData(void)
 
             for (i = 0; i < i32Len; i++)
             {
-                g_au8RxBuf0[i] = g_au8ComRbuf0[g_u16ComRhead0++];
-
                 if (g_u16ComRhead0 >= RXBUFSIZE)
                     g_u16ComRhead0 = 0;
+
+                g_au8RxBuf0[i] = g_au8ComRbuf0[g_u16ComRhead0++];
             }
 
             __set_PRIMASK(1);
@@ -342,10 +340,10 @@ void VCOM_TransferData(void)
 
             for (i = 0; i < i32Len; i++)
             {
-                g_au8RxBuf1[i] = g_au8ComRbuf1[g_u16ComRhead1++];
-
                 if (g_u16ComRhead1 >= RXBUFSIZE)
                     g_u16ComRhead1 = 0;
+
+                g_au8RxBuf1[i] = g_au8ComRbuf1[g_u16ComRhead1++];
             }
 
             __set_PRIMASK(1);
@@ -416,13 +414,13 @@ void VCOM_TransferData(void)
         /* Check if Tx is working */
         if ((UART4->INTEN & UART_INTEN_THREIEN_Msk) == 0)
         {
-            /* Send one bytes out */
-            UART4->DAT = g_au8ComTbuf0[g_u16ComThead0++];
-
             if (g_u16ComThead0 >= TXBUFSIZE)
             {
                 g_u16ComThead0 = 0;
             }
+
+            /* Send one bytes out */
+            UART4->DAT = g_au8ComTbuf0[g_u16ComThead0++];
 
             g_u16ComTbytes0--;
 
@@ -436,13 +434,13 @@ void VCOM_TransferData(void)
         /* Check if Tx is working */
         if ((UART1->INTEN & UART_INTEN_THREIEN_Msk) == 0)
         {
-            /* Send one bytes out */
-            UART1->DAT = g_au8ComTbuf1[g_u16ComThead1++];
-
             if (g_u16ComThead1 >= TXBUFSIZE)
             {
                 g_u16ComThead1 = 0;
             }
+
+            /* Send one bytes out */
+            UART1->DAT = g_au8ComTbuf1[g_u16ComThead1++];
 
             g_u16ComTbytes1--;
 

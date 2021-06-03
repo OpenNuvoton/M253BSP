@@ -99,7 +99,7 @@ int main(void)
     /* Init Debug UART */
     UartDebugInit();
 
-    printf("\n\nCPU @ %d Hz\n", SystemCoreClock);
+    printf("\n\nCPU @ %u Hz\n", SystemCoreClock);
     printf("+------------------------------------------------+\n");
     printf("|    WWDT Compare Match Interrupt Sample Code    |\n");
     printf("+------------------------------------------------+\n\n");
@@ -116,7 +116,7 @@ int main(void)
     dPeriodTime = (((double)(1000000 * 2048) / (double)SystemCoreClock) * 1024) * 32;
 
     printf("# WWDT Settings: \n");
-    printf("    - Clock source is PCLK0/2048 (%d Hz)    \n", SystemCoreClock / 2048);
+    printf("    - Clock source is PCLK0/2048 (%u Hz)    \n", SystemCoreClock / 2048);
     printf("    - WWDT counter prescale period is 1024, \n");
     printf("        and max WWDT time-out period is 1024 * (64 * WWDT_CLK)\n");
     printf("    - Interrupt enable                      \n");

@@ -289,7 +289,6 @@ void UI2C0_Init(uint32_t u32ClkSpeed)
 int32_t ReadWriteSlave(uint16_t u16SlvAddr)
 {
     uint32_t u32Idx;
-    uint8_t u8Temp;
 
     /* Init Send 10-bit Addr */
     g_u8DeviceHAddr = (u16SlvAddr >> 8) | SLV_10BIT_ADDR;
@@ -297,6 +296,8 @@ int32_t ReadWriteSlave(uint16_t u16SlvAddr)
 
     for (u32Idx = 0; u32Idx < 0x100; u32Idx++)
     {
+        uint8_t u8Temp;
+
         g_au8MstTxData[0] = (uint8_t)((u32Idx & 0xFF00) >> 8);
         g_au8MstTxData[1] = (uint8_t)(u32Idx & 0x00FF);
         g_au8MstTxData[2] = (uint8_t)(g_au8MstTxData[1] + 3);

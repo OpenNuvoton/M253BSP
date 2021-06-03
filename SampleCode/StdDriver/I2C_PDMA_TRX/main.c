@@ -217,11 +217,6 @@ void I2C_PDMA_SlaveTx(uint32_t u32Status)
     {
         I2C_SET_CONTROL_REG(I2C1, I2C_CTL_SI_AA);
     }
-    else if (u32Status == 0x88)                 /* Previously addressed with own SLA address; NOT ACK has
-                                                   been returned */
-    {
-        I2C_SET_CONTROL_REG(I2C1, I2C_CTL_SI_AA);
-    }
     else
     {
         /* TO DO */

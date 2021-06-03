@@ -188,7 +188,6 @@ void UART_IRQHandler(VCOM_CONTROL_BLOCK_t *tVCOM)
 {
     uint32_t u32IntStatus;
     uint8_t bInChar;
-    int32_t size;
 
     u32IntStatus = tVCOM->psPeripheralInfo->UART_BASE->INTSTS;
 
@@ -229,7 +228,7 @@ void UART_IRQHandler(VCOM_CONTROL_BLOCK_t *tVCOM)
             //to avoid race condition between main program and IRQ handler
         {
             /* Fill the Tx FIFO */
-            size = tVCOM->psCtrlVar->u16ComTbytes;
+            int32_t size = tVCOM->psCtrlVar->u16ComTbytes;
 
             if (size > tVCOM->psPeripheralInfo->u32TX_FIFO_SIZE)
             {

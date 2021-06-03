@@ -228,11 +228,11 @@ void CAN_ShowRecvMessage(void)
     else
         printf("Rx FIFO1(Extended ID) ID = 0x%08X\n", g_sRxMsgFrame.u32Id);
 
-    printf("Message Data(%02d bytes) : ", g_sRxMsgFrame.u32DLC);
+    printf("Message Data(%02u bytes) : ", g_sRxMsgFrame.u32DLC);
 
     for (u8Cnt = 0; u8Cnt <  g_sRxMsgFrame.u32DLC; u8Cnt++)
     {
-        printf("%02d ,", g_sRxMsgFrame.au8Data[u8Cnt]);
+        printf("%02u ,", g_sRxMsgFrame.au8Data[u8Cnt]);
     }
 
     printf("\n\n");

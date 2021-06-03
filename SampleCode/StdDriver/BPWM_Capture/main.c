@@ -1,7 +1,7 @@
 /**************************************************************************//**
  * @file     main.c
  * @version  V0.10
- * @brief    Use BPWM0 Channel 0(PA.0) to capture the PWM0 Channel 0(PB.5) Waveform.
+ * @brief    Use BPWM0 Channel 0(PA.0) to capture the Timer0 (PB.5) waveform.
  *
  * SPDX-License-Identifier: Apache-2.0
  * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
@@ -58,9 +58,7 @@ void CalPeriodTime(BPWM_T *BPWM, uint32_t u32Ch)
     /* Clear Capture Falling Indicator (Time B)*/
     BPWM_ClearCaptureIntFlag(BPWM, u32Ch, BPWM_CAPTURE_INT_FALLING_LATCH);
 
-    u32i = 0;
-
-    while (u32i < 4)
+    for (u32i = 0 ; u32i < 4 ;)
     {
         /* Wait for Capture Falling Indicator */
         while (BPWM_GetCaptureIntFlag(BPWM, u32Ch) < 2);
@@ -103,7 +101,6 @@ void CalPeriodTime(BPWM_T *BPWM, uint32_t u32Ch)
 
 void SYS_Init(void)
 {
-    outpw(0x4000C04C, 0x103);
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init System Clock                                                                                       */
     /*---------------------------------------------------------------------------------------------------------*/
@@ -201,12 +198,6 @@ int32_t main(void)
         /* set BPWM0 channel 0 capture configuration */
         BPWM_ConfigCaptureChannel(BPWM0, 0, 80, 0);
 
-        /* Enable capture falling edge interrupt for BPWM0 channel 0 */
-        //BPWM_EnableCaptureInt(BPWM0, 0, BPWM_CAPTURE_INT_FALLING_LATCH);
-
-        /* Enable BPWM0 NVIC interrupt */
-        //NVIC_EnableIRQ(BPWM0_IRQn);
-
         /* Enable Timer for BPWM0 channel 0 */
         BPWM_Start(BPWM0, BPWM_CH_0_MASK);
 
@@ -234,9 +225,6 @@ int32_t main(void)
         /* Stop BPWM0 channel 0 (Recommended procedure method 1)                                                    */
         /* Set BPWM Timer loaded value(Period) as 0. When BPWM internal counter(CNT) reaches to 0, disable BPWM Timer */
         /*---------------------------------------------------------------------------------------------------------*/
-
-        /* Disable BPWM0 NVIC */
-        //NVIC_DisableIRQ(BPWM0_IRQn);
 
         /* Set loaded value as 0 for BPWM0 channel 0 */
         BPWM_Stop(BPWM0, BPWM_CH_0_MASK);

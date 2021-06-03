@@ -337,10 +337,7 @@ void HID_ClassRequest(void)
 
 void HID_UpdateMouseData(void)
 {
-    uint8_t *pu8Buf;
     uint32_t u32Reg;
-    static int32_t i32x = 0, i32y = 0;
-    uint32_t u32MouseKey;
 
     /*
        Key definition:
@@ -356,7 +353,9 @@ void HID_UpdateMouseData(void)
 
     if (g_u8EP2Ready)
     {
-        pu8Buf = (uint8_t *)(USBD_BUF_BASE + USBD_GET_EP_BUF_ADDR(EP2));
+        uint32_t u32MouseKey;
+        static int32_t i32x = 0, i32y = 0;
+        uint8_t *pu8Buf = (uint8_t *)(USBD_BUF_BASE + USBD_GET_EP_BUF_ADDR(EP2));
 
         /* To control Y axis */
         if ((u32Reg & 1) == 0)
@@ -393,8 +392,8 @@ void HID_UpdateMouseData(void)
 
         /* Update new report data */
         pu8Buf[0] = u32MouseKey;
-        pu8Buf[1] = i32x >> 2;
-        pu8Buf[2] = i32y >> 2;
+        pu8Buf[1] = (uint8_t)i32x >> 2;
+        pu8Buf[2] = (uint8_t)i32y >> 2;
         pu8Buf[3] = 0x00;
 
         g_u8EP2Ready = 0;

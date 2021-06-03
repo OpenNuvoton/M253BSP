@@ -235,7 +235,6 @@ static void CANFD_CalculateRamAddress(CANFD_RAM_PART_T *psConfigAddr, CANFD_ELEM
     if (psConfigSize->u32TxEventFifo > 0)
     {
         psConfigAddr->u32TXEFC_EFSA = u32RamAddrOffset;
-        u32RamAddrOffset += psConfigSize->u32TxEventFifo *  sizeof(CANFD_EXT_FILTER_T);
     }
 }
 
@@ -366,7 +365,7 @@ static uint8_t CANFD_DecodeDLC(uint8_t u8Dlc)
  */
 static void CANFD_SetTimingConfig(CANFD_T *psCanfd, const CANFD_TIMEING_CONFIG_T *psConfig)
 {
-    uint32_t *pu32DBTP;
+    uint32_t *pu32DBTP = NULL;
 
     /* configuration change enable */
     psCanfd->CCCR |= CANFD_CCCR_CCE_Msk;
@@ -461,6 +460,7 @@ static void CANFD_GetSegments(uint32_t u32NominalBaudRate, uint32_t u32DataBaudR
 /**
  * @brief       Calculates the CAN controller timing values for specific baudrates.
  *
+ * @param[in]   psCanfd             Pointer to CAN FD configuration structure.
  * @param[in]   u32NominalBaudRate  The nominal speed in bps.
  * @param[in]   u32DataBaudRate     The data speed in bps. Zero to disable baudrate switching.
  * @param[in]   u32SourceClock_Hz   CAN FD Protocol Engine clock source frequency in Hz.
@@ -470,9 +470,9 @@ static void CANFD_GetSegments(uint32_t u32NominalBaudRate, uint32_t u32DataBaudR
  *
  * @details     Calculates the CAN controller timing values for specific baudrates.
  */
-static uint32_t CANFD_CalculateTimingValues(uint32_t u32NominalBaudRate, uint32_t u32DataBaudRate, uint32_t u32SourceClock_Hz, CANFD_TIMEING_CONFIG_T *psConfig)
+static uint32_t CANFD_CalculateTimingValues(CANFD_T *psCanfd, uint32_t u32NominalBaudRate, uint32_t u32DataBaudRate, uint32_t u32SourceClock_Hz, CANFD_TIMEING_CONFIG_T *psConfig)
 {
-    int i32Nclk;
+
     int i32Nclk2;
     int i32Ntq;
     int i32Dclk;
@@ -484,7 +484,7 @@ static uint32_t CANFD_CalculateTimingValues(uint32_t u32NominalBaudRate, uint32_
 
     for (i32Ntq = MAX_TIME_QUANTA; i32Ntq >= MIN_TIME_QUANTA; i32Ntq--)
     {
-        i32Nclk = u32NominalBaudRate * i32Ntq;
+        int i32Nclk = u32NominalBaudRate * i32Ntq;
 
         for (psConfig->u16NominalPrescaler = 0x001; psConfig->u16NominalPrescaler <= 0x400; (psConfig->u16NominalPrescaler)++)
         {
@@ -494,48 +494,51 @@ static uint32_t CANFD_CalculateTimingValues(uint32_t u32NominalBaudRate, uint32_
             {
                 psConfig->u8PreDivider = u32SourceClock_Hz / i32Nclk2;
 
-
-                /* if not using baudrate switch then we are done */
-                if (!u32DataBaudRate)
+                /*FD Operation enabled*/
+                if (psCanfd->CCCR & CANFD_CCCR_FDOE_Msk)
                 {
-                    i32Dtq = 0;
-                    psConfig->u8DataPrescaler = 0;
-                    CANFD_GetSegments(u32NominalBaudRate, u32DataBaudRate, i32Ntq, i32Dtq, psConfig);
-                    return TRUE;
-                }
-
-                /* if baudrates are the same and the solution for nominal will work for
-                data, then use the nominal settings for both */
-                if ((u32DataBaudRate == u32NominalBaudRate) && psConfig->u16NominalPrescaler <= 0x20)
-                {
-                    i32Dtq = i32Ntq;
-                    psConfig->u8DataPrescaler = (uint8_t)psConfig->u16NominalPrescaler;
-                    CANFD_GetSegments(u32NominalBaudRate, u32DataBaudRate, i32Ntq, i32Dtq, psConfig);
-                    return TRUE;
-                }
-
-                /* calculate data settings */
-                for (i32Dtq = MAX_TIME_QUANTA; i32Dtq >= MIN_TIME_QUANTA; i32Dtq--)
-                {
-                    i32Dclk = u32DataBaudRate * i32Dtq;
-
-                    for (psConfig->u8DataPrescaler = 0x01; psConfig->u8DataPrescaler <= 0x20; (psConfig->u8DataPrescaler)++)
+                    /* if not using baudrate switch then we are done */
+                    if (!u32DataBaudRate)
                     {
-                        i32Dclk2 = i32Dclk * psConfig->u8DataPrescaler;
+                        i32Dtq = 0;
+                        psConfig->u8DataPrescaler = 0;
+                        CANFD_GetSegments(u32NominalBaudRate, u32DataBaudRate, i32Ntq, i32Dtq, psConfig);
+                        return TRUE;
+                    }
 
-                        if ((float)(u32SourceClock_Hz) / i32Dclk2 == psConfig->u8PreDivider)
+                    /* if baudrates are the same and the solution for nominal will work for
+                    data, then use the nominal settings for both */
+                    if ((u32DataBaudRate == u32NominalBaudRate) && psConfig->u16NominalPrescaler <= 0x20)
+                    {
+                        i32Dtq = i32Ntq;
+                        psConfig->u8DataPrescaler = (uint8_t)psConfig->u16NominalPrescaler;
+                        CANFD_GetSegments(u32NominalBaudRate, u32DataBaudRate, i32Ntq, i32Dtq, psConfig);
+                        return TRUE;
+                    }
+
+                    /* calculate data settings */
+                    for (i32Dtq = MAX_TIME_QUANTA; i32Dtq >= MIN_TIME_QUANTA; i32Dtq--)
+                    {
+                        i32Dclk = u32DataBaudRate * i32Dtq;
+
+                        for (psConfig->u8DataPrescaler = 0x01; psConfig->u8DataPrescaler <= 0x20; (psConfig->u8DataPrescaler)++)
                         {
-                            CANFD_GetSegments(u32NominalBaudRate, u32DataBaudRate, i32Ntq, i32Dtq, psConfig);
-                            return TRUE;
+                            i32Dclk2 = i32Dclk * psConfig->u8DataPrescaler;
+
+                            if ((float)(u32SourceClock_Hz) / i32Dclk2 == psConfig->u8PreDivider)
+                            {
+                                CANFD_GetSegments(u32NominalBaudRate, u32DataBaudRate, i32Ntq, i32Dtq, psConfig);
+                                return TRUE;
+                            }
                         }
                     }
                 }
-
-                if (u32DataBaudRate == 0)
+                else
                 {
                     CANFD_GetSegments(u32NominalBaudRate, 0, i32Ntq, 0, psConfig);
                     return TRUE;
                 }
+
             }
         }
     }
@@ -586,7 +589,7 @@ void CANFD_Open(CANFD_T *psCanfd, CANFD_FD_T *psCanfdStr)
     psCanfd->RXF1C = 0;
 
     /* calculate and apply timing */
-    if (CANFD_CalculateTimingValues(psCanfdStr->sBtConfig.sNormBitRate.u32BitRate, psCanfdStr->sBtConfig.sDataBitRate.u32BitRate,
+    if (CANFD_CalculateTimingValues(psCanfd, psCanfdStr->sBtConfig.sNormBitRate.u32BitRate, psCanfdStr->sBtConfig.sDataBitRate.u32BitRate,
                                     SystemCoreClock, &psCanfdStr->sBtConfig.sConfigBitTing))
     {
         CANFD_SetTimingConfig(psCanfd, &psCanfdStr->sBtConfig.sConfigBitTing);
@@ -916,7 +919,6 @@ uint32_t CANFD_TransmitDMsg(CANFD_T *psCanfd, uint32_t u32TxBufIdx, CANFD_FD_MSG
  */
 void CANFD_SetGFC(CANFD_T *psCanfd, E_CANFD_ACC_NON_MATCH_FRM eNMStdFrm, E_CANFD_ACC_NON_MATCH_FRM eEMExtFrm, uint32_t u32RejRmtStdFrm, uint32_t u32RejRmtExtFrm)
 {
-    psCanfd->GFC &= (CANFD_GFC_RRFS_Msk | CANFD_GFC_RRFE_Msk);
     psCanfd->GFC = (eNMStdFrm << CANFD_GFC_ANFS_Pos) | (eEMExtFrm << CANFD_GFC_ANFE_Pos)
                    | (u32RejRmtStdFrm << CANFD_GFC_RRFS_Pos) | (u32RejRmtExtFrm << CANFD_GFC_RRFE_Pos);
 }
@@ -1213,12 +1215,14 @@ void CANFD_SetXIDFltr(CANFD_T *psCanfd, uint32_t u32FltrIdx, uint32_t u32FilterL
 */
 uint32_t CANFD_ReadRxBufMsg(CANFD_T *psCanfd, uint8_t u8MbIdx, CANFD_FD_MSG_T *psMsgBuf)
 {
-    CANFD_BUF_T *psRxBuffer;
+    CANFD_BUF_T *psRxBuffer = NULL;
     uint32_t u32Success = 0;
-    uint32_t newData = 0;
+
 
     if (u8MbIdx < CANFD_MAX_RX_BUF_ELEMS)
     {
+        uint32_t newData = 0;
+
         if (u8MbIdx < 32)
             newData = (psCanfd->NDAT1 >> u8MbIdx) & 1;
         else
@@ -1262,16 +1266,18 @@ uint32_t CANFD_ReadRxBufMsg(CANFD_T *psCanfd, uint8_t u8MbIdx, CANFD_FD_MSG_T *p
  */
 uint32_t CANFD_ReadRxFifoMsg(CANFD_T *psCanfd, uint8_t u8FifoIdx, CANFD_FD_MSG_T *psMsgBuf)
 {
-    CANFD_BUF_T *pRxBuffer;
-    uint8_t GetIndex;
+    CANFD_BUF_T *pRxBuffer = NULL;
+
     uint32_t u32Success = 0;
     __I  uint32_t *pRXFS;
     __IO uint32_t *pRXFC, *pRXFA;
-    uint8_t msgLostBit;
+
 
     /* check for valid FIFO number */
     if (u8FifoIdx < CANFD_NUM_RX_FIFOS)
     {
+        uint8_t msgLostBit;
+
         if (u8FifoIdx == 0)
         {
             pRXFS = &(psCanfd->RXF0S);
@@ -1290,6 +1296,8 @@ uint32_t CANFD_ReadRxFifoMsg(CANFD_T *psCanfd, uint8_t u8FifoIdx, CANFD_FD_MSG_T
         /* if FIFO is not empty */
         if ((*pRXFS & 0x7F) > 0)
         {
+            uint8_t GetIndex;
+
             GetIndex = (uint8_t)((*pRXFS >> 8) & 0x3F);
             pRxBuffer = (CANFD_BUF_T *)(CANFD_SRAM_BASE_ADDR + (*pRXFC & 0xFFFF) + (GetIndex * sizeof(CANFD_BUF_T)));
             CANFD_CopyRxFifoToMsgBuf(pRxBuffer, psMsgBuf);

@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include "NuMicro.h"
 
-#define IS_USE_RS485NMM   0   //1:Select NMM_Mode , 0:Select AAD_Mode
+#define IS_USE_RS485NMM   1   //1:Select NMM_Mode , 0:Select AAD_Mode
 #define MATCH_ADDRSS1     0xC0
 #define MATCH_ADDRSS2     0xA2
 #define UNMATCH_ADDRSS1   0xB1
@@ -173,7 +173,7 @@ void RS485_HANDLE(void)
     {
         /* Handle received data */
         while (!UART_GET_RX_EMPTY(UART1))
-            printf("%2d,", UART1->DAT);
+            printf("%2u,", UART1->DAT);
 
     }
     else if (u32IntSts & UART_INTSTS_BUFERRINT_Msk)     /* Buffer Error INT */
@@ -204,7 +204,6 @@ void RS485_SendDataByte(uint8_t *pu8TxBuf, uint32_t u32WriteBytes)
 void RS485_9bitModeMaster(void)
 {
     int32_t i32LenCnt;
-    uint32_t u32Delay;
     uint8_t au8SendDataGroup1[10] = {0};
     uint8_t au8SendDataGroup2[10] = {0};
     uint8_t au8SendDataGroup3[10] = {0};
@@ -225,6 +224,8 @@ void RS485_9bitModeMaster(void)
     UART_SelectRS485Mode(UART1, UART_ALTCTL_RS485AUD_Msk, 0);
 
     UART1->MODEM &= ~UART_MODEM_RTSACTLV_Msk;
+    /*Set the TX Delay Time */
+    UART1->TOUT |= (0x20 << UART_TOUT_DLY_Pos);
 
     /* Prepare Data to transmit*/
     for (i32LenCnt = 0; i32LenCnt < 10; i32LenCnt++)
@@ -239,21 +240,12 @@ void RS485_9bitModeMaster(void)
     printf("Send Address %x and data 0~9\n", MATCH_ADDRSS1);
     RS485_SendAddressByte(MATCH_ADDRSS1);
     RS485_SendDataByte(au8SendDataGroup1, 10);
-
-    for (u32Delay = 0 ; u32Delay < 100000; u32Delay++) {}
-
     printf("Send Address %x and data 10~19\n", UNMATCH_ADDRSS1);
     RS485_SendAddressByte(UNMATCH_ADDRSS1);
     RS485_SendDataByte(au8SendDataGroup2, 10);
-
-    for (u32Delay = 0 ; u32Delay < 100000; u32Delay++) {}
-
     printf("Send Address %x and data 20~29\n", MATCH_ADDRSS2);
     RS485_SendAddressByte(MATCH_ADDRSS2);
     RS485_SendDataByte(au8SendDataGroup3, 10);
-
-    for (u32Delay = 0 ; u32Delay < 100000; u32Delay++) {}
-
     printf("Send Address %x and data 30~39\n", UNMATCH_ADDRSS2);
     RS485_SendAddressByte(UNMATCH_ADDRSS2);
     RS485_SendDataByte(au8SendDataGroup4, 10);

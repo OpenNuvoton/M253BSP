@@ -1,7 +1,7 @@
 /**************************************************************************//**
  * @file     main.c
  * @version  V1.00
- * @brief    Transmit and receive CAN message through CAN interface.
+ * @brief    Transmit and receive CAN messages through CAN interface.
  *
  * SPDX-License-Identifier: Apache-2.0
  * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
@@ -123,10 +123,6 @@ void CAN_TxRxTest(void)
 {
     uint8_t u8Item;
     uint8_t u8Cnt;
-    uint8_t u8ErrFlag = 0;
-    uint8_t u8TxTestNum = 0;
-    uint8_t u8RxTestNum = 0;
-    uint8_t u8RxTempLen = 0;
     CANFD_FD_MSG_T      sRxFrame;
     CANFD_FD_MSG_T      sTxMsgFrame;
 
@@ -148,6 +144,8 @@ void CAN_TxRxTest(void)
 
     if (u8Item == '0')
     {
+        uint8_t u8TxTestNum = 0;
+
         /* Send 6 messages with different ID and data size */
         for (u8TxTestNum = 0; u8TxTestNum < 6 ; u8TxTestNum++)
         {
@@ -195,6 +193,10 @@ void CAN_TxRxTest(void)
     }
     else
     {
+        uint8_t u8ErrFlag = 0;
+        uint8_t u8RxTestNum = 0;
+        uint8_t u8RxTempLen = 0;
+
         printf("Start to CAN Bus Receiver :\n");
 
         /* Receive  6 messages with different ID and data size */
@@ -209,7 +211,7 @@ void CAN_TxRxTest(void)
 
                 for (u8Cnt = 0; u8Cnt < sRxFrame.u32DLC; u8Cnt++)
                 {
-                    printf("%02d ,", sRxFrame.au8Data[u8Cnt]);
+                    printf("%02u ,", sRxFrame.au8Data[u8Cnt]);
 
                     if (sRxFrame.au8Data[u8Cnt] != u8Cnt + u8RxTestNum)
                     {
@@ -253,7 +255,7 @@ void CAN_TxRxTest(void)
 
                 for (u8Cnt = 0; u8Cnt < sRxFrame.u32DLC; u8Cnt++)
                 {
-                    printf("%02d ,", sRxFrame.au8Data[u8Cnt]);
+                    printf("%02u ,", sRxFrame.au8Data[u8Cnt]);
 
                     if (sRxFrame.au8Data[u8Cnt] != u8Cnt + u8RxTestNum)
                     {

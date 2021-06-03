@@ -321,7 +321,7 @@ void UI2C0_Init(uint32_t u32ClkSpeed)
 /*---------------------------------------------------------------------------------------------------------*/
 int main(void)
 {
-    uint32_t u32Idx, u32TmpSts;
+    uint32_t u32Idx;
     uint8_t u8Ch;
 
     /* Unlock protected registers */
@@ -405,6 +405,8 @@ int main(void)
     /* Clear flag before enter power-down mode */
     if (UI2C0->PROTSTS != 0)
     {
+        uint32_t u32TmpSts;
+
         u32TmpSts = UI2C0->PROTSTS;
         UI2C0->PROTSTS = u32TmpSts;
     }

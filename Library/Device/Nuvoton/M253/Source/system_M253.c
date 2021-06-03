@@ -129,7 +129,7 @@ void AssertError(uint8_t *file, uint32_t line)
 #endif
 void UartDebugMFP(void)
 {
-#if !defined(DEBUG_ENABLE_SEMIHOST) || !defined(OS_USE_SEMIHOSTING)
+#if !defined(DEBUG_ENABLE_SEMIHOST) && !defined(OS_USE_SEMIHOSTING)
 
     /* Set GPA multi-function pins for UART RXD and TXD */
     SYS->GPA_MFPL = (SYS->GPA_MFPL & ~SYS_GPA_MFPL_PA2MFP_Msk) | SYS_GPA_MFPL_PA2MFP_UART4_RXD;

@@ -138,7 +138,7 @@ void CANFD_CANFD_TxRx_Test(CANFD_FD_MSG_T *psTxMsg, E_CANFD_ID_TYPE eFrameIdType
 
     for (u8Cnt = 0; u8Cnt <  g_sRxMsgFrame.u32DLC; u8Cnt++)
     {
-        printf("%02d ,", g_sRxMsgFrame.au8Data[u8Cnt]);
+        printf("%02u ,", g_sRxMsgFrame.au8Data[u8Cnt]);
     }
 
     printf("\n\n");

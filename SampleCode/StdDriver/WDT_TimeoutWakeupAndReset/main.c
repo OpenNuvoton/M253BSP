@@ -98,7 +98,7 @@ int main(void)
     /* Init Debug UART */
     UartDebugInit();
 
-    printf("\n\nCPU @ %d Hz\n", SystemCoreClock);
+    printf("\n\nCPU @ %u Hz\n", SystemCoreClock);
     printf("+----------------------------------------+\n");
     printf("|    WDT Time-out Wake-up Sample Code    |\n");
     printf("+----------------------------------------+\n\n");
@@ -162,6 +162,6 @@ int main(void)
         g_u8IsWDTWakeupINT = 0;
         PB0 ^= 1;
 
-        printf("System has been waken up done. WDT interrupt counts: %d.\n\n", g_u32WDTINTCounts);
+        printf("System has been waken up done. WDT interrupt counts: %u.\n\n", g_u32WDTINTCounts);
     }
 }
