@@ -175,6 +175,9 @@ void SYS_Init(void)
     /* Enable peripheral clock */
     CLK_EnableModuleClock(USCI0_MODULE);
 
+    /* Enable GPIO clock */
+    CLK_EnableModuleClock(GPB_MODULE);
+
     /* Debug UART clock setting */
     UartDebugCLK();
 
@@ -192,6 +195,9 @@ void SYS_Init(void)
     /* Set UI2C0 multi-function pins */
     SYS->GPB_MFPH = (SYS->GPB_MFPH & ~(SYS_GPB_MFPH_PB12MFP_Msk | SYS_GPB_MFPH_PB13MFP_Msk)) |
                     (SYS_GPB_MFPH_PB12MFP_USCI0_CLK | SYS_GPB_MFPH_PB13MFP_USCI0_DAT0);
+
+    /* I2C pins enable schmitt trigger */
+    PB->SMTEN |= GPIO_SMTEN_SMTEN12_Msk | GPIO_SMTEN_SMTEN13_Msk;
 }
 
 void UI2C0_Init(uint32_t u32ClkSpeed)

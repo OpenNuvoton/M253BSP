@@ -48,8 +48,8 @@ void SYS_Init(void)
     SYS->GPB_MFPL = (SYS->GPB_MFPL & ~(SYS_GPB_MFPL_PB0MFP_Msk | SYS_GPB_MFPL_PB1MFP_Msk)) |
                     (SYS_GPB_MFPL_PB0MFP_I2C1_SDA | SYS_GPB_MFPL_PB1MFP_I2C1_SCL);
 
-    /* I2C clock pin enable schmitt trigger */
-    PB->SMTEN |= GPIO_SMTEN_SMTEN1_Msk;
+    /* I2C pins enable schmitt trigger */
+    PB->SMTEN |= GPIO_SMTEN_SMTEN0_Msk | GPIO_SMTEN_SMTEN1_Msk;
 }
 
 int main(void)
