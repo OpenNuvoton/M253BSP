@@ -16,6 +16,7 @@
 /** @addtogroup EADC_Driver EADC Driver
   @{
 */
+int32_t g_EADC_i32ErrCode = 0;       /*!< EADC global error code */
 
 /** @addtogroup EADC_EXPORTED_FUNCTIONS EADC Exported Functions
   @{
@@ -29,14 +30,25 @@
   * @return None
   * @details This function is used to set analog input mode and enable A/D Converter.
   *         Before starting A/D conversion function, ADCEN bit (EADC_CTL[0]) should be set to 1.
-  * @note
+  * @note   This function sets g_EADC_i32ErrCode to EADC_TIMEOUT_ERR if PWRCTL_READY(EADC_PWRCTL[0]) is not set to 1
   */
 void EADC_Open(EADC_T *eadc, uint32_t u32InputMode)
 {
+    uint32_t u32Delay = SystemCoreClock; /* 1 second */
+
+    g_EADC_i32ErrCode = 0;
+
     eadc->CTL |= EADC_CTL_ADCEN_Msk;
 
     /* Wait for EADC start up completely and ready for conversion */
-    while ((eadc->PWRCTL & EADC_PWRCTL_READY_Msk) == 0);
+    while ((eadc->PWRCTL & EADC_PWRCTL_READY_Msk) == 0)
+    {
+        if (--u32Delay == 0)
+        {
+            g_EADC_i32ErrCode = EADC_TIMEOUT_ERR;
+            break;
+        }
+    }
 
 }
 
@@ -70,10 +82,10 @@ void EADC_Close(EADC_T *eadc)
   *                            - \ref EADC_TIMER3_TRIGGER                : Timer3 overflow pulse trigger
   *                            - \ref EADC_BPWM0TG_TRIGGER               : BPWM0TG trigger
   *                            - \ref EADC_BPWM1TG_TRIGGER               : BPWM1TG trigger
-  * @param[in] u32Channel Specifies the sample module channel, valid value are from 0 to 15.
+  * @param[in] u32Channel Specifies the sample module channel, valid value are from 0 to 7, 12 to 15.
   * @return None
-  * @details Each of EADC control logic modules 0~15 which is configurable for EADC converter channel EADC_CH0~15 and trigger source.
-  *          Sample module 16~18 is fixed for EADC channel 16, 17, 18 input sources as band-gap voltage, temperature sensor, and battery power (VBAT).
+  * @details Each of EADC control logic modules 0~3 which is configurable for EADC converter channel EADC_CH0~7, 12~15 and trigger source.
+  *          Sample module 16~17 is fixed for EADC channel 16, 17 input sources as band-gap voltage, temperature sensor.
   */
 void EADC_ConfigSampleModule(EADC_T *eadc, \
                              uint32_t u32ModuleNum, \

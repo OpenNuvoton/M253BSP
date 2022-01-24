@@ -247,7 +247,7 @@ typedef struct
   */
 #define RTC_DISABLE_ALARM_WAKEUP()        ((RTC->INTEN &= ~RTC_INTEN_ALMIEN_Msk));
 
-void RTC_Open(S_RTC_TIME_DATA_T *psPt);
+int32_t RTC_Open(S_RTC_TIME_DATA_T *psPt);
 void RTC_Close(void);
 void RTC_32KCalibration(int32_t i32FrequencyX10000);
 void RTC_GetDateAndTime(S_RTC_TIME_DATA_T *psPt);

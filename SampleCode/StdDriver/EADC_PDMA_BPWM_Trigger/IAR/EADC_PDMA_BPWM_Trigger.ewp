@@ -1628,7 +1628,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>EADC_SWTRG_Trigger.out</state>
+          <state>EADC_PDMA_BPWM_Trigger.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>

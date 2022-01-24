@@ -343,6 +343,9 @@ extern "C"
 #define CLK_PMUCTL_PDMSEL_PD          (0x0UL<<CLK_PMUCTL_PDMSEL_Pos)
 #define CLK_PMUCTL_PDMSEL_FWPD        (0x2UL<<CLK_PMUCTL_PDMSEL_Pos)
 
+#define CLK_TIMEOUT_ERR            (-1)     /*!< Clock timeout error value \hideinitializer */
+
+extern int32_t g_CLK_i32ErrCode;
 
 /*---------------------------------------------------------------------------------------------------------*/
 /* static inline functions                                                                                 */

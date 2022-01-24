@@ -554,7 +554,7 @@ void SYS_Init(void)
     /* I2C pins enable schmitt trigger */
     PB->SMTEN |= GPIO_SMTEN_SMTEN2_Msk | GPIO_SMTEN_SMTEN3_Msk;
     PB->SMTEN |= GPIO_SMTEN_SMTEN4_Msk | GPIO_SMTEN_SMTEN5_Msk;
-    PB->SMTEN |= GPIO_SMTEN_SMTEN12_Msk| GPIO_SMTEN_SMTEN13_Msk;
+    PB->SMTEN |= GPIO_SMTEN_SMTEN12_Msk | GPIO_SMTEN_SMTEN13_Msk;
 }
 
 int main()

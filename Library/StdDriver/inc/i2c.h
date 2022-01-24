@@ -30,6 +30,8 @@ extern "C"
   @{
 */
 
+#define I2C_TIMEOUT_ERR    (-1L)          /*!< I2C operation abort due to timeout error \hideinitializer */
+
 /*---------------------------------------------------------------------------------------------------------*/
 /*  I2C_CTL constant definitions.                                                                            */
 /*---------------------------------------------------------------------------------------------------------*/
@@ -50,6 +52,8 @@ extern "C"
 #define I2C_GCMODE_DISABLE          0    /*!< Disable I2C GC Mode                                                         */
 
 /*@}*/ /* end of group I2C_EXPORTED_CONSTANTS */
+
+extern int32_t g_I2C_i32ErrCode;
 
 /** @addtogroup I2C_EXPORTED_FUNCTIONS I2C Exported Functions
   @{

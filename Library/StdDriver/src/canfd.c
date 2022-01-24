@@ -830,19 +830,23 @@ void CANFD_DisableInt(CANFD_T *psCanfd, uint32_t u32IntLine0, uint32_t u32IntLin
  *
  * @return      number of tx requests set: 0= Tx Message Buffer is currently in use.
  *                                         1= Write Tx Message Buffer Successfully.
- *
+ *                                        -1= Tx Buffer Request timeout
  * @details     Copy Tx Message to FIFO/Queue TX buffer and Request transmission.
  */
-uint32_t CANFD_TransmitTxMsg(CANFD_T *psCanfd, uint32_t u32TxBufIdx, CANFD_FD_MSG_T *psTxMsg)
+int32_t CANFD_TransmitTxMsg(CANFD_T *psCanfd, uint32_t u32TxBufIdx, CANFD_FD_MSG_T *psTxMsg)
 {
     uint32_t u32Success = 0;
+    uint32_t u32TimeOutCount = SystemCoreClock; // 1 second timeout
     /* write the message to the message buffer */
     u32Success = CANFD_TransmitDMsg(psCanfd, u32TxBufIdx, psTxMsg);
 
     if (u32Success == 1)
     {
         /* wait for completion */
-        while (!(psCanfd->TXBRP & (1UL << u32TxBufIdx)));
+        while (!(psCanfd->TXBRP & (1UL << u32TxBufIdx)))
+        {
+            if (u32TimeOutCount == 0) return -1;
+        }
     }
 
     return u32Success;
@@ -1697,19 +1701,33 @@ void CANFD_GetBusErrCount(CANFD_T *psCanfd, uint8_t *pu8TxErrBuf, uint8_t *pu8Rx
  */
 void CANFD_RunToNormal(CANFD_T *psCanfd, uint8_t u8Enable)
 {
+    uint32_t u32TimeOutCount = SystemCoreClock; // 1 second timeout
+
     if (u8Enable)
     {
         /* start operation */
         psCanfd->CCCR &= ~(CANFD_CCCR_CCE_Msk | CANFD_CCCR_INIT_Msk);
 
-        while (psCanfd->CCCR & CANFD_CCCR_INIT_Msk);
+        /* Check INIT bit is released */
+        while (psCanfd->CCCR & CANFD_CCCR_INIT_Msk)
+        {
+            if (u32TimeOutCount == 0) break;
+
+            u32TimeOutCount--;
+        }
     }
     else
     {
         /* init mode */
         psCanfd->CCCR |= CANFD_CCCR_INIT_Msk;
 
-        while (!(psCanfd->CCCR & CANFD_CCCR_INIT_Msk));
+        /* Wait run to INIT mode */
+        while (!(psCanfd->CCCR & CANFD_CCCR_INIT_Msk))
+        {
+            if (u32TimeOutCount == 0) break;
+
+            u32TimeOutCount--;
+        }
     }
 }
 

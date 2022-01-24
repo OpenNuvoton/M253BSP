@@ -82,7 +82,7 @@ int32_t main(void)
     FMC_EnableAPUpdate();
 
     /* Read User Configuration */
-    printf("\b");
+    printf("\n");
     printf("XOM Status = 0x%X\n", FMC->XOMSTS);
 
     /* Run XOM function */

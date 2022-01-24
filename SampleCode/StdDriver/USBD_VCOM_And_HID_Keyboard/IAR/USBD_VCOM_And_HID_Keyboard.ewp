@@ -1629,7 +1629,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>USBD_VCOM_and_HID_Keyboard.out</state>
+          <state>USBD_VCOM_And_HID_Keyboard.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>

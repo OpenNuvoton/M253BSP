@@ -1628,7 +1628,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>USBD_VCOM_and_HID_Transfer.out</state>
+          <state>USBD_VCOM_And_HID_Transfer.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>

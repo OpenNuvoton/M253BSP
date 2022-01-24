@@ -118,9 +118,6 @@ typedef struct
      * |[2]     |ISPCKEN   |Flash ISP Controller Clock Enable Bit
      * |        |          |0 = Flash ISP peripheral clock Disabled.
      * |        |          |1 = Flash ISP peripheral clock Enabled.
-     * |[3]     |EBICKEN   |EBI Controller Clock Enable Bit
-     * |        |          |0 = EBI peripheral clock Disabled.
-     * |        |          |1 = EBI peripheral clock Enabled.
      * |[4]     |EXSTCKEN  |External System Tick Clock Enable Bit
      * |        |          |0 = External System tick clock Disabled.
      * |        |          |1 = External System tick clock Enabled.
@@ -153,12 +150,11 @@ typedef struct
      * |[0]     |WDTCKEN   |Watchdog Timer Clock Enable Bit (Write Protect)
      * |        |          |0 = Watchdog timer clock Disabled.
      * |        |          |1 = Watchdog timer clock Enabled.
-     * |        |          |Note: This bit is write protected. Refer to the SYS_REGLCTL register.
-     * |        |          |Note : this bit is forced to 1 when cfg0[3] & cfg0[3] & cfg0[31] are all 1s
+     * |        |          |Note 1: This bit is write protected. Refer to the SYS_REGLCTL register.
+     * |        |          |Note 2: This bit is forced  to 1 when CONFIG0[3] or CONFIG0[4] or CONFIG0[31] is 0.
+     * |        |          |Note 3: Reset by power on reset or watch dog reset or software chip reset.
      * |[1]     |RTCCKEN   |Real-time-clock APB Interface Clock Enable Bit
-     * |        |          |This bit is used to control the RTC APB clock only
-     * |        |          |The RTC peripheral clock source is selected from RTCSEL(CLK_CLKSEL3[8])
-     * |        |          |It can be selected to 32.768 kHz external low speed crystal or 38.4 kHz internal low speed RC oscillator (LIRC).
+     * |        |          |This bit is used to control the RTC APB clock.
      * |        |          |0 = RTC clock Disabled.
      * |        |          |1 = RTC clock Enabled.
      * |[2]     |TMR0CKEN  |Timer0 Clock Enable Bit

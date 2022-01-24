@@ -176,7 +176,6 @@ void SYS_Init(void)
     PB->SMTEN |= GPIO_SMTEN_SMTEN4_Msk | GPIO_SMTEN_SMTEN5_Msk;
 }
 
-
 void I2C0_Init(void)
 {
     /* Open I2C0 and set clock to 100k */
@@ -185,15 +184,8 @@ void I2C0_Init(void)
     /* Get I2C0 Bus Clock */
     printf("I2C clock %d Hz\n", I2C_GetBusClockFreq(I2C0));
 
-    /* Set I2C0 4 Slave Addresses */
-    I2C_SetSlaveAddr(I2C0, 0, 0x15, I2C_GCMODE_DISABLE);   /* Slave Address : 0x15 */
-    I2C_SetSlaveAddr(I2C0, 1, 0x35, I2C_GCMODE_DISABLE);   /* Slave Address : 0x35 */
-    I2C_SetSlaveAddr(I2C0, 2, 0x55, I2C_GCMODE_DISABLE);   /* Slave Address : 0x55 */
-    I2C_SetSlaveAddr(I2C0, 3, 0x75, I2C_GCMODE_DISABLE);   /* Slave Address : 0x75 */
-
     I2C_EnableInt(I2C0);
     NVIC_EnableIRQ(I2C0_IRQn);
-
 }
 
 /*---------------------------------------------------------------------------------------------------------*/

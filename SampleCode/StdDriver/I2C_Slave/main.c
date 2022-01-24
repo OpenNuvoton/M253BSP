@@ -19,7 +19,6 @@ uint32_t g_u32Slave_buff_addr;
 uint8_t g_au8SlvData[256];
 uint8_t g_au8SlvRxData[3];
 
-volatile uint8_t g_u8DeviceAddr;
 volatile uint8_t g_u8SlvDataLen;
 
 typedef void (*I2C_FUNC)(uint32_t u32Status);

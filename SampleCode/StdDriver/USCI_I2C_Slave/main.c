@@ -1,7 +1,7 @@
 /**************************************************************************//**
  * @file     main.c
  * @version  V0.10
- * @brief    Show a Slave how to receive data from Master.
+ * @brief    Show how an I2C 7-bit address slave receives data from master.
  *           This sample code needs to work with USCI_I2C_Master.
  *
  * SPDX-License-Identifier: Apache-2.0

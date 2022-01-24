@@ -1,7 +1,7 @@
 /**************************************************************************//**
  * @file     main.c
  * @version  V0.10
- * @brief    Show a Master how to access Slave.
+ * @brief    Show how an I2C master accesses 7-bit address slave.
  *           This sample code needs to work with USCI_I2C_Slave.
  *
  * SPDX-License-Identifier: Apache-2.0

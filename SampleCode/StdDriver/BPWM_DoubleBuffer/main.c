@@ -95,6 +95,7 @@ int32_t main(void)
     /* Init Debug UART */
     UartDebugInit();
 
+    printf("\n\nCPU @ %dHz\n", SystemCoreClock);
     printf("+------------------------------------------------------------------------+\n");
     printf("|                          BPWM Driver Sample Code                       |\n");
     printf("+------------------------------------------------------------------------+\n");

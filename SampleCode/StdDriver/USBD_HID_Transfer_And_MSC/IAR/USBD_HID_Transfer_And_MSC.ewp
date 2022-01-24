@@ -1630,7 +1630,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>USBD_HID_Transfer_and_MSC.out</state>
+          <state>USBD_HID_Transfer_And_MSC.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>
