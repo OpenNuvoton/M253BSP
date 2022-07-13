@@ -10,9 +10,9 @@
 #include "fmc_user.h"
 
 
-int FMC_Proc(unsigned int u32Cmd, unsigned int addr_start, unsigned int addr_end, unsigned int *data)
+int FMC_Proc(uint32_t u32Cmd, uint32_t addr_start, uint32_t addr_end, uint32_t *data)
 {
-    unsigned int u32Addr;
+    uint32_t u32Addr;
 
     for (u32Addr = addr_start; u32Addr < addr_end; data++, u32Addr += 4)
     {
@@ -38,7 +38,7 @@ int FMC_Proc(unsigned int u32Cmd, unsigned int addr_start, unsigned int addr_end
 
         while (FMC->ISPTRG & 0x1) ;  /* Wait for ISP command done. */
 
-        unsigned int Reg;
+        uint32_t Reg;
 
         Reg = FMC->ISPCTL;
 
@@ -58,12 +58,12 @@ int FMC_Proc(unsigned int u32Cmd, unsigned int addr_start, unsigned int addr_end
     return 0;
 }
 
-int ReadData(unsigned int addr_start, unsigned int addr_end, unsigned int *data)    // Read data from flash
+int ReadData(uint32_t addr_start, uint32_t addr_end, uint32_t *data)    // Read data from flash
 {
     return FMC_Proc(FMC_ISPCMD_READ, addr_start, addr_end, data);
 }
 
-int WriteData(unsigned int addr_start, unsigned int addr_end, unsigned int *data)  // Write data into flash
+int WriteData(uint32_t addr_start, uint32_t addr_end, uint32_t *data)  // Write data into flash
 {
     return FMC_Proc(FMC_ISPCMD_PROGRAM, addr_start, addr_end, data);
 }

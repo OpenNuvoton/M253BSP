@@ -368,7 +368,7 @@ void UART_FunctionTest(void)
                 BuildSrcPattern((uint32_t)g_au8TxData, UART_WORD_LEN_8, BUFSIZE);
 
                 /* Check the Rx status is Idle */
-                while (!UART_RX_IDEL(UART1)) {};
+                while (!UART_RX_IDLE(UART1)) {};
 
                 UART_Write(UART1, g_au8TxData, BUFSIZE);
 
@@ -388,7 +388,7 @@ void UART_FunctionTest(void)
                 BuildSrcPattern((uint32_t)g_au8TxData, UART_WORD_LEN_8, BUFSIZE);
 
                 /* Check the Rx status is Idle */
-                while (!UART_RX_IDEL(UART2)) {};
+                while (!UART_RX_IDLE(UART2)) {};
 
                 UART_Write(UART2, g_au8TxData, BUFSIZE);
 

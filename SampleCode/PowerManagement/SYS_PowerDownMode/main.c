@@ -86,6 +86,46 @@ void RTC_Init(void)
 
 }
 
+void CheckResetStatus(void)
+{
+    static uint32_t u32ResetCounter = 1UL;
+
+    const uint32_t u32RestStatus = SYS_GetResetSrc();
+
+    /* Reset status register included PMURF,PINRF and PORF after reset */
+    printf("Reset Status 0x%x,included...\n", u32RestStatus);
+
+    if (u32RestStatus & SYS_RSTSTS_CPULKRF_Msk)
+        printf("[%d] CPU Lockup Reset Flag\n", u32ResetCounter++);
+
+    if (u32RestStatus & SYS_RSTSTS_CPURF_Msk)
+        printf("[%d] CPU Reset Flag\n", u32ResetCounter++);
+
+    if (u32RestStatus & SYS_RSTSTS_PMURF_Msk)
+        printf("[%d] PMU Reset Flag\n", u32ResetCounter++);
+
+    if (u32RestStatus & SYS_RSTSTS_SYSRF_Msk)
+        printf("[%d] System Reset Flag\n", u32ResetCounter++);
+
+    if (u32RestStatus & SYS_RSTSTS_BODRF_Msk)
+        printf("[%d] BOD Reset Flag\n", u32ResetCounter++);
+
+    if (u32RestStatus & SYS_RSTSTS_LVRF_Msk)
+        printf("[%d] LVR Reset Flag\n", u32ResetCounter++);
+
+    if (u32RestStatus & SYS_RSTSTS_WDTRF_Msk)
+        printf("[%d] WDT Reset Flag\n", u32ResetCounter++);
+
+    if (u32RestStatus & SYS_RSTSTS_PINRF_Msk)
+        printf("[%d] nRESET Pin Reset Flag\n", u32ResetCounter++);
+
+    if (u32RestStatus & SYS_RSTSTS_PORF_Msk)
+        printf("[%d] POR Reset Flag\n", u32ResetCounter++);
+
+    /* Clear all reset flag */
+    SYS->RSTSTS = SYS->RSTSTS;
+}
+
 void SYS_Init(void)
 {
     /*---------------------------------------------------------------------------------------------------------*/
@@ -151,6 +191,9 @@ int32_t main(void)
 
     /* Enable Clock Output function, output clock is stopped in Power-down mode */
     CLK_EnableCKO(CLK_CLKSEL1_CLKOSEL_HCLK, 3, 0);
+
+    /* Get Reset Status */
+    CheckResetStatus();
 
     /* RTC wake-up source setting */
     RTC_Init();

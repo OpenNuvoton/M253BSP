@@ -747,11 +747,6 @@ uint32_t FMC_Write128(uint32_t u32Addr, uint32_t pu32Buf[]);
 
 /*@}*/ /* end of group FMC_EXPORTED_FUNCTIONS */
 
-/*---------------------------------------------------------------------------------------------------------*/
-/*  Global variables                                                                                       */
-/*---------------------------------------------------------------------------------------------------------*/
-extern int32_t  g_FMC_i32ErrCode; /*!< FMC global error code */
-
 /*@}*/ /* end of group FMC_Driver */
 
 /*@}*/ /* end of group Standard_Driver */

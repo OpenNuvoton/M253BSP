@@ -189,7 +189,7 @@ void CAN_SendMessage(CANFD_FD_MSG_T *psTxMsg, E_CANFD_ID_TYPE eIdType, uint32_t 
     else
         printf("Send to transmit message 0x%08x (29-bit)\n", psTxMsg->u32Id);
 
-    if (CANFD_TransmitTxMsg(CANFD0, 0, psTxMsg) != 1)
+    if (CANFD_TransmitTxMsg(CANFD0, 0, psTxMsg) != eCANFD_TRANSMIT_SUCCESS)
     {
         printf("Failed to transmit message\n");
     }
@@ -282,8 +282,8 @@ void CAN_Init(void)
     CANFD_SetXIDFltr(CANFD0, 1, CANFD_RX_FIFO0_EXT_MASK_LOW(0x3333), CANFD_RX_FIFO0_EXT_MASK_HIGH(0x1FFFFFFF));
     /* receive 0x4444 (29-bit id) in CAN rx fifo0 buffer by setting mask 2 */
     CANFD_SetXIDFltr(CANFD0, 2, CANFD_RX_FIFO0_EXT_MASK_LOW(0x44444), CANFD_RX_FIFO0_EXT_MASK_HIGH(0x1FFFFFFF));
-    /* Enable Standard ID and  Extended ID Filter as RX FOFI0*/
-    CANFD_SetGFC(CANFD0, eCANFD_ACC_NON_MATCH_FRM_RX_FIFO0, eCANFD_ACC_NON_MATCH_FRM_RX_FIFO0, 1, 1);
+    /* Reject Non-Matching Standard ID and Extended ID Filter(RX fifo0)*/
+    CANFD_SetGFC(CANFD0, eCANFD_REJ_NON_MATCH_FRM, eCANFD_REJ_NON_MATCH_FRM, 1, 1);
     /* Enable RX fifo0 new message interrupt using interrupt line 0. */
     CANFD_EnableInt(CANFD0, (CANFD_IE_TOOE_Msk | CANFD_IE_RF0NE_Msk), 0, 0, 0);
     /* CAN FD0 Run to Normal mode  */

@@ -1,8 +1,8 @@
 /******************************************************************************//**
  * @file     main.c
- * @version  V3.00
+ * @version  V3.01
  * @brief
- *           Demonstrate how to upgrade firmware between USB device and PC through USB DFU( Device Firmware Upgrade) class.
+ *           Demonstrate how to upgrade firmware between USB device and PC through USB DFU (Device Firmware Upgrade) class.
  *           A windows tool is also included in this sample code to connect with USB device.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -12,20 +12,17 @@
 #include "NuMicro.h"
 #include "dfu_transfer.h"
 
-#define HCLK_DIV                1
-
-#define PLL_CLOCK               48000000
-
+#define TRIM_INIT           (SYS_BASE + 0x118)
+#define HCLK_DIV            1
+#define PLL_CLOCK           48000000
 
 uint32_t CLK_GetPLLClockFreq(void)
 {
     return PLL_CLOCK;
 }
 
-
 void SYS_Init(void)
 {
-
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init System Clock                                                                                       */
     /*---------------------------------------------------------------------------------------------------------*/
@@ -43,7 +40,6 @@ void SYS_Init(void)
     /* Enable module clock */
     CLK->APBCLK0 |= CLK_APBCLK0_USBDCKEN_Msk;
     CLK->AHBCLK |= CLK_AHBCLK_ISPCKEN_Msk;
-
 }
 
 
@@ -52,6 +48,7 @@ void SYS_Init(void)
 /*---------------------------------------------------------------------------------------------------------*/
 int32_t main(void)
 {
+    uint32_t u32TrimInit;
 
     /* Unlock write-protected registers to operate SYS_Init and FMC ISP function */
     SYS_UnlockReg();
@@ -74,6 +71,50 @@ int32_t main(void)
     /* Enable USB device interrupt */
     NVIC_EnableIRQ(USBD_IRQn);
 
-    while (1);
+    /* Backup default trim value */
+    u32TrimInit = M32(TRIM_INIT);
 
+    /* Clear SOF */
+    USBD_CLR_INT_FLAG(USBD_INTSTS_SOFIF_Msk);
+
+    while (1)
+    {
+        /* Start USB trim function if it is not enabled. */
+        if ((SYS->HIRCTRIMCTL & SYS_HIRCTRIMCTL_FREQSEL_Msk) != 0x1)
+        {
+            /* Start USB trim only when USB signal arrived */
+            if (USBD->INTSTS & USBD_INTSTS_SOFIF_Msk)
+            {
+                /* Clear SOF */
+                USBD_CLR_INT_FLAG(USBD_INTSTS_SOFIF_Msk);
+
+                /*
+                    USB clock trim function:
+                    HIRC Trimming with boundary function enhances robustility
+                    and keeps HIRC in right frequency while receiving unstable USB signal
+                */
+                SYS->HIRCTRIMCTL = (0x1 << SYS_HIRCTRIMCTL_REFCKSEL_Pos)
+                                   | (0x1 << SYS_HIRCTRIMCTL_FREQSEL_Pos)
+                                   | (0x0 << SYS_HIRCTRIMCTL_LOOPSEL_Pos)
+                                   | (0x1 << SYS_HIRCTRIMCTL_BOUNDEN_Pos)
+                                   | (10  << SYS_HIRCTRIMCTL_BOUNDARY_Pos);
+            }
+        }
+
+        /* Disable USB Trim when any error found */
+        if (SYS->HIRCTRIMSTS & (SYS_HIRCTRIMSTS_CLKERIF_Msk | SYS_HIRCTRIMSTS_TFAILIF_Msk))
+        {
+            /* Init TRIM */
+            M32(TRIM_INIT) = u32TrimInit;
+
+            /* Disable USB clock trim function */
+            SYS->HIRCTRIMCTL = 0;
+
+            /* Clear trim error flags */
+            SYS->HIRCTRIMSTS = SYS_HIRCTRIMSTS_CLKERIF_Msk | SYS_HIRCTRIMSTS_TFAILIF_Msk;
+
+            /* Clear SOF */
+            USBD_CLR_INT_FLAG(USBD_INTSTS_SOFIF_Msk);
+        }
+    }
 }

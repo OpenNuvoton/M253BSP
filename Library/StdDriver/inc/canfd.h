@@ -79,6 +79,21 @@ extern "C"
 /* CANFD Rx FIFO 1 extended Mask helper macro - high. */
 #define CANFD_RX_FIFO1_EXT_MASK_HIGH(mask)           (2UL << 30) | ((mask & 0x1FFFFFFF))
 
+/**
+ *    @brief        Get Monitors the Module’s CAN Communication State Flag
+ *
+ *    @param[in]    canfd    The pointer of the specified CANFD module
+ *
+ *    @retval       0 Synchronizing - node is synchronizing on CANFD communication.
+ *    @retval       1 Idle - node is neither receiver nor transmitter.
+ *    @retval       2 Receiver - node is operating as receiver.
+ *    @retval       3 Transmitter - node is operating as transmitter.
+ *
+ *    @details      This macro get the module’s CANFD communication state.
+ *    \hideinitializer
+ */
+#define CANFD_GET_COMMUNICATION_STATE(canfd)    (((canfd)->PSR  & CANFD_PSR_ACT_Msk) >> CANFD_PSR_ACT_Pos)
+
 
 /* CAN FD frame data field size. */
 typedef enum
@@ -188,7 +203,7 @@ typedef struct
     CANFD_RAM_PART_T        sMRamStartAddr;   /*!< Absolute Byte Start Addresses for Element Types in Message RAM */
     CANFD_ELEM_SIZE_T       sElemSize;        /*!< Size of Elements in Message RAM (RX Elem. in FIFO0, in FIFO1, TX Buffer) given in words */
     CANFD_TX_BUF_CONFIG_T   sTxConfig;        /*!< TX Buffer Configuration  */
-    uint32_t                u32MRamSize;      /*!< Size of the Message RAM: number of words */
+    uint32_t                u32MRamSize;      /*!< Size of the Message RAM: number of bytes */
 } CANFD_FD_T;
 
 /* CAN FD Message ID Type */
@@ -205,6 +220,34 @@ typedef enum
     eCANFD_RX_FIFO_1 = 1,
     eCANFD_RX_DBUF = 2
 } E_CANFD_RX_BUF_TYPE;
+
+/* CAN FD communication state.*/
+typedef enum
+{
+    eCANFD_SYNC         = 0,
+    eCANFD_IDLE         = 1,
+    eCANFD_RECEIVER     = 2,
+    eCANFD_TRANSMITTER  = 3
+} E_CANFD_COMMUNICATION_STATE;
+
+
+/* CAN FD transmission state.*/
+typedef enum
+{
+    eCANFD_TRANSMIT_FAIL     = 0,
+    eCANFD_TRANSMIT_SUCCESS  = 1,
+    eCANFD_TRANSMIT_TIMEOUT  = 2
+} E_CANFD_TRANSMIT_STATE;
+
+/* CAN FD transmission state.*/
+typedef enum
+{
+    eCANFD_RECEIVE_EMPTY     = 0,
+    eCANFD_RECEIVE_SUCCESS   = 1,
+    eCANFD_RECEIVE_SUCCESS_AND_BUFFER_FULL   = 2
+
+} E_CANFD_RECEIVE_STATE;
+
 
 /* CAN FD Message receive Information: via which RX Buffers, etc. */
 typedef struct
@@ -348,12 +391,34 @@ typedef struct
     uint8_t             bBitRateSwitch;  /*!< Bit Rate Switch */
 } CANFD_TX_EVNT_ELEM_T;
 
+#define CANFD_READ_REG_TIMEOUT    48                 /*!< CANFD read register time-out count */
+
+__STATIC_INLINE uint32_t CANFD_ReadReg(uint32_t u32RegAddr);
+
+__STATIC_INLINE uint32_t CANFD_ReadReg(uint32_t u32RegAddr)
+{
+    uint32_t u32ReadReg;
+    uint32_t u32TimeOutCnt = CANFD_READ_REG_TIMEOUT;
+    u32ReadReg = 0UL;
+
+    do
+    {
+        u32ReadReg = inpw((uint32_t *)u32RegAddr);
+
+        if (--u32TimeOutCnt == 0UL)
+        {
+            break;
+        }
+    } while (u32ReadReg == 0UL);
+
+    return u32ReadReg;
+}
 
 void CANFD_Open(CANFD_T *canfd, CANFD_FD_T *psCanfdStr);
 void CANFD_Close(CANFD_T *canfd);
 void CANFD_EnableInt(CANFD_T *canfd, uint32_t u32IntLine0, uint32_t u32IntLine1, uint32_t u32TXBTIE, uint32_t u32TXBCIE);
 void CANFD_DisableInt(CANFD_T *canfd, uint32_t u32IntLine0, uint32_t u32IntLine1, uint32_t u32TXBTIE, uint32_t u32TXBCIE);
-int32_t CANFD_TransmitTxMsg(CANFD_T *canfd, uint32_t u32TxBufIdx, CANFD_FD_MSG_T *psTxMsg);
+uint32_t CANFD_TransmitTxMsg(CANFD_T *canfd, uint32_t u32TxBufIdx, CANFD_FD_MSG_T *psTxMsg);
 uint32_t CANFD_TransmitDMsg(CANFD_T *canfd, uint32_t u32TxBufIdx, CANFD_FD_MSG_T *psTxMsg);
 void CANFD_SetGFC(CANFD_T *canfd, E_CANFD_ACC_NON_MATCH_FRM eNMStdFrm, E_CANFD_ACC_NON_MATCH_FRM eEMExtFrm, uint32_t u32RejRmtStdFrm, uint32_t u32RejRmtExtFrm);
 void CANFD_InitRxFifo(CANFD_T *canfd, uint32_t u32RxFifoNum, CANFD_RAM_PART_T *psRamConfig, CANFD_ELEM_SIZE_T *psElemSize, uint32_t u32FifoWM, E_CANFD_DATA_FIELD_SIZE eFifoSize);

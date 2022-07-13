@@ -1,10 +1,10 @@
 /**************************************************************************//**
  * @file     main.c
- * @version  V0.10
+ * @version  V1.00
  * @brief    Read/write EEPROM via I2C interface
  *
  * SPDX-License-Identifier: Apache-2.0
- * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
+ * @copyright (C) 2022 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "NuMicro.h"
@@ -20,7 +20,7 @@ volatile uint8_t g_u8EndFlag = 0;
 
 typedef void (*I2C_FUNC)(uint32_t u32Status);
 
-static I2C_FUNC s_pfnI2C0Handler = NULL;
+static volatile I2C_FUNC s_pfnI2C0Handler = NULL;
 
 /*---------------------------------------------------------------------------------------------------------*/
 /*  I2C0 IRQ Handler                                                                                       */
@@ -160,7 +160,6 @@ void SYS_Init(void)
     CLK_EnableModuleClock(GPB_MODULE);
 
     /* Update System Core Clock */
-    /* User can use SystemCoreClockUpdate() to calculate SystemCoreClock and cyclesPerUs automatically. */
     SystemCoreClockUpdate();
 
     /*---------------------------------------------------------------------------------------------------------*/
@@ -188,9 +187,6 @@ void I2C0_Init(void)
     NVIC_EnableIRQ(I2C0_IRQn);
 }
 
-/*---------------------------------------------------------------------------------------------------------*/
-/*  Main Function                                                                                          */
-/*---------------------------------------------------------------------------------------------------------*/
 int32_t main(void)
 {
     uint32_t i;
@@ -220,6 +216,8 @@ int32_t main(void)
 
     for (i = 0; i < 2; i++)
     {
+        uint32_t u32TimeOutCnt = I2C_TIMEOUT;
+
         g_au8TxData[0] = (uint8_t)((i & 0xFF00) >> 8);
         g_au8TxData[1] = (uint8_t)(i & 0x00FF);
         g_au8TxData[2] = (uint8_t)(g_au8TxData[1] + 3);
@@ -234,12 +232,31 @@ int32_t main(void)
         I2C_SET_CONTROL_REG(I2C0, I2C_CTL_STA);
 
         /* Wait I2C Tx Finish */
-        while (g_u8EndFlag == 0);
+
+        while (g_u8EndFlag == 0)
+        {
+            if (--u32TimeOutCnt == 0)
+            {
+                printf("Wait for I2C Tx finish time-out!\n");
+
+                while (1);
+            }
+        }
 
         g_u8EndFlag = 0;
 
         /* Make sure I2C0 STOP already */
-        while (I2C0->CTL0 & I2C_CTL0_STO_Msk);
+        u32TimeOutCnt = I2C_TIMEOUT;
+
+        while (I2C0->CTL0 & I2C_CTL0_STO_Msk)
+        {
+            if (--u32TimeOutCnt == 0)
+            {
+                printf("Wait for I2C STOP ready time-out!\n");
+
+                while (1);
+            }
+        }
 
         /* Wait write operation complete */
         CLK_SysTickDelay(10000);
@@ -253,16 +270,37 @@ int32_t main(void)
         I2C_SET_CONTROL_REG(I2C0, I2C_CTL_STA);
 
         /* Wait I2C Rx Finish */
-        while (g_u8EndFlag == 0);
+        u32TimeOutCnt = I2C_TIMEOUT;
+
+        while (g_u8EndFlag == 0)
+        {
+            if (--u32TimeOutCnt == 0)
+            {
+                printf("Wait for I2C Rx finish time-out!\n");
+
+                while (1);
+            }
+        }
 
         /* Make sure I2C0 STOP already */
-        while (I2C0->CTL0 & I2C_CTL0_STO_Msk);
+        u32TimeOutCnt = I2C_TIMEOUT;
+
+        while (I2C0->CTL0 & I2C_CTL0_STO_Msk)
+        {
+            if (--u32TimeOutCnt == 0)
+            {
+                printf("Wait for I2C STOP ready time-out!\n");
+
+                while (1);
+            }
+        }
 
         /* Compare data */
         if (g_u8RxData != g_au8TxData[2])
         {
             printf("I2C Byte Write/Read Failed, Data 0x%x\n", g_u8RxData);
-            return -1;
+
+            while (1);
         }
     }
 

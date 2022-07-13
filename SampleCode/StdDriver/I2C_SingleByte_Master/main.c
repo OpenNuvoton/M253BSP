@@ -1,13 +1,12 @@
-
-/****************************************************************************//**
+/**************************************************************************//**
  * @file     main.c
  * @version  V0.10
  * @brief    Show how to use I2C Signle byte API Read and Write data to Slave
  *           Needs to work with I2C_Slave sample code.
  *
  * SPDX-License-Identifier: Apache-2.0
- * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
-*****************************************************************************/
+ * @copyright (C) 2022 Nuvoton Technology Corp. All rights reserved.
+ *****************************************************************************/
 #include <stdio.h>
 #include "NuMicro.h"
 
@@ -41,7 +40,6 @@ void SYS_Init(void)
     CLK_EnableModuleClock(GPB_MODULE);
 
     /* Update System Core Clock */
-    /* User can use SystemCoreClockUpdate() to calculate SystemCoreClock and cyclesPerUs automatically. */
     SystemCoreClockUpdate();
 
     /*---------------------------------------------------------------------------------------------------------*/
@@ -56,7 +54,6 @@ void SYS_Init(void)
     /* I2C pins enable schmitt trigger */
     PB->SMTEN |= GPIO_SMTEN_SMTEN4_Msk | GPIO_SMTEN_SMTEN5_Msk;
 }
-
 
 void I2C0_Init(void)
 {
@@ -79,9 +76,6 @@ void I2C0_Close(void)
 
 }
 
-/*---------------------------------------------------------------------------------------------------------*/
-/*  Main Function                                                                                          */
-/*---------------------------------------------------------------------------------------------------------*/
 int32_t main(void)
 {
     uint32_t i;
@@ -108,7 +102,7 @@ int32_t main(void)
     printf("| Needs to work with I2C_Slave sample code               |\n");
     printf("|                                                        |\n");
     printf("| I2C Master (I2C0) <---> I2C Slave(I2C0)                |\n");
-    printf("| !! This sample code requires two borads to test !!     |\n");
+    printf("| !! This sample code requires two boards to test !!     |\n");
     printf("+--------------------------------------------------------+\n");
 
     printf("\n");
@@ -116,7 +110,7 @@ int32_t main(void)
     /* Init I2C0 */
     I2C0_Init();
 
-    /* Slave Address */
+    /* Slave address */
     g_u8DeviceAddr = 0x15;
 
     u8Err = 0;

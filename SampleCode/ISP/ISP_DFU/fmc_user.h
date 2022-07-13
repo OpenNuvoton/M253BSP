@@ -27,8 +27,8 @@
 #define _FMC_DISABLE_CFG_UPDATE()  (FMC->ISPCTL &= ~FMC_ISPCTL_CFGUEN_Msk) /*!< Disable CONFIG Update Function */
 
 
-int ReadData(unsigned int addr_start, unsigned int addr_end, unsigned int *data);
-int WriteData(unsigned int addr_start, unsigned int addr_end, unsigned int *data);
+int ReadData(uint32_t addr_start, uint32_t addr_end, uint32_t *data);
+int WriteData(uint32_t addr_start, uint32_t addr_end, uint32_t *data);
 
 
 #endif

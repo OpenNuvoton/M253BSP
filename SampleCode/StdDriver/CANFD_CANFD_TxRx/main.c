@@ -197,7 +197,7 @@ void CANFD_TxRxTest(void)
             printf("\n\n");
 
             /* use message buffer 0 */
-            if (CANFD_TransmitTxMsg(CANFD0, 0, &sTxMsgFrame) != 1)
+            if (CANFD_TransmitTxMsg(CANFD0, 0, &sTxMsgFrame) != eCANFD_TRANSMIT_SUCCESS)
             {
                 printf("Failed to transmit message\n");
             }
@@ -218,7 +218,7 @@ void CANFD_TxRxTest(void)
         do
         {
             /* check for any received messages on CAN FD0 message buffer 0 */
-            if (CANFD_ReadRxBufMsg(CANFD0, 0, &sRxMsgFrame) == 1)
+            if (CANFD_ReadRxBufMsg(CANFD0, 0, &sRxMsgFrame) == eCANFD_RECEIVE_SUCCESS)
             {
                 printf("Rx buf 0: Received message 0x%08X\n", sRxMsgFrame.u32Id);
                 printf("Message Data : ");
@@ -261,7 +261,7 @@ void CANFD_TxRxTest(void)
             }
 
             /* check for any received messages on CAN FD0 message buffer 1 */
-            if (CANFD_ReadRxBufMsg(CANFD0, 1, &sRxMsgFrame) == 1)
+            if (CANFD_ReadRxBufMsg(CANFD0, 1, &sRxMsgFrame) == eCANFD_RECEIVE_SUCCESS)
             {
 
                 printf("Rx buf 1: Received message 0x%08X (29-bit)\r\n", sRxMsgFrame.u32Id);

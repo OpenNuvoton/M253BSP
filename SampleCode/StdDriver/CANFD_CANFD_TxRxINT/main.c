@@ -155,7 +155,7 @@ void CANFD_TxTest(void)
 
             case '5':
                 /*Extend ID =0x111,Data lenght 24 bytes*/
-                CANFD_SendMessage(&g_sTxMsgFrame, eCANFD_XID, 0x220, 4);
+                CANFD_SendMessage(&g_sTxMsgFrame, eCANFD_XID, 0x221, 4);
                 break;
 
             case '6':
@@ -225,7 +225,7 @@ void CANFD_SendMessage(CANFD_FD_MSG_T *psTxMsg, E_CANFD_ID_TYPE eIdType, uint32_
 
     printf("\n");
 
-    if (CANFD_TransmitTxMsg(CANFD0, 0, psTxMsg) != 1)
+    if (CANFD_TransmitTxMsg(CANFD0, 0, psTxMsg) != eCANFD_TRANSMIT_SUCCESS)
     {
         printf("Failed to transmit message\n");
     }
@@ -320,7 +320,7 @@ void CANFD_Init(void)
     /* receive 0x44444 (29-bit id) in CAN FD0 rx fifo1 buffer by setting mask 2 */
     CANFD_SetXIDFltr(CANFD0, 2, CANFD_RX_FIFO1_EXT_MASK_LOW(0x44444), CANFD_RX_FIFO1_EXT_MASK_HIGH(0x1FFFFFFF));
     /* Reject Non-Matching Standard ID and Extended ID Filter(RX fifo1)*/
-    CANFD_SetGFC(CANFD0, eCANFD_ACC_NON_MATCH_FRM_RX_FIFO1, eCANFD_ACC_NON_MATCH_FRM_RX_FIFO1, 1, 1);
+    CANFD_SetGFC(CANFD0, eCANFD_REJ_NON_MATCH_FRM, eCANFD_REJ_NON_MATCH_FRM, 1, 1);
     /* Enable RX fifo1 new message interrupt using interrupt line 0. */
     CANFD_EnableInt(CANFD0, (CANFD_IE_TOOE_Msk | CANFD_IE_RF1NE_Msk), 0, 0, 0);
     /* CAN FD0 Run to Normal mode  */

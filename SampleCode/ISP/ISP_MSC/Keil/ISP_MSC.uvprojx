@@ -369,10 +369,10 @@
             <TextAddressRange>0x00000000</TextAddressRange>
             <DataAddressRange>0x20000000</DataAddressRange>
             <pXoBase></pXoBase>
-            <ScatterFile></ScatterFile>
+            <ScatterFile>..\..\..\..\Library\Device\Nuvoton\M253\Source\ARM\LDROM.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc>--map --first='startup_M253_User.o(RESET)' --datacompressor=off --info=inline --entry Reset_Handler</Misc>
+            <Misc>--map --datacompressor=off --info=inline --entry Reset_Handler</Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>
@@ -410,7 +410,7 @@
             <File>
               <FileName>startup_M253_user.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\startup_M253_user.s</FilePath>
+              <FilePath>startup_M253_user.s</FilePath>
             </File>
           </Files>
         </Group>

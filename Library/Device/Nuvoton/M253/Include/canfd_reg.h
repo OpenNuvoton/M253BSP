@@ -20,7 +20,7 @@
 */
 
 /**
-    @addtogroup Controller Area Network with Feasibility Data Rate (CAN FD)
+    @addtogroup Controller Area Network with Flexible Data-Rate (CAN FD)
     Memory Mapped Structure for CAN FD Controller
 @{ */
 

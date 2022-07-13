@@ -57,7 +57,7 @@ void CANFD0_IRQ0_IRQHandler(void)
     if (u32IIDRstatus & CANFD_IR_RF0N_Msk)
     {
         /*Clear the Interrupt flag */
-        CANFD_ClearStatusFlag(CANFD0, CANFD_IR_TOO_Msk | CANFD_IR_RF0N_Msk);
+        CANFD0->IR |= (CANFD_IR_TOO_Msk | CANFD_IR_RF0N_Msk);
         CANFD_ReadRxFifoMsg(CANFD0, 0, &g_sRxMsgFrame);
         s_u8CANPackageFlag = 1;
     }
@@ -65,20 +65,27 @@ void CANFD0_IRQ0_IRQHandler(void)
 
 void SYS_Init(void)
 {
-    /* Enable HIRC clock (Internal RC 48MHz) */
-    CLK_EnableXtalRC(CLK_PWRCTL_HIRCEN_Msk);
+    /*---------------------------------------------------------------------------------------------------------*/
+    /* Init System Clock */
+    /*---------------------------------------------------------------------------------------------------------*/
+    /* Enable Internal RC clock */
+    CLK->PWRCTL |= CLK_PWRCTL_HIRCEN_Msk;
 
-    /* Wait for HIRC clock ready */
-    CLK_WaitClockReady(CLK_STATUS_HIRCSTB_Msk);
+    /* Waiting for external XTAL clock ready */
+    while (!(CLK->STATUS & CLK_STATUS_HIRCSTB_Msk));
 
-    /* Select HCLK clock source as HIRC and and HCLK source divider as 1 */
-    CLK_SetHCLK(CLK_CLKSEL0_HCLKSEL_HIRC, CLK_CLKDIV0_HCLK(1));
+    CLK->CLKSEL0 &= (~CLK_CLKSEL0_HCLKSEL_Msk);
+    CLK->CLKSEL0 |= CLK_CLKSEL0_HCLKSEL_HIRC;
+    /* Update System Core Clock */
+    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CycylesPerUs automatically. */
+
+    SystemCoreClock = __HIRC; // HCLK
+    CyclesPerUs = SystemCoreClock / 1000000; // For SYS_SysTickDelay()
+    /* Set both PCLK0 and PCLK1 as HCLK/2 */
+    CLK->PCLKDIV = CLK_PCLKDIV_APB0DIV_DIV2 | CLK_PCLKDIV_APB1DIV_DIV2;
 
     /* Select CAN FD0 clock source is HCLK */
     CLK_SetModuleClock(CANFD0_MODULE, CLK_CLKSEL0_CANFD0SEL_HCLK, CLK_CLKDIV4_CANFD0(1));
-
-    /* Update System Core Clock */
-    SystemCoreClockUpdate();
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
@@ -97,7 +104,7 @@ void CAN_Package_ACK(CANFD_T *psCanfd)
     sTxMsgFrame.au32Data[0] = g_sRxMsgFrame.au32Data[0];
     sTxMsgFrame.au32Data[1] = g_sRxMsgFrame.au32Data[1];
 
-    if (CANFD_TransmitTxMsg(psCanfd, 0, &sTxMsgFrame) == FALSE)    // Configure Msg RAM and send the Msg in the RAM
+    if (CANFD_TransmitTxMsg(psCanfd, 0, &sTxMsgFrame) != eCANFD_TRANSMIT_SUCCESS)    // Configure Msg RAM and send the Msg in the RAM
     {
         return;
     }
@@ -119,9 +126,41 @@ void CAN_Init(void)
     PC11 = 0;
 
     /*Get the CAN configuration value*/
-    CANFD_GetDefaultConfig(&sCANFD_Config, CANFD_OP_CAN_MODE);
+
+    sCANFD_Config.sBtConfig.bFDEn = FALSE;
+    sCANFD_Config.sBtConfig.bBitRateSwitch = FALSE;
+    sCANFD_Config.sBtConfig.bEnableLoopBack = FALSE;
     sCANFD_Config.sBtConfig.sNormBitRate.u32BitRate = CAN_BAUD_RATE;
     sCANFD_Config.sBtConfig.sDataBitRate.u32BitRate = 0;
+    /* CAN FD Standard message ID elements as 12 elements    */
+    sCANFD_Config.sElemSize.u32SIDFC = 12;
+    /* CAN FD Extended message ID elements as 10 elements    */
+    sCANFD_Config.sElemSize.u32XIDFC = 10;
+    /* CAN FD TX Buffer elements as 3 elements    */
+    sCANFD_Config.sElemSize.u32TxBuf = 3;
+    /* CAN FD RX Buffer elements as 3 elements    */
+    sCANFD_Config.sElemSize.u32RxBuf = 3;
+    /* CAN FD RX FIFO0 elements as 3 elements    */
+    sCANFD_Config.sElemSize.u32RxFifo0 = 3;
+    /* CAN FD RX FIFO1 elements as 3 elements    */
+    sCANFD_Config.sElemSize.u32RxFifo1 = 3;
+    /* CAN FD TX Event FOFI elements as 3 elements    */
+    sCANFD_Config.sElemSize.u32TxEventFifo = 3;
+    /* Set the Standard ID Filter element address     */
+    sCANFD_Config.sMRamStartAddr.u32SIDFC_FLSSA =  0;
+    /* Set the Extend ID Filter element address       */
+    sCANFD_Config.sMRamStartAddr.u32XIDFC_FLESA =  0x30;
+    /* Set the TX Buffer element address              */
+    sCANFD_Config.sMRamStartAddr.u32TXBC_TBSA   =  0x80;
+    /* Set the RX Buffer element address              */
+    sCANFD_Config.sMRamStartAddr.u32RXBC_RBSA   =  0x158;
+    /* Set the RX FIFO0 element address               */
+    sCANFD_Config.sMRamStartAddr.u32RXF0C_F0SA  =  0x230;
+    /* Set the RX FIFO1 element address               */
+    sCANFD_Config.sMRamStartAddr.u32RXF1C_F1SA  =  0x308;
+    /* Set the TX Event FOFI element address           */
+    sCANFD_Config.sMRamStartAddr.u32TXEFC_EFSA  =  0x3E0;
+
 
     /*Open the CAN feature*/
     CANFD_Open(CANFD0, &sCANFD_Config);
@@ -129,10 +168,8 @@ void CAN_Init(void)
     /* Set CAN reveive message */
     CANFD_SetSIDFltr(CANFD0, 0, CANFD_RX_FIFO0_STD_MASK(Master_ISP_ID, 0x7FF));
 
-    /* Enable Standard ID and  Extended ID Filter as RX FOFI0*/
-    CANFD_SetGFC(CANFD0, eCANFD_ACC_NON_MATCH_FRM_RX_FIFO0, eCANFD_ACC_NON_MATCH_FRM_RX_FIFO0, 1, 1);
     /* Enable RX fifo0 new message interrupt using interrupt line 0. */
-    CANFD_EnableInt(CANFD0, (CANFD_IE_TOOE_Msk | CANFD_IE_RF0NE_Msk | CANFD_IE_TCE_Msk), 0, 0, 0);
+    CANFD_EnableInt(CANFD0, (CANFD_IE_TOOE_Msk | CANFD_IE_RF0NE_Msk), 0, 0, 0);
 
     /* CAN FD0 Run to Normal mode  */
     CANFD_RunToNormal(CANFD0, TRUE);
@@ -158,7 +195,7 @@ int main(void)
     CAN_Init();
 
     SysTick->LOAD = 300000 * CyclesPerUs;
-    SysTick->VAL   = (0x00);
+    SysTick->VAL  = (0x00);
     SysTick->CTRL = SysTick->CTRL | SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk;
 
     while (1)
@@ -170,7 +207,7 @@ int main(void)
 
         if (SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk)
         {
-            goto lexit;
+            goto _APROM;
         }
     }
 
@@ -210,13 +247,13 @@ int main(void)
         }
     }
 
-lexit:
+_APROM:
+    outpw(&SYS->RSTSTS, SYS_RSTSTS_PORF_Msk | SYS_RSTSTS_PINRF_Msk);
+    outpw(&FMC->ISPCTL, inpw(&FMC->ISPCTL) & 0xFFFFFFFC);
+    NVIC_SystemReset();
 
     /* Trap the CPU */
-    for (;;)
-    {
-        __WFI();
-    }
+    while (1);
 }
 
 /*---------------------------------------------------------------------------------------------------------*/

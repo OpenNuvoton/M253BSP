@@ -12,6 +12,7 @@
 #include <string.h>
 #include "NuMicro.h"
 #include "dfu_transfer.h"
+#include "fmc_user.h"
 
 #define APROM_BLOCK_NUM         ((0x8000/TRANSFER_SIZE)-1) //M253 series minimum size 32KB.
 
@@ -177,7 +178,7 @@ void DFU_ClassRequest(void)
                     {
                         dfu_status.bState = STATE_dfuDNLOAD_IDLE;
 
-                        if (WriteData(prog_struct.block_num * TRANSFER_SIZE, (prog_struct.block_num * TRANSFER_SIZE) + prog_struct.data_len, prog_struct.buf) != 0)
+                        if (WriteData(prog_struct.block_num * TRANSFER_SIZE, (prog_struct.block_num * TRANSFER_SIZE) + prog_struct.data_len, (uint32_t *)prog_struct.buf) != 0)
                             dfu_status.bStatus = STATUS_errWRITE;
 
                         command_Count = 0;
@@ -242,7 +243,7 @@ void DFU_ClassRequest(void)
                             break;
                         }
 
-                        ReadData(wValue * TRANSFER_SIZE, (wValue * TRANSFER_SIZE) + wLength, prog_struct.buf);
+                        ReadData(wValue * TRANSFER_SIZE, (wValue * TRANSFER_SIZE) + wLength, (uint32_t *)prog_struct.buf);
                         USBD_PrepareCtrlIn((uint8_t *)prog_struct.buf, wLength);
                     }
 

@@ -1,12 +1,12 @@
 
 /****************************************************************************//**
  * @file     main.c
- * @version  V0.10
+ * @version  V1.00
  * @brief    Show how to set I2C use Multi bytes API Read and Write data to Slave.
  *           Needs to work with I2C_Slave sample code.
  *
  * SPDX-License-Identifier: Apache-2.0
- * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
+ * @copyright (C) 2022 Nuvoton Technology Corp. All rights reserved.
  *****************************************************************************/
 #include <stdio.h>
 #include "NuMicro.h"
@@ -41,7 +41,6 @@ void SYS_Init(void)
     CLK_EnableModuleClock(GPB_MODULE);
 
     /* Update System Core Clock */
-    /* User can use SystemCoreClockUpdate() to calculate SystemCoreClock and CyclesPerUs automatically. */
     SystemCoreClockUpdate();
 
     /*---------------------------------------------------------------------------------------------------------*/
@@ -78,9 +77,6 @@ void I2C0_Close(void)
 
 }
 
-/*---------------------------------------------------------------------------------------------------------*/
-/*  Main Function                                                                                          */
-/*---------------------------------------------------------------------------------------------------------*/
 int32_t main(void)
 {
     uint32_t i;
@@ -88,8 +84,10 @@ int32_t main(void)
 
     /* Unlock protected registers */
     SYS_UnlockReg();
+
     /* Init System, IP clock and multi-function I/O. */
     SYS_Init();
+
     /* Lock protected registers */
     SYS_LockReg();
 
@@ -105,7 +103,7 @@ int32_t main(void)
     printf("| Needs to work with I2C_Slave sample code               |\n");
     printf("|                                                        |\n");
     printf("| I2C Master (I2C0) <---> I2C Slave(I2C0)                |\n");
-    printf("| !! This sample code requires two borads to test !!     |\n");
+    printf("| !! This sample code requires two boards to test !!     |\n");
     printf("+--------------------------------------------------------+\n");
 
     printf("\n");
@@ -125,7 +123,13 @@ int32_t main(void)
     for (i = 0; i < 256; i += 32)
     {
         /* Write 32 bytes data to Slave */
-        while (I2C_WriteMultiBytesTwoRegs(I2C0, g_u8DeviceAddr, i, &txbuf[i], 32) < 32);
+        if (I2C_WriteMultiBytesTwoRegs(I2C0, g_u8DeviceAddr, i, &txbuf[i], 32) < 32)
+        {
+            printf("I2C_WriteMultiBytesTwoRegs failed.....\n");
+
+            while (1);
+
+        }
     }
 
     printf("Multi bytes Write access Pass.....\n");
@@ -133,7 +137,12 @@ int32_t main(void)
     printf("\n");
 
     /* Use Multi Bytes Read from Slave (Two Registers) */
-    while (I2C_ReadMultiBytesTwoRegs(I2C0, g_u8DeviceAddr, 0x0000, rDataBuf, 256) < 256);
+    if (I2C_ReadMultiBytesTwoRegs(I2C0, g_u8DeviceAddr, 0x0000, rDataBuf, 256) < 256)
+    {
+        printf("I2C_ReadMultiBytesTwoRegs failed.....\n");
+
+        while (1);
+    }
 
     /* Compare TX data and RX data */
     for (i = 0; i < 256; i++)

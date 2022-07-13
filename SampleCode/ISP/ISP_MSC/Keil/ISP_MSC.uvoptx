@@ -285,7 +285,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\startup_M253_user.s</PathWithFileName>
+      <PathWithFileName>startup_M253_user.s</PathWithFileName>
       <FilenameWithoutPath>startup_M253_user.s</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>

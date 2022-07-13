@@ -123,7 +123,7 @@ void CANFD_CANFD_TxRx_Test(CANFD_FD_MSG_T *psTxMsg, E_CANFD_ID_TYPE eFrameIdType
     else
         printf("Send to transmit message 0x%08x (29-bit)\n", psTxMsg->u32Id);
 
-    if (CANFD_TransmitTxMsg(CANFD0, 0, psTxMsg) != 1)
+    if (CANFD_TransmitTxMsg(CANFD0, 0, psTxMsg) != eCANFD_TRANSMIT_SUCCESS)
     {
         printf("Failed to transmit message\n");
     }
@@ -173,7 +173,7 @@ void CANFD_CANFD_Loopback(void)
     /* receive 0x44444 (29-bit id) in CAN FD0 rx fifo buffer by setting mask 2 */
     CANFD_SetXIDFltr(CANFD0, 2, CANFD_RX_FIFO1_EXT_MASK_LOW(0x44444), CANFD_RX_FIFO1_EXT_MASK_HIGH(0x1FFFFFFF));
     /* Reject Non-Matching Standard ID and Extended ID Filter(RX fifo1)*/
-    CANFD_SetGFC(CANFD0, eCANFD_ACC_NON_MATCH_FRM_RX_FIFO1, eCANFD_ACC_NON_MATCH_FRM_RX_FIFO1, 1, 1);
+    CANFD_SetGFC(CANFD0, eCANFD_REJ_NON_MATCH_FRM, eCANFD_REJ_NON_MATCH_FRM, 1, 1);
     /* Enable RX fifo1 new message interrupt using interrupt line 0. */
     CANFD_EnableInt(CANFD0, (CANFD_IE_TOOE_Msk | CANFD_IE_RF1NE_Msk), 0, 0, 0);
     /* CAN FD0 Run to Normal mode  */
@@ -184,7 +184,7 @@ void CANFD_CANFD_Loopback(void)
         CANFD_CANFD_TxRx_Test(&g_sTxMsgFrame, eCANFD_SID, 0x110 + u8Loop, u8Loop);
     }
 
-    CANFD_CANFD_TxRx_Test(&g_sTxMsgFrame, eCANFD_SID, 0x2FF, 8);
+    CANFD_CANFD_TxRx_Test(&g_sTxMsgFrame, eCANFD_SID, 0x22F, 8);
     CANFD_CANFD_TxRx_Test(&g_sTxMsgFrame, eCANFD_SID, 0x333, 8);
 
     for (u8Loop = 0 ; u8Loop < 8; u8Loop++)
