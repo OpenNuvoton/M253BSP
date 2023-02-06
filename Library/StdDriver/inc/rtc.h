@@ -107,7 +107,7 @@ extern "C"
 #define RTC_FCR_REFERENCE       32761UL           /*!< RTC Reference for frequency compensation \hideinitializer */
 
 
-/*@}*/ /* end of group RTC_EXPORTED_CONSTANTS */
+/** @} end of group RTC_EXPORTED_CONSTANTS */
 
 
 /** @addtogroup RTC_EXPORTED_STRUCTS RTC Exported Structs
@@ -129,7 +129,7 @@ typedef struct
     uint32_t u32AmPm;           /*!< Only Time Scale select 12-hr used */
 } S_RTC_TIME_DATA_T;
 
-/*@}*/ /* end of group RTC_EXPORTED_STRUCTS */
+/** @} end of group RTC_EXPORTED_STRUCTS */
 
 
 /** @addtogroup RTC_EXPORTED_FUNCTIONS RTC Exported Functions
@@ -139,7 +139,6 @@ typedef struct
 /**
   * @brief      Indicate is Leap Year or not
   *
-  * @param      None
   *
   * @retval     0   This year is not a leap year
   * @retval     1   This year is a leap year
@@ -152,9 +151,7 @@ typedef struct
 /**
   * @brief      Clear RTC Alarm Interrupt Flag
   *
-  * @param      None
   *
-  * @return     None
   *
   * @details    This macro is used to clear RTC alarm interrupt flag.
   * \hideinitializer
@@ -164,9 +161,7 @@ typedef struct
 /**
   * @brief      Clear RTC Tick Interrupt Flag
   *
-  * @param      None
   *
-  * @return     None
   *
   * @details    This macro is used to clear RTC tick interrupt flag.
   * \hideinitializer
@@ -176,7 +171,6 @@ typedef struct
 /**
   * @brief      Get RTC Alarm Interrupt Flag
   *
-  * @param      None
   *
   * @retval     0   RTC alarm interrupt did not occur
   * @retval     1   RTC alarm interrupt occurred
@@ -189,7 +183,6 @@ typedef struct
 /**
   * @brief      Get RTC Time Tick Interrupt Flag
   *
-  * @param      None
   *
   * @retval     0   RTC time tick interrupt did not occur
   * @retval     1   RTC time tick interrupt occurred
@@ -202,9 +195,7 @@ typedef struct
 /**
  * @brief      Enable RTC Tick Wake-up Function
  *
- * @param      None
  *
- * @return     None
  *
  * @details    This macro is used to enable RTC tick interrupt wake-up function.
  * \hideinitializer
@@ -214,9 +205,7 @@ typedef struct
 /**
   * @brief      Disable RTC Tick Wake-up Function
   *
-  * @param      None
   *
-  * @return     None
   *
   * @details    This macro is used to disable RTC tick interrupt wake-up function.
   * \hideinitializer
@@ -226,9 +215,7 @@ typedef struct
 /**
  * @brief      Enable RTC Alarm Wake-up Function
  *
- * @param      None
  *
- * @return     None
  *
  * @details    This macro is used to enable RTC Alarm interrupt wake-up function.
  * \hideinitializer
@@ -238,9 +225,7 @@ typedef struct
 /**
   * @brief      Disable RTC Alarm Wake-up Function
   *
-  * @param      None
   *
-  * @return     None
   *
   * @details    This macro is used to disable RTC Alarm interrupt wake-up function.
   * \hideinitializer
@@ -266,11 +251,11 @@ void RTC_EnableInt(uint32_t u32IntFlagMask);
 void RTC_DisableInt(uint32_t u32IntFlagMask);
 
 
-/*@}*/ /* end of group RTC_EXPORTED_FUNCTIONS */
+/** @} end of group RTC_EXPORTED_FUNCTIONS */
 
-/*@}*/ /* end of group RTC_Driver */
+/** @} end of group RTC_Driver */
 
-/*@}*/ /* end of group Standard_Driver */
+/** @} end of group Standard_Driver */
 
 #ifdef __cplusplus
 }

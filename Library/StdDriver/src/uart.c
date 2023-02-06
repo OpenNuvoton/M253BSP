@@ -33,7 +33,6 @@
  *                                      - \ref UART_INTSTS_MODEMINT_Msk  : Modem Status interrupt
  *                                      - \ref UART_INTSTS_RLSINT_Msk    : Receive Line Status interrupt
  *
- *    @return       None
  *
  *    @details      The function is used to clear UART specified interrupt flag.
  */
@@ -85,7 +84,6 @@ void UART_ClearIntFlag(UART_T *uart, uint32_t u32InterruptFlag)
  *
  *  @param[in]  uart The pointer of the specified UART module.
  *
- *  @return     None
  *
  *  @details    The function is used to disable UART interrupt.
  */
@@ -100,7 +98,6 @@ void UART_Close(UART_T *uart)
  *
  *  @param[in]  uart The pointer of the specified UART module.
  *
- *  @return     None
  *
  *  @details    The function is used to disable UART auto flow control.
  */
@@ -125,7 +122,6 @@ void UART_DisableFlowCtrl(UART_T *uart)
  *                                      - \ref UART_INTEN_THREIEN_Msk    : Tx empty interrupt
  *                                      - \ref UART_INTEN_RDAIEN_Msk     : Rx ready interrupt
  *
- *    @return       None
  *
  *    @details      The function is used to disable UART specified interrupt.
  */
@@ -141,7 +137,6 @@ void UART_DisableInt(UART_T  *uart, uint32_t u32InterruptFlag)
  *
  *    @param[in]    uart    The pointer of the specified UART module.
  *
- *    @return       None
  *
  *    @details      The function is used to Enable UART auto flow control.
  */
@@ -173,7 +168,6 @@ void UART_EnableFlowCtrl(UART_T *uart)
  *                                      - \ref UART_INTEN_THREIEN_Msk    : Tx empty interrupt
  *                                      - \ref UART_INTEN_RDAIEN_Msk     : Rx ready interrupt
  *
- *    @return       None
  *
  *    @details      The function is used to enable UART specified interrupt.
  */
@@ -190,7 +184,6 @@ void UART_EnableInt(UART_T  *uart, uint32_t u32InterruptFlag)
  *    @param[in]    uart            The pointer of the specified UART module.
  *    @param[in]    u32BaudRate     The baud rate of UART module.
  *
- *    @return       None
  *
  *    @details      This function use to enable UART function and set baud-rate.
  */
@@ -358,7 +351,6 @@ uint32_t UART_Read(UART_T *uart, uint8_t pu8RxBuf[], uint32_t u32ReadBytes)
  *                                  - \ref UART_STOP_BIT_1_5
  *                                  - \ref UART_STOP_BIT_2
  *
- *    @return       None
  *
  *    @details      This function use to config UART line setting.
  */
@@ -455,7 +447,6 @@ void UART_SetLine_Config(UART_T *uart, uint32_t u32BaudRate, uint32_t u32DataWid
  *    @param[in]    uart    The pointer of the specified UART module.
  *    @param[in]    u32TOC  Rx timeout counter.
  *
- *    @return       None
  *
  *    @details      This function use to set Rx timeout count.
  */
@@ -478,7 +469,6 @@ void UART_SetTimeoutCnt(UART_T *uart, uint32_t u32TOC)
  *                                  - \ref UART_IRDA_TXEN
  *                                  - \ref UART_IRDA_RXEN
  *
- *    @return       None
   *
  *    @details      The function is used to configure IrDA relative settings. It consists of TX or RX mode and baudrate.
  */
@@ -591,7 +581,6 @@ void UART_SelectIrDAMode(UART_T *uart, uint32_t u32BuadRate, uint32_t u32Directi
  *                              - \ref UART_ALTCTL_RS485AAD_Msk
  *    @param[in]    u32Addr     The RS485 address.
  *
- *    @return       None
  *
  *    @details      The function is used to set RS485 relative setting.
  */
@@ -658,7 +647,6 @@ uint32_t UART_Write(UART_T *uart, uint8_t pu8TxBuf[], uint32_t u32WriteBytes)
  *
  *    @param[in]    uart        The pointer of the specified UART module.
  *
- *    @return       None
  *
  *    @details      The function is used to select Single Wire mode.
  */
@@ -671,8 +659,8 @@ void UART_SelectSingleWireMode(UART_T *uart)
 }
 
 
-/*@}*/ /* end of group UART_EXPORTED_FUNCTIONS */
+/** @} end of group UART_EXPORTED_FUNCTIONS */
 
-/*@}*/ /* end of group UART_Driver */
+/** @} end of group UART_Driver */
 
-/*@}*/ /* end of group Standard_Driver */
+/** @} end of group Standard_Driver */

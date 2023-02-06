@@ -161,7 +161,6 @@ uint32_t SPI_Open(SPI_T *spi,
 /**
   * @brief  Disable SPI controller.
   * @param[in]  spi The pointer of the specified SPI module.
-  * @return None
   * @details This function will reset SPI controller.
   */
 void SPI_Close(SPI_T *spi)
@@ -177,7 +176,6 @@ void SPI_Close(SPI_T *spi)
 /**
   * @brief  Clear RX FIFO buffer.
   * @param[in]  spi The pointer of the specified SPI module.
-  * @return None
   * @details This function will clear SPI RX FIFO buffer. The RXEMPTY (SPI_STATUS[8]) will be set to 1.
   */
 void SPI_ClearRxFIFO(SPI_T *spi)
@@ -188,7 +186,6 @@ void SPI_ClearRxFIFO(SPI_T *spi)
 /**
   * @brief  Clear TX FIFO buffer.
   * @param[in]  spi The pointer of the specified SPI module.
-  * @return None
   * @details This function will clear SPI TX FIFO buffer. The TXEMPTY (SPI_STATUS[16]) will be set to 1.
   * @note The TX shift register will not be cleared.
   */
@@ -200,7 +197,6 @@ void SPI_ClearTxFIFO(SPI_T *spi)
 /**
   * @brief  Disable the automatic slave selection function.
   * @param[in]  spi The pointer of the specified SPI module.
-  * @return None
   * @details This function will disable the automatic slave selection function and set slave selection signal to inactive state.
   */
 void SPI_DisableAutoSS(SPI_T *spi)
@@ -213,7 +209,6 @@ void SPI_DisableAutoSS(SPI_T *spi)
   * @param[in]  spi The pointer of the specified SPI module.
   * @param[in]  u32SSPinMask Specifies slave selection pins. (SPI_SS)
   * @param[in]  u32ActiveLevel Specifies the active level of slave selection signal. (SPI_SS_ACTIVE_HIGH, SPI_SS_ACTIVE_LOW)
-  * @return None
   * @details This function will enable the automatic slave selection function. Only available in Master mode.
   *          The slave selection pin and the active level will be set in this function.
   */
@@ -315,7 +310,6 @@ uint32_t SPI_SetBusClock(SPI_T *spi, uint32_t u32BusClock)
   * @param[in]  spi The pointer of the specified SPI module.
   * @param[in]  u32TxThreshold Decides the TX FIFO threshold.
   * @param[in]  u32RxThreshold Decides the RX FIFO threshold.
-  * @return None
   * @details Set TX FIFO threshold and RX FIFO threshold configurations.
   */
 void SPI_SetFIFO(SPI_T *spi, uint32_t u32TxThreshold, uint32_t u32RxThreshold)
@@ -378,7 +372,6 @@ uint32_t SPI_GetBusClock(SPI_T *spi)
   *                       - \ref SPI_FIFO_RXOV_INT_MASK
   *                       - \ref SPI_FIFO_RXTO_INT_MASK
   *
-  * @return None
   * @details Enable SPI related interrupts specified by u32Mask parameter.
   */
 void SPI_EnableInt(SPI_T *spi, uint32_t u32Mask)
@@ -461,7 +454,6 @@ void SPI_EnableInt(SPI_T *spi, uint32_t u32Mask)
   *                       - \ref SPI_FIFO_RXOV_INT_MASK
   *                       - \ref SPI_FIFO_RXTO_INT_MASK
   *
-  * @return None
   * @details Disable SPI related interrupts specified by u32Mask parameter.
   */
 void SPI_DisableInt(SPI_T *spi, uint32_t u32Mask)
@@ -649,7 +641,6 @@ uint32_t SPI_GetIntFlag(SPI_T *spi, uint32_t u32Mask)
   *                       - \ref SPI_FIFO_RXOV_INT_MASK
   *                       - \ref SPI_FIFO_RXTO_INT_MASK
   *
-  * @return None
   * @details Clear SPI related interrupt flags specified by u32Mask parameter.
   */
 void SPI_ClearIntFlag(SPI_T *spi, uint32_t u32Mask)
@@ -932,7 +923,6 @@ uint32_t SPII2S_Open(SPI_T *i2s, uint32_t u32MasterSlave, uint32_t u32SampleRate
 /**
   * @brief  Disable I2S function.
   * @param[in]  i2s The pointer of the specified I2S module.
-  * @return None
   * @details Disable I2S function.
   */
 void SPII2S_Close(SPI_T *i2s)
@@ -953,7 +943,6 @@ void SPII2S_Close(SPI_T *i2s)
   *            - \ref SPII2S_RIGHT_ZC_INT_MASK
   *            - \ref SPII2S_LEFT_ZC_INT_MASK
   *            - \ref SPII2S_SLV_CLKERR_INT_MASK
-  * @return None
   * @details This function enables the interrupt according to the u32Mask parameter.
   */
 void SPII2S_EnableInt(SPI_T *i2s, uint32_t u32Mask)
@@ -1020,7 +1009,6 @@ void SPII2S_EnableInt(SPI_T *i2s, uint32_t u32Mask)
   *            - \ref SPII2S_RIGHT_ZC_INT_MASK
   *            - \ref SPII2S_LEFT_ZC_INT_MASK
   *            - \ref SPII2S_SLV_CLKERR_INT_MASK
-  * @return None
   * @details This function disables the interrupt according to the u32Mask parameter.
   */
 void SPII2S_DisableInt(SPI_T *i2s, uint32_t u32Mask)
@@ -1125,7 +1113,6 @@ uint32_t SPII2S_EnableMCLK(SPI_T *i2s, uint32_t u32BusClock)
 /**
   * @brief  Disable master clock (MCLK).
   * @param[in] i2s The pointer of the specified I2S module.
-  * @return None
   * @details Clear MCLKEN bit of SPI_I2SCTL register to disable master clock output.
   */
 void SPII2S_DisableMCLK(SPI_T *i2s)
@@ -1138,7 +1125,6 @@ void SPII2S_DisableMCLK(SPI_T *i2s)
   * @param[in]  i2s The pointer of the specified I2S module.
   * @param[in]  u32TxThreshold Decides the TX FIFO threshold.
   * @param[in]  u32RxThreshold Decides the RX FIFO threshold.
-  * @return None
   * @details Set TX FIFO threshold and RX FIFO threshold configurations.
   */
 void SPII2S_SetFIFO(SPI_T *i2s, uint32_t u32TxThreshold, uint32_t u32RxThreshold)
@@ -1148,8 +1134,8 @@ void SPII2S_SetFIFO(SPI_T *i2s, uint32_t u32TxThreshold, uint32_t u32RxThreshold
                    (u32RxThreshold << SPI_FIFOCTL_RXTH_Pos);
 }
 
-/*@}*/ /* end of group SPI_EXPORTED_FUNCTIONS */
+/** @} end of group SPI_EXPORTED_FUNCTIONS */
 
-/*@}*/ /* end of group SPI_Driver */
+/** @} end of group SPI_Driver */
 
-/*@}*/ /* end of group Standard_Driver */
+/** @} end of group Standard_Driver */

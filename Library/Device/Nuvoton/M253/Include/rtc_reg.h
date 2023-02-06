@@ -15,14 +15,15 @@
 #endif
 
 /**
-   @addtogroup REGISTER Control Register
-  @{
+    @addtogroup REGISTER Control Register
+    @{
 */
 
 /**
     @addtogroup RTC Real Time Clock Controller (RTC)
     Memory Mapped Structure for RTC Controller
-@{ */
+    @{
+*/
 
 typedef struct
 {
@@ -246,7 +247,7 @@ typedef struct
      * |        |           |011 = L3 mode.
      * |[7]     |C32KS      |RTC Clock 32K Source Selection:
      * |        |           |0 = Internal RTC clock is from 32K crystal .
-     * |        |           |1 = Internal RTC clock is from LIRC32K.
+     * |        |           |1 = Internal RTC clock is from LIRC.
      * @var RTC_T::DSTCTL
      * Offset: 0x110  RTC Daylight Saving Time Control Register
      * ---------------------------------------------------------------------------------------------------
@@ -457,9 +458,9 @@ typedef struct
 #define RTC_DSTCTL_DSBAK_Msk             (0x1ul << RTC_DSTCTL_DSBAK_Pos)                   /*!< RTC_T::DSTCTL: DSBAK Mask              */
 
 
-/**@}*/ /* RTC_CONST */
-/**@}*/ /* end of RTC register group */
-/**@}*/ /* end of REGISTER group */
+/** @} RTC_CONST */
+/** @} end of RTC register group */
+/** @} end of REGISTER group */
 
 #if defined ( __CC_ARM   )
     #pragma no_anon_unions

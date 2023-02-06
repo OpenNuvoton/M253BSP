@@ -98,7 +98,6 @@ enum { r0, r1, r2, r3, r12, lr, pc, psr};
 /**
  * @brief       Helper function to dump register while hard fault occurred
  * @param[in]   stack pointer points to the dumped registers in SRAM
- * @return      None
  * @details     This function is implement to print r0, r1, r2, r3, r12, lr, pc, psr
  */
 static void DumpStack(uint32_t stack[])
@@ -150,10 +149,6 @@ int32_t SH_Return(int32_t n32In_R0, int32_t n32In_R1, int32_t *pn32Out_R0)
 
 /**
  * @brief    This HardFault handler is implemented to show r0, r1, r2, r3, r12, lr, pc, psr
- *
- * @param    None
- *
- * @returns  None
  *
  * @details  This function is implement to print r0, r1, r2, r3, r12, lr, pc, psr.
  *
@@ -234,8 +229,8 @@ uint32_t ProcessHardFault(uint32_t lr, uint32_t msp, uint32_t psp)
             We still return for output/input message to UART.
         */
         g_ICE_Connected = 0; // Set a flag for ICE offline
-        sp[6] += 2;         // Return to next instruction
-        return lr;          // Keep lr in R0
+        sp[6] += 2;          // Return to next instruction
+        return lr;           // Keep lr in R0
     }
 
     printf("  HardFault!\n\n");
@@ -252,8 +247,6 @@ uint32_t ProcessHardFault(uint32_t lr, uint32_t msp, uint32_t psp)
  * @brief    Routine to send a char
  *
  * @param[in] ch  A character data writes to debug port
- *
- * @returns  Send value from UART debug port
  *
  * @details  Send a target char to UART debug port .
  */
@@ -389,7 +382,6 @@ __WEAK void SendChar(int ch)
 /**
  * @brief    Routine to get a char
  *
- * @param    None
  *
  * @returns  Get value from UART debug port or semihost
  *
@@ -401,7 +393,6 @@ char GetChar(void)
 
     if (g_ICE_Connected)
     {
-
 #if defined (__ICCARM__)
         int nRet;
 
@@ -462,7 +453,6 @@ char GetChar(void)
 /**
  * @brief    Check any char input from UART
  *
- * @param    None
  *
  * @retval   1: No any char input
  * @retval   0: Have some char input
@@ -476,12 +466,10 @@ int kbhit(void)
 
 
 /**
- * @brief    Check if debug message finished
+ * @brief  Check if debug message finished
  *
- * @param    None
- *
- * @retval   1: Message is finished
- * @retval   0: Message is transmitting.
+ * @return   1 Message is finished.
+ *           0 Message is transmitting.
  *
  * @details  Check if message finished (FIFO empty of debug port)
  */
@@ -495,8 +483,6 @@ int IsDebugFifoEmpty(void)
  * @brief    C library retargetting
  *
  * @param[in]  ch  Write a character data
- *
- * @returns  None
  *
  * @details  Check if message finished (FIFO empty of debug port)
  */

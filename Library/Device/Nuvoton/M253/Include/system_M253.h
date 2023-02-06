@@ -46,54 +46,38 @@ extern uint32_t PllClock;           /*!< PLL Output Clock Frequency           */
 
 
 /**
- * Initialize the system
+ * @brief    System Initialization
  *
- * @param  none
- * @return none
- *
- * @brief  Setup the micro controller system.
- *         Initialize the System and update the SystemCoreClock variable.
+ * @details  The necessary initialization of system. Global variables are forbidden here.
  */
 extern void SystemInit(void);
 
 /**
- * Update SystemCoreClock variable
+ * @brief    Update the Variable SystemCoreClock
  *
- * @param  none
- * @return none
- *
- * @brief  Updates the SystemCoreClock with current core Clock
- *         retrieved from cpu registers.
+ * @details  This function is used to update the variable SystemCoreClock
+ *           and must be called whenever the core clock is changed.
  */
 extern void SystemCoreClockUpdate(void);
 
 #ifndef NOT_USE_DBG_UART
 /**
- * Set UART debug multi function pin
+ * @brief    Set UART debug MPF
  *
- * @param  none
- * @return none
- *
- * @brief  The initialization of uart default multiple-function pin.
+ * @details  The initialization of uart debug multi function pin.
  */
 extern void UartDebugMFP(void);
 
 /**
- * Set UART debug clock
+ * @brief    Set UART debug clock
  *
- * @param    None
- * @return   None
- *
- * @brief  The initialization of debug uart clock source.
+ * @details  The initialization of debug uart clock source.
  */
 extern void UartDebugCLK(void);
 
 
 /**
  * @brief    UART Initial
- *
- * @param    None
- * @return   None
  *
  * @details  The initialization of debug uart.
  */
@@ -102,12 +86,10 @@ extern void UartDebugInit(void);
 #endif /* NOT_USE_DBG_UART */
 
 /**
- * Check if debug message finished
+ * @brief  Check if debug message finished
  *
- * @param    None
- *
- * @retval   1: Message is finished
- * @retval   0: Message is transmitting.
+ * @return   1 Message is finished.
+ *           0 Message is transmitting.
  *
  * @details  Check if message finished (FIFO empty of debug port)
  */

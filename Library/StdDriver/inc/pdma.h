@@ -108,7 +108,7 @@ extern "C"
 #define PDMA_INT_TIMEOUT    0x00000002UL            /*!<Timeout Interrupt \hideinitializer */
 
 
-/*@}*/ /* end of group PDMA_EXPORTED_CONSTANTS */
+/** @} end of group PDMA_EXPORTED_CONSTANTS */
 
 /** @addtogroup PDMA_EXPORTED_FUNCTIONS PDMA Exported Functions
   @{
@@ -119,7 +119,6 @@ extern "C"
  *
  * @param[in]   pdma      The pointer of the specified PDMA module
  *
- * @return      None
  *
  * @details     This macro gets the interrupt status.
  * \hideinitializer
@@ -131,7 +130,6 @@ extern "C"
  *
  * @param[in]   pdma      The pointer of the specified PDMA module
  *
- * @return      None
  *
  * @details     Get the transfer done Interrupt status.
  * \hideinitializer
@@ -144,7 +142,6 @@ extern "C"
  * @param[in]   pdma      The pointer of the specified PDMA module
  * @param[in]   u32Mask     The channel mask
  *
- * @return      None
  *
  * @details     Clear the transfer done Interrupt status.
  * \hideinitializer
@@ -156,7 +153,6 @@ extern "C"
  *
  * @param[in]   pdma      The pointer of the specified PDMA module
  *
- * @return      None
  *
  * @details     Get the target abort Interrupt status.
  * \hideinitializer
@@ -169,7 +165,6 @@ extern "C"
  * @param[in]   pdma      The pointer of the specified PDMA module
  * @param[in]   u32Mask     The channel mask
  *
- * @return      None
  *
  * @details     Clear the target abort Interrupt status.
  * \hideinitializer
@@ -181,7 +176,6 @@ extern "C"
  *
  * @param[in]   pdma      The pointer of the specified PDMA module
  *
- * @return      None
  *
  * @details     Get Alignment Interrupt status.
  * \hideinitializer
@@ -194,7 +188,6 @@ extern "C"
  * @param[in]   pdma        The pointer of the specified PDMA module
  * @param[in]   u32Mask     The channel mask
  *
- * @return      None
  *
  * @details     Clear the Alignment Interrupt status.
  * \hideinitializer
@@ -207,7 +200,6 @@ extern "C"
  * @param[in]   pdma        The pointer of the specified PDMA module
  * @param[in]   u32Ch     The selected channel
  *
- * @return      None
  *
  * @details     Clear the selected channel timeout interrupt status.
  * \hideinitializer
@@ -235,7 +227,6 @@ extern "C"
  * @param[in]   u32Ch     The selected channel
  * @param[in]   u32Addr   The selected address
  *
- * @return      None
  *
  * @details     This macro set the selected channel source address.
  * \hideinitializer
@@ -249,7 +240,6 @@ extern "C"
  * @param[in]   u32Ch     The selected channel
  * @param[in]   u32Addr   The selected address
  *
- * @return      None
  *
  * @details     This macro set the selected channel destination address.
  * \hideinitializer
@@ -263,7 +253,6 @@ extern "C"
  * @param[in]   u32Ch          The selected channel
  * @param[in]   u32TransCount  Transfer Count
  *
- * @return      None
  *
  * @details     This macro set the selected channel transfer count.
  * \hideinitializer
@@ -277,7 +266,6 @@ extern "C"
  * @param[in]   u32Ch     The selected channel
  * @param[in]   u32Addr   The descriptor address
  *
- * @return      None
  *
  * @details     This macro set the selected channel scatter-gather descriptor address.
  * \hideinitializer
@@ -290,7 +278,6 @@ extern "C"
  * @param[in]   pdma      The pointer of the specified PDMA module
  * @param[in]   u32Ch     The selected channel
  *
- * @return      None
  *
  * @details     This macro stop the selected channel.
  * \hideinitializer
@@ -303,7 +290,6 @@ extern "C"
  * @param[in]   pdma      The pointer of the specified PDMA module
  * @param[in]   u32Ch     The selected channel
  *
- * @return      None
  *
  * @details     This macro pause the selected channel.
  * \hideinitializer
@@ -327,11 +313,11 @@ void PDMA_EnableInt(PDMA_T *pdma, uint32_t u32Ch, uint32_t u32Mask);
 void PDMA_DisableInt(PDMA_T *pdma, uint32_t u32Ch, uint32_t u32Mask);
 
 
-/*@}*/ /* end of group PDMA_EXPORTED_FUNCTIONS */
+/** @} end of group PDMA_EXPORTED_FUNCTIONS */
 
-/*@}*/ /* end of group PDMA_Driver */
+/** @} end of group PDMA_Driver */
 
-/*@}*/ /* end of group Standard_Driver */
+/** @} end of group Standard_Driver */
 
 #ifdef __cplusplus
 }

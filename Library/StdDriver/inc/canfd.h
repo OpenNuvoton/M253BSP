@@ -30,6 +30,8 @@ extern "C"
 #define CANFD_OP_CAN_MODE     0
 #define CANFD_OP_CAN_FD_MODE  1
 
+#define CANFD_READ_REG_TIMEOUT    48                 /*!< CANFD read register time-out count */
+
 /* Reserved number of elements in Message RAM - used for calculation of start addresses within RAM Configuration
    some element_numbers set to less than max, to stay altogether below 256 words of MessageRAM requirement*/
 #define CANFD_MAX_11_BIT_FTR_ELEMS    128ul  /*!<  maximum is 128 11-bit Filter */
@@ -40,8 +42,10 @@ extern "C"
 #define CANFD_MAX_TX_BUF_ELEMS        32ul   /*!<  maximum is  32 Tx Buffers */
 #define CANFD_MAX_TX_EVNT_FIFO_ELEMS  32ul   /*!<  maximum is  32 Tx Event FIFO elements */
 
+#define CANFD_SRAM_OFFSET             0x200ul
+
 /* CAN FD sram address  */
-#define CANFD_SRAM_BASE_ADDR          CANFD_BASE + 0x200ul
+#define CANFD_SRAM_BASE_ADDR(psCanfd)  ((uint32_t)psCanfd + CANFD_SRAM_OFFSET)
 
 /* CAN FD  Mask all interrupt */
 #define CANFD_INT_ALL_SIGNALS         0x3FFFFFFFul
@@ -50,34 +54,34 @@ extern "C"
 #define CANFD_MAX_MESSAGE_BYTES     64
 
 /* Maximum size of a CAN FD frame. Must be a valid CAN FD value */
-#define CANFD_MAX_MESSAGE_WORDS     CANFD_MAX_MESSAGE_BYTES/4
+#define CANFD_MAX_MESSAGE_WORDS     (CANFD_MAX_MESSAGE_BYTES / 4)
 
 /* Receive message buffer helper macro */
-#define CANFD_RX_BUFFER_STD(id, mbIdx)               (7UL << 27) | ((id & 0x7FF) << 16) | (mbIdx & 0x3F)
+#define CANFD_RX_BUFFER_STD(id, mbIdx)               ((7UL << 27) | ((id & 0x7FF) << 16) | (mbIdx & 0x3F))
 
 /* Receive message buffer extended helper macro - low */
-#define CANFD_RX_BUFFER_EXT_LOW(id, mbIdx)           (7UL << 29) | (id & 0x1FFFFFFFUL)
+#define CANFD_RX_BUFFER_EXT_LOW(id, mbIdx)           ((7UL << 29) | (id & 0x1FFFFFFFUL))
 
 /*  Receive message buffer extended helper macro - high */
 #define CANFD_RX_BUFFER_EXT_HIGH(id, mbIdx)          (mbIdx & 0x3FUL)
 
 /*  CAN FD Rx FIFO 0 Mask helper macro. */
-#define CANFD_RX_FIFO0_STD_MASK(match, mask)         (2UL << 30) | (1UL << 27) | ((match & 0x7FF) << 16) | (mask & 0x7FF)
+#define CANFD_RX_FIFO0_STD_MASK(match, mask)         ((2UL << 30) | (1UL << 27) | ((match & 0x7FF) << 16) | (mask & 0x7FF))
 
 /* CAN FD Rx FIFO 0 extended Mask helper macro - low. */
-#define CANFD_RX_FIFO0_EXT_MASK_LOW(match)           (1UL << 29) | ((match & 0x1FFFFFFF))
+#define CANFD_RX_FIFO0_EXT_MASK_LOW(match)           ((1UL << 29) | (match & 0x1FFFFFFF))
 
 /* CAN FD Rx FIFO 0 extended Mask helper macro - high. */
-#define CANFD_RX_FIFO0_EXT_MASK_HIGH(mask)           (2UL << 30) | ((mask & 0x1FFFFFFF))
+#define CANFD_RX_FIFO0_EXT_MASK_HIGH(mask)           ((2UL << 30) | (mask & 0x1FFFFFFF))
 
 /* CAN FD Rx FIFO 1 Mask helper macro. */
-#define CANFD_RX_FIFO1_STD_MASK(match, mask)         (2UL << 30) | (2UL << 27) | ((match & 0x7FF) << 16) | (mask & 0x7FF)
+#define CANFD_RX_FIFO1_STD_MASK(match, mask)         ((2UL << 30) | (2UL << 27) | ((match & 0x7FF) << 16) | (mask & 0x7FF))
 
 /* CANFD Rx FIFO 1 extended Mask helper macro - low. */
-#define CANFD_RX_FIFO1_EXT_MASK_LOW(match)           (2UL << 29) | ((match & 0x1FFFFFFF))
+#define CANFD_RX_FIFO1_EXT_MASK_LOW(match)           ((2UL << 29) | (match & 0x1FFFFFFF))
 
 /* CANFD Rx FIFO 1 extended Mask helper macro - high. */
-#define CANFD_RX_FIFO1_EXT_MASK_HIGH(mask)           (2UL << 30) | ((mask & 0x1FFFFFFF))
+#define CANFD_RX_FIFO1_EXT_MASK_HIGH(mask)           ((2UL << 30) | (mask & 0x1FFFFFFF))
 
 /**
  *    @brief        Get Monitors the Module’s CAN Communication State Flag
@@ -391,28 +395,6 @@ typedef struct
     uint8_t             bBitRateSwitch;  /*!< Bit Rate Switch */
 } CANFD_TX_EVNT_ELEM_T;
 
-#define CANFD_READ_REG_TIMEOUT    48                 /*!< CANFD read register time-out count */
-
-__STATIC_INLINE uint32_t CANFD_ReadReg(uint32_t u32RegAddr);
-
-__STATIC_INLINE uint32_t CANFD_ReadReg(uint32_t u32RegAddr)
-{
-    uint32_t u32ReadReg;
-    uint32_t u32TimeOutCnt = CANFD_READ_REG_TIMEOUT;
-    u32ReadReg = 0UL;
-
-    do
-    {
-        u32ReadReg = inpw((uint32_t *)u32RegAddr);
-
-        if (--u32TimeOutCnt == 0UL)
-        {
-            break;
-        }
-    } while (u32ReadReg == 0UL);
-
-    return u32ReadReg;
-}
 
 void CANFD_Open(CANFD_T *canfd, CANFD_FD_T *psCanfdStr);
 void CANFD_Close(CANFD_T *canfd);
@@ -421,12 +403,6 @@ void CANFD_DisableInt(CANFD_T *canfd, uint32_t u32IntLine0, uint32_t u32IntLine1
 uint32_t CANFD_TransmitTxMsg(CANFD_T *canfd, uint32_t u32TxBufIdx, CANFD_FD_MSG_T *psTxMsg);
 uint32_t CANFD_TransmitDMsg(CANFD_T *canfd, uint32_t u32TxBufIdx, CANFD_FD_MSG_T *psTxMsg);
 void CANFD_SetGFC(CANFD_T *canfd, E_CANFD_ACC_NON_MATCH_FRM eNMStdFrm, E_CANFD_ACC_NON_MATCH_FRM eEMExtFrm, uint32_t u32RejRmtStdFrm, uint32_t u32RejRmtExtFrm);
-void CANFD_InitRxFifo(CANFD_T *canfd, uint32_t u32RxFifoNum, CANFD_RAM_PART_T *psRamConfig, CANFD_ELEM_SIZE_T *psElemSize, uint32_t u32FifoWM, E_CANFD_DATA_FIELD_SIZE eFifoSize);
-void CANFD_InitRxDBuf(CANFD_T *canfd, CANFD_RAM_PART_T *psRamConfig, CANFD_ELEM_SIZE_T *psElemSize, E_CANFD_DATA_FIELD_SIZE eRxBufSize);
-void CANFD_InitTxDBuf(CANFD_T *canfd, CANFD_RAM_PART_T *psRamConfig, CANFD_ELEM_SIZE_T *psElemSize, E_CANFD_DATA_FIELD_SIZE eTxBufSize);
-void CANFD_InitTxEvntFifo(CANFD_T *canfd, CANFD_RAM_PART_T *psRamConfig, CANFD_ELEM_SIZE_T *psElemSize, uint32_t u32FifoWaterLvl);
-void CANFD_ConfigSIDFC(CANFD_T *canfd, CANFD_RAM_PART_T *psRamConfig, CANFD_ELEM_SIZE_T *psElemSize);
-void CANFD_ConfigXIDFC(CANFD_T *canfd, CANFD_RAM_PART_T *psRamConfig, CANFD_ELEM_SIZE_T *psElemSize);
 void CANFD_SetSIDFltr(CANFD_T *canfd, uint32_t u32FltrIdx, uint32_t u32Filter);
 void CANFD_SetXIDFltr(CANFD_T *canfd, uint32_t u32FltrIdx, uint32_t u32FilterLow, uint32_t u32FilterHigh);
 uint32_t CANFD_ReadRxBufMsg(CANFD_T *canfd, uint8_t u8MbIdx, CANFD_FD_MSG_T *psMsgBuf);
@@ -444,12 +420,13 @@ void CANFD_RunToNormal(CANFD_T *canfd, uint8_t u8Enable);
 void CANFD_GetDefaultConfig(CANFD_FD_T *psConfig, uint8_t u8OpMode);
 void CANFD_ClearStatusFlag(CANFD_T *canfd, uint32_t u32InterruptFlag);
 uint32_t CANFD_GetStatusFlag(CANFD_T *canfd, uint32_t u32IntTypeFlag);
+uint32_t CANFD_ReadReg(__I uint32_t *pu32RegAddr);
 
-/*@}*/ /* end of group CANFD_EXPORTED_FUNCTIONS */
+/** @} end of group CANFD_EXPORTED_FUNCTIONS */
 
-/*@}*/ /* end of group CANFD_Driver */
+/** @} end of group CANFD_Driver */
 
-/*@}*/ /* end of group Standard_Driver */
+/** @} end of group Standard_Driver */
 
 #ifdef __cplusplus
 }

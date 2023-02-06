@@ -102,7 +102,7 @@ extern "C"
 #define UART_BAUD_MODE2     (UART_BAUD_BAUDM1_Msk | UART_BAUD_BAUDM0_Msk) /*!< Set UART Baudrate Mode is Mode2 \hideinitializer */
 
 
-/*@}*/ /* end of group UART_EXPORTED_CONSTANTS */
+/** @} end of group UART_EXPORTED_CONSTANTS */
 
 
 /** @addtogroup UART_EXPORTED_FUNCTIONS UART Exported Functions
@@ -144,7 +144,6 @@ extern "C"
  *    @param[in]    uart    The pointer of the specified UART module
  *    @param[in]    u8Data  Data byte to transmit.
  *
- *    @return       None
  *
  *    @details      This macro write Data to Tx data register.
  *    \hideinitializer
@@ -213,7 +212,6 @@ extern "C"
  *
  *    @param[in]    uart    The pointer of the specified UART module
  *
- *    @return       None
  *
  *    @details      This macro wait specified UART port transmission is over.
  *    \hideinitializer
@@ -321,7 +319,6 @@ extern "C"
  *                              - \ref UART_INTEN_THREIEN_Msk    : Tx empty interrupt
  *                              - \ref UART_INTEN_RDAIEN_Msk     : Rx ready interrupt
  *
- *    @return       None
  *
  *    @details      This macro enable specified UART interrupt.
  *    \hideinitializer
@@ -346,7 +343,6 @@ extern "C"
  *                              - \ref UART_INTEN_THREIEN_Msk    : Tx empty interrupt
  *                              - \ref UART_INTEN_RDAIEN_Msk     : Rx ready interrupt
  *
- *    @return       None
  *
  *    @details      This macro disable specified UART interrupt.
  *    \hideinitializer
@@ -403,7 +399,6 @@ extern "C"
  *
  *    @param[in]    uart    The pointer of the specified UART module
  *
- *    @return       None
  *
  *    @details      This macro clear RS-485 address byte detection flag.
  *    \hideinitializer
@@ -432,7 +427,6 @@ extern "C"
  *                             - \ref UART_INTEN_TXPDMAEN_Msk
  *                             - \ref UART_INTEN_RXPDMAEN_Msk
  *
- *    @return       None
  *
  *    \hideinitializer
  */
@@ -445,7 +439,6 @@ extern "C"
  *                             - \ref UART_INTEN_TXPDMAEN_Msk
  *                             - \ref UART_INTEN_RXPDMAEN_Msk
  *
- *    @return       None
  *
  *    \hideinitializer
  */
@@ -456,7 +449,6 @@ extern "C"
  *
  *    @param[in]    uart        The pointer of the specified UART module
  *
- *    @return       None
  *
  *    \hideinitializer
  */
@@ -466,7 +458,6 @@ extern "C"
  *
  *    @param[in]    uart        The pointer of the specified UART module
  *
- *    @return       None
  *
  *    \hideinitializer
  */
@@ -483,7 +474,6 @@ __STATIC_INLINE void UART_SET_RTS(UART_T *uart);
  *
  *    @param[in]    uart    The pointer of the specified UART module
  *
- *    @return       None
  *
  *    @details      This macro set RTS pin to low.
  */
@@ -499,7 +489,6 @@ __STATIC_INLINE void UART_CLEAR_RTS(UART_T *uart)
  *
  *    @param[in]    uart    The pointer of the specified UART module
  *
- *    @return       None
  *
  *    @details      This macro set RTS pin to high.
  */
@@ -526,11 +515,11 @@ void UART_SelectSingleWireMode(UART_T *uart);
 
 
 
-/*@}*/ /* end of group UART_EXPORTED_FUNCTIONS */
+/** @} end of group UART_EXPORTED_FUNCTIONS */
 
-/*@}*/ /* end of group UART_Driver */
+/** @} end of group UART_Driver */
 
-/*@}*/ /* end of group Standard_Driver */
+/** @} end of group Standard_Driver */
 
 #ifdef __cplusplus
 }

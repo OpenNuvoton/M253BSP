@@ -56,7 +56,7 @@ extern "C"
 #define I2C_TIMEOUT_ERR (I2C_ERR_TIMEOUT)/*!< I2C operation abort due to timeout error (backward compatibility)           \hideinitializer */
 #define I2C_ERR_FAIL    (-2L)            /*!< I2C operation failed                                                        \hideinitializer */
 
-/*@}*/ /* end of group I2C_EXPORTED_CONSTANTS */
+/** @} end of group I2C_EXPORTED_CONSTANTS */
 
 extern int32_t g_I2C_i32ErrCode;
 
@@ -69,7 +69,6 @@ extern int32_t g_I2C_i32ErrCode;
  *    @param[in]    i2c        Specify I2C port
  *    @param[in]    u8Ctrl     A byte writes to I2C control register
  *
- *    @return       None
  *
  *    @details      Set I2C_CTL register to control I2C bus conditions of START, STOP, SI, ACK.
  *    \hideinitializer
@@ -81,7 +80,6 @@ extern int32_t g_I2C_i32ErrCode;
  *
  *    @param[in]    i2c        Specify I2C port
  *
- *    @return       None
  *
  *    @details      Set the I2C bus START condition in I2C_CTL register.
  *    \hideinitializer
@@ -93,7 +91,6 @@ extern int32_t g_I2C_i32ErrCode;
  *
  *    @param[in]    i2c        Specify I2C port
  *
- *    @return       None
  *
  *    @details      When a new status is presented of I2C bus, the SI flag will be set in I2C_CTL register.
  *    \hideinitializer
@@ -118,7 +115,6 @@ extern int32_t g_I2C_i32ErrCode;
  *    @param[in]    i2c         Specify I2C port
  *    @param[in]    u8Data      A byte that writes to data register
  *
- *    @return       None
  *
  *    @details      When write a data to I2C_DAT register, the I2C controller will shift it to I2C bus.
  *    \hideinitializer
@@ -168,7 +164,6 @@ extern int32_t g_I2C_i32ErrCode;
  *
  *    @param[in]    i2c     Specify I2C port
  *
- *    @return       None
  *
  *    @details      If wake-up flag is set, use this macro to clear it.
  *    \hideinitializer
@@ -250,7 +245,6 @@ __STATIC_INLINE void I2C_STOP(I2C_T *i2c);
  *
  *    @param[in]    i2c        Specify I2C port
  *
- *    @return       None
  *
  *    @details      Set the I2C bus STOP condition in I2C_CTL register.
  */
@@ -297,11 +291,11 @@ uint32_t I2C_ReadMultiBytesOneReg(I2C_T *i2c, uint8_t u8SlaveAddr, uint8_t u8Dat
 uint8_t I2C_ReadByteTwoRegs(I2C_T *i2c, uint8_t u8SlaveAddr, uint16_t u16DataAddr);
 uint32_t I2C_ReadMultiBytesTwoRegs(I2C_T *i2c, uint8_t u8SlaveAddr, uint16_t u16DataAddr, uint8_t *pu8rData, uint32_t u32rLen);
 
-/*@}*/ /* end of group I2C_EXPORTED_FUNCTIONS */
+/** @} end of group I2C_EXPORTED_FUNCTIONS */
 
-/*@}*/ /* end of group I2C_Driver */
+/** @} end of group I2C_Driver */
 
-/*@}*/ /* end of group Standard_Driver */
+/** @} end of group Standard_Driver */
 
 #ifdef __cplusplus
 }

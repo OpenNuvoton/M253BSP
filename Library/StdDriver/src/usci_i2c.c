@@ -65,7 +65,6 @@ uint32_t UI2C_Open(UI2C_T *psUI2C, uint32_t u32BusClock)
  *
  *    @param[in]    psUI2C          The pointer of the specified USCI_I2C module.
  *
- *    @return       None
  *
  *    @details      Close USCI_I2C protocol function.
  */
@@ -80,7 +79,6 @@ void UI2C_Close(UI2C_T *psUI2C)
  *
  *    @param[in]    psUI2C          The pointer of the specified USCI_I2C module.
  *
- *    @return       None
  *
  *    @details      Clear time-out flag when time-out flag is set.
  */
@@ -98,7 +96,6 @@ void UI2C_ClearTimeoutFlag(UI2C_T *psUI2C)
  *    @param[in]    u8Ptrg Set      PTRG bit to USCI_I2C module.
  *    @param[in]    u8Ack Set       ACK bit to USCI_I2C module.
  *
- *    @return       None
  *
  *    @details      The function set USCI_I2C control bit of USCI_I2C bus protocol.
  */
@@ -145,7 +142,6 @@ void UI2C_Trigger(UI2C_T *psUI2C, uint8_t u8Start, uint8_t u8Stop, uint8_t u8Ptr
  *                                  - \ref UI2C_ERR_INT_MASK
  *                                  - \ref UI2C_ACK_INT_MASK
  *
- *    @return       None
  *
  *    @details      The function is used to disable USCI_I2C bus interrupt events.
  */
@@ -207,7 +203,6 @@ void UI2C_DisableInt(UI2C_T *psUI2C, uint32_t u32Mask)
  *                                  - \ref UI2C_ARBLO_INT_MASK
  *                                  - \ref UI2C_ERR_INT_MASK
  *                                  - \ref UI2C_ACK_INT_MASK
- *    @return None
  *
  *    @details      The function is used to enable USCI_I2C bus interrupt events.
  */
@@ -400,7 +395,6 @@ uint32_t UI2C_GetIntFlag(UI2C_T *psUI2C, uint32_t u32Mask)
  *                                  - \ref UI2C_ERR_INT_MASK
  *                                  - \ref UI2C_ACK_INT_MASK
  *
- *    @return       None
  *
  *    @details      Use this function to clear USCI_I2C interrupt flag when module occurs interrupt event and set flag.
  */
@@ -469,7 +463,6 @@ uint32_t UI2C_GetData(UI2C_T *psUI2C)
  *    @param[in]    psUI2C          The pointer of the specified USCI_I2C module.
  *    @param[in]    u8Data          The data which will be written to data register of USCI_I2C module.
  *
- *    @return       None
  *
  *    @details      To write a byte data to transmit data register to transmit data.
  */
@@ -488,7 +481,6 @@ void UI2C_SetData(UI2C_T *psUI2C, uint8_t u8Data)
  *                                  - \ref UI2C_GCMODE_ENABLE
  *                                  - \ref UI2C_GCMODE_DISABLE
  *
- *    @return None
  *
  *    @details      To configure USCI_I2C module slave address and GC mode.
  */
@@ -513,7 +505,6 @@ void UI2C_SetSlaveAddr(UI2C_T *psUI2C, uint8_t u8SlaveNo, uint16_t u16SlaveAddr,
  *    @param[in]    u8SlaveNo        Slave channel number [0/1]
  *    @param[in]    u16SlaveAddrMask The slave address mask.
  *
- *    @return None
  *
  *    @details      To configure USCI_I2C module slave  address mask bit.
  *    @note         The corresponding address bit is "Don't Care".
@@ -536,7 +527,6 @@ void UI2C_SetSlaveAddrMask(UI2C_T *psUI2C, uint8_t u8SlaveNo, uint16_t u16SlaveA
  *    @param[in]    psUI2C          The pointer of the specified USCI_I2C module.
  *    @param[in]    u32TimeoutCnt   Timeout counter. Valid values are between 0~0x3FF
  *
- *    @return       None
  *
  *    @details      To enable USCI_I2C bus time-out function and set time-out counter.
  */
@@ -551,7 +541,6 @@ void UI2C_EnableTimeout(UI2C_T *psUI2C, uint32_t u32TimeoutCnt)
  *
  *    @param[in]    psUI2C          The pointer of the specified USCI_I2C module.
  *
- *    @return       None
  *
  *    @details      To disable USCI_I2C bus time-out function.
  */
@@ -569,7 +558,6 @@ void UI2C_DisableTimeout(UI2C_T *psUI2C)
  *                                  - \ref UI2C_DATA_TOGGLE_WK
  *                                  - \ref UI2C_ADDR_MATCH_WK
  *
- *    @return       None
  *
  *    @details      To enable USCI_I2C module wake-up function.
  */
@@ -583,7 +571,6 @@ void UI2C_EnableWakeup(UI2C_T *psUI2C, uint8_t u8WakeupMode)
  *
  *    @param[in]    psUI2C          The pointer of the specified USCI_I2C module.
  *
- *    @return       None
  *
  *    @details      To disable USCI_I2C module wake-up function.
  */
@@ -1659,8 +1646,8 @@ uint32_t UI2C_ReadMultiBytesTwoRegs(UI2C_T *psUI2C, uint8_t u8SlaveAddr, uint16_
     return u32RXLen;                                                        /* Return bytes length that have been received */
 }
 
-/*@}*/ /* end of group USCI_I2C_EXPORTED_FUNCTIONS */
+/** @} end of group USCI_I2C_EXPORTED_FUNCTIONS */
 
-/*@}*/ /* end of group USCI_I2C_Driver */
+/** @} end of group USCI_I2C_Driver */
 
-/*@}*/ /* end of group Standard_Driver */
+/** @} end of group Standard_Driver */

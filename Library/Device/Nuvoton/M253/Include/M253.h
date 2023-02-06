@@ -184,23 +184,12 @@ typedef enum IRQn
 #define __Vendor_SysTickConfig    0U        /* Set to 1 if different SysTick Config is used */
 #define USE_ASSERT                0U        /* Define to use Assert function or not       */
 
-/*@}*/ /* end of group CMSIS_Device */
+/** @} end of group CMSIS_Device */
 
 
 #include <stdint.h>
 #include "core_cm23.h"                      /* Processor and core peripherals             */
 #include "system_M253.h"                    /* System Header                              */
-
-/**
- * Initialize the system clock
- *
- * @param  none
- * @return none
- *
- * @brief  Setup the micro controller system
- *         Initialize the PLL and update the SystemFrequency variable
- */
-extern void SystemInit(void);
 
 
 /******************************************************************************/
@@ -234,7 +223,7 @@ extern void SystemInit(void);
 #include "wdt_reg.h"
 #include "wwdt_reg.h"
 
-/**@}*/ /* end of REGISTER group */
+/** @} end of REGISTER group */
 
 
 /******************************************************************************/
@@ -297,7 +286,7 @@ extern void SystemInit(void);
 #define I2C1_BASE             (APBPERIPH_BASE + 0x41000UL)
 #define UART3_BASE            (APBPERIPH_BASE + 0x33000UL)
 
-/**@}*/ /* end of group PERIPHERAL_BASE */
+/** @} end of group PERIPHERAL_BASE */
 
 
 /******************************************************************************/
@@ -350,7 +339,7 @@ extern void SystemInit(void);
 #define I2C1                 ((I2C_T *)             I2C1_BASE)
 #define UART3                ((UART_T *)            UART3_BASE)
 
-/**@}*/ /* end of group PERIPHERAL_DECLARATION */
+/** @} end of group PERIPHERAL_DECLARATION */
 
 
 /* --------------------  End of section using anonymous unions  ------------------- */
@@ -510,7 +499,7 @@ typedef volatile uint64_t vu64;       ///< Define 64-bit unsigned volatile data 
   */
 #define inp8(port)          ((*((volatile unsigned char *)(port))))
 
-/*@}*/ /* end of group IO_ROUTINE */
+/** @} end of group IO_ROUTINE */
 
 
 /******************************************************************************/
@@ -579,7 +568,7 @@ typedef volatile uint64_t vu64;       ///< Define 64-bit unsigned volatile data 
 #define GET_BYTE2(u32Param)    (((u32Param) & BYTE2_Msk) >> 16) /*!< Extract Byte 2 (Bit 16~23) from parameter u32Param */
 #define GET_BYTE3(u32Param)    (((u32Param) & BYTE3_Msk) >> 24) /*!< Extract Byte 3 (Bit 24~31) from parameter u32Param */
 
-/*@}*/ /* end of group Legacy_Constants */
+/** @} end of group Legacy_Constants */
 
 
 /******************************************************************************/

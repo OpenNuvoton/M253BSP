@@ -1,7 +1,7 @@
 /**************************************************************************//**
  * @file     canfd_reg.h
  * @version  V1.00
- * @brief    CAN FD register definition header file
+ * @brief    CANFD register definition header file
  *
 * SPDX-License-Identifier: Apache-2.0
  * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
@@ -15,14 +15,15 @@
 #endif
 
 /**
-   @addtogroup REGISTER Control Register
-   @{
+    @addtogroup REGISTER Control Register
+    @{
 */
 
 /**
-    @addtogroup Controller Area Network with Flexible Data-Rate (CAN FD)
-    Memory Mapped Structure for CAN FD Controller
-@{ */
+    @addtogroup CANFD Controller Area Network with Flexible Data-Rate (CANFD)
+    Memory Mapped Structure for CANFD Controller
+    @{
+*/
 
 typedef struct
 {
@@ -120,7 +121,7 @@ typedef struct
     * |[9]     |BRSE      |Bit Rate Switch Enable
     * |        |          |0 = Bit rate switching for transmissions disabled.
     * |        |          |1 = Bit rate switching for transmissions enabled.
-    * |        |          |Note: When CAN FD operation is disabled FDOE = 0, BRSE is not evaluated.
+    * |        |          |Note: When CANFD operation is disabled FDOE = 0, BRSE is not evaluated.
     * |[12]    |PXHD      |Protocol Exception Handling Disable
     * |        |          |0 = Protocol exception handling enabled.
     * |        |          |1 = Protocol exception handling disabled.
@@ -129,13 +130,13 @@ typedef struct
     * |        |          |0 = Edge filtering disabled.
     * |        |          |1 = Two consecutive dominant tq required to detect an edge f or hard synchronization.
     * |[14]    |TXP       |Transmit Pause
-    * |        |          |If this bit is set, the CAN FD controller pauses for two CAN bit times before starting the next transmission after itself has successfully transmitted a frame (refer to 1.1.5.5).
+    * |        |          |If this bit is set, the CANFD controller pauses for two CAN bit times before starting the next transmission after itself has successfully transmitted a frame (refer to 1.1.5.5).
     * |        |          |0 = Transmit pause disabled.
     * |        |          |1 = Transmit pause enabled.
     * |[15]    |NISO      |Non ISO Operation
-    * |        |          |If this bit is set, the CAN FD controller controller uses the CAN FD frame format as specied by the Bosch CAN FD Specification V1.0.
-    * |        |          |0 = CAN FD frame format according to ISO 11898-1:2015.
-    * |        |          |1 = CAN FD frame format according to Bosch CAN FD Specification V1.0.
+    * |        |          |If this bit is set, the CANFD controller controller uses the CANFD frame format as specied by the Bosch CANFD Specification V1.0.
+    * |        |          |0 = CANFD frame format according to ISO 11898-1:2015.
+    * |        |          |1 = CANFD frame format according to Bosch CANFD Specification V1.0.
     * @var CANFD_T::NBTP
     * Offset: 0x1C  Nominal Bit Timing & Prescaler Register
     * ---------------------------------------------------------------------------------------------------
@@ -190,7 +191,7 @@ typedef struct
     * |[0]     |ETOC      |Enable Timeout Counter
     * |        |          |0 = Timeout Counter disabled.
     * |        |          |1 = Timeout Counter enabled.
-    * |        |          |Note: For use of timeout function with CAN FD refer to 1.1.5.3.
+    * |        |          |Note: For use of timeout function with CANFD refer to 1.1.5.3.
     * |[2:1]   |TOS       |Timeout Select
     * |        |          |When operating in Continuous mode, a write to CANFD_TOCV presets the counter to the value configured by CANFD_TOP (TOCC[31:16]) and continues down-counting
     * |        |          |When the Timeout Counter is controlled by one of the FIFOs, an empty FIFO presets the counter to the value configured by CANFD_TOP (TOCC[31:16])
@@ -256,32 +257,32 @@ typedef struct
     * |        |          |10 = Receiver - node is operating as receiver.
     * |        |          |11 = Transmitter - node is operating as transmitter.
     * |[5]     |EP        |Error Passive
-    * |        |          |0 = The CAN FD controller is in the Error_Active state.
+    * |        |          |0 = The CANFD controller is in the Error_Active state.
     * |        |          |It normally takes part in bus communication and sends an active error flag when an error has been detected.
-    * |        |          |1 = The CAN FD controller is in the Error_Passive state.
+    * |        |          |1 = The CANFD controller is in the Error_Passive state.
     * |[6]     |EW        |Warning Status
     * |        |          |0 = Both error counters are below the Error_Warning limit of 96.
     * |        |          |1 = At least one of error counter has reached the Error_Warning limit of 96.
     * |[7]     |BO        |Bus_Off Status
-    * |        |          |0 = The CAN FD controller is not Bus_Off.
-    * |        |          |1 = The CAN FD controller is in Bus_Off state.
+    * |        |          |0 = The CANFD controller is not Bus_Off.
+    * |        |          |1 = The CANFD controller is in Bus_Off state.
     * |[10:8]  |DLEC      |Data Phase Last Error Code
-    * |        |          |Type of last error that occurred in the data phase of a CAN FD format frame with its BRS flag set.
+    * |        |          |Type of last error that occurred in the data phase of a CANFD format frame with its BRS flag set.
     * |        |          |Coding is the same as for LEC.
-    * |        |          |This field will be cleared to zero when a CAN FD format frame with its BRS flag set has been transferred (reception or transmission) without error.
-    * |[11]    |RESI      |ESI flag of last received CAN FD Message
+    * |        |          |This field will be cleared to zero when a CANFD format frame with its BRS flag set has been transferred (reception or transmission) without error.
+    * |[11]    |RESI      |ESI flag of last received CANFD Message
     * |        |          |This bit is set together with RFDF, independent of acceptance filtering.
-    * |        |          |0 = Last received CAN FD message did not have its ESI flag set.
-    * |        |          |1 = Last received CAN FD message had its ESI flag set.
-    * |[12]    |RBRS      |BRS flag of last received CAN FD Message
+    * |        |          |0 = Last received CANFD message did not have its ESI flag set.
+    * |        |          |1 = Last received CANFD message had its ESI flag set.
+    * |[12]    |RBRS      |BRS flag of last received CANFD Message
     * |        |          |This bit is set together with RFDF, independent of acceptance filtering.
-    * |        |          |0 = Last received CAN FD message did not have its BRS flag set.
-    * |        |          |1 = Last received CAN FD message had its BRS flag set.
+    * |        |          |0 = Last received CANFD message did not have its BRS flag set.
+    * |        |          |1 = Last received CANFD message had its BRS flag set.
     * |        |          |Note: Byte access: Reading byte 0 will reset RBRS, reading bytes 3/2/1 has no impact.
-    * |[13]    |RFDF      |Received a CAN FD Message
+    * |[13]    |RFDF      |Received a CANFD Message
     * |        |          |This bit is set independent of acceptance filtering.
-    * |        |          |0 = Since this bit was reset by the CPU, no CAN FD message has been received.
-    * |        |          |1 = Message in CAN FD format with FDF flag set has been received.
+    * |        |          |0 = Since this bit was reset by the CPU, no CANFD message has been received.
+    * |        |          |1 = Message in CANFD format with FDF flag set has been received.
     * |        |          |Note: Byte access: Reading byte 0 will reset RFDF, reading bytes 3/2/1 has no impact.
     * |[14]    |PXE       |Protocol Exception Event
     * |        |          |0 = No protocol exception event occurred since last read access.
@@ -367,7 +368,7 @@ typedef struct
     * |        |          |The New Data flag for a dedicated Rx Buffer is not set, a partly stored message is overwritten when the next message is stored to this location.
     * |        |          |The flag is also set when the Tx Handler was not able to read a message from the Message RAM in time.
     * |        |          |In this case message transmission is aborted.
-    * |        |          |In case of a Tx Handler access failure the CAN FD controller is switched into Restricted Operation Mode (refer to Restricted Operation Mode).
+    * |        |          |In case of a Tx Handler access failure the CANFD controller is switched into Restricted Operation Mode (refer to Restricted Operation Mode).
     * |        |          |To leave Restricted Operation Mode, the Host CPU has to reset CANFD_ASM (CANFD_CCCR[2]).
     * |        |          |0 = No Message RAM access failure occurred.
     * |        |          |1 = Message RAM access failure occurred.
@@ -1081,12 +1082,11 @@ typedef struct
     __IO uint32_t TXEFC;                /*!< [0x00f0] Tx Event FIFO Configuration                                      */
     __IO uint32_t TXEFS;                /*!< [0x00f4] Tx Event FIFO Status                                             */
     __IO uint32_t TXEFA;                /*!< [0x00f8] Tx Event FIFO Acknowledge                                        */
-
 } CANFD_T;
 
 /**
-    @addtogroup CANFD_CONST CAN FD Bit Field Definition
-    Constant Definitions for CAN FD Controller
+    @addtogroup CANFD_CONST CANFD Bit Field Definition
+    Constant Definitions for CANFD Controller
 @{ */
 
 #define CANFD_DBTP_DSJW_Pos              (0)                                               /*!< CANFD_T::DBTP: DSJW Position           */
@@ -1704,9 +1704,9 @@ typedef struct
 #define CANFD_TXEFA_EFA_Pos              (0)                                               /*!< CANFD_T::TXEFA: EFA Position           */
 #define CANFD_TXEFA_EFA_Msk              (0x1ful << CANFD_TXEFA_EFA_Pos)                   /*!< CANFD_T::TXEFA: EFA Mask               */
 
-/**@}*/ /* CANFD_CONST */
-/**@}*/ /* end of CANFD register group */
-/**@}*/ /* end of REGISTER group */
+/** @} CANFD_CONST */
+/** @} end of CANFD register group */
+/** @} end of REGISTER group */
 
 #if defined ( __CC_ARM   )
     #pragma no_anon_unions

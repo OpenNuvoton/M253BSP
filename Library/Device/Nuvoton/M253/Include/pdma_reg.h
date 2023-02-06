@@ -15,15 +15,15 @@
 #endif
 
 /**
-   @addtogroup REGISTER Control Register
-   @{
+    @addtogroup REGISTER Control Register
+    @{
 */
 
 /**
     @addtogroup PDMA Peripheral Direct Memory Access Controller (PDMA)
     Memory Mapped Structure for PDMA Controller
-@{ */
-
+    @{
+*/
 
 typedef struct
 {
@@ -636,9 +636,9 @@ typedef struct
 #define PDMA_REQSEL4_7_REQSRC4_Pos       (0)                                               /*!< PDMA_T::REQSEL4_7: REQSRC4 Position    */
 #define PDMA_REQSEL4_7_REQSRC4_Msk       (0x7ful << PDMA_REQSEL4_7_REQSRC4_Pos)            /*!< PDMA_T::REQSEL4_7: REQSRC4 Mask        */
 
-/**@}*/ /* PDMA_CONST */
-/**@}*/ /* end of PDMA register group */
-/**@}*/ /* end of REGISTER group */
+/** @} PDMA_CONST */
+/** @} end of PDMA register group */
+/** @} end of REGISTER group */
 
 #if defined ( __CC_ARM   )
     #pragma no_anon_unions

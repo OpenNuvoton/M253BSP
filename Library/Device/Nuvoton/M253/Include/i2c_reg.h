@@ -15,15 +15,16 @@
 #endif
 
 /**
-   @addtogroup REGISTER Control Register
-   @{
+    @addtogroup REGISTER Control Register
+    @{
 */
 
 /*---------------------- Inter-IC Bus Controller -------------------------*/
 /**
     @addtogroup I2C Inter-IC Bus Controller (I2C)
     Memory Mapped Structure for I2C Controller
-@{ */
+    @{
+*/
 
 typedef struct
 {
@@ -371,9 +372,9 @@ typedef struct
 #define I2C_TMCTL_HTCTL_Pos              (16)                                              /*!< I2C_T::TMCTL: HTCTL Position           */
 #define I2C_TMCTL_HTCTL_Msk              (0x1fful << I2C_TMCTL_HTCTL_Pos)                  /*!< I2C_T::TMCTL: HTCTL Mask               */
 
-/**@}*/ /* I2C_CONST */
-/**@}*/ /* end of I2C register group */
-/**@}*/ /* end of REGISTER group */
+/** @} I2C_CONST */
+/** @} end of I2C register group */
+/** @} end of REGISTER group */
 
 #if defined ( __CC_ARM   )
     #pragma no_anon_unions
