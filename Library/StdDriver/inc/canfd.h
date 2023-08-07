@@ -30,8 +30,6 @@ extern "C"
 #define CANFD_OP_CAN_MODE     0
 #define CANFD_OP_CAN_FD_MODE  1
 
-#define CANFD_READ_REG_TIMEOUT    48                 /*!< CANFD read register time-out count */
-
 /* Reserved number of elements in Message RAM - used for calculation of start addresses within RAM Configuration
    some element_numbers set to less than max, to stay altogether below 256 words of MessageRAM requirement*/
 #define CANFD_MAX_11_BIT_FTR_ELEMS    128ul  /*!<  maximum is 128 11-bit Filter */
