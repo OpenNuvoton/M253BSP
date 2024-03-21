@@ -13,8 +13,19 @@
 #include "hid_kb.h"
 
 uint8_t volatile g_u8Suspend = 0;
-
 uint8_t g_u8Idle = 0, g_u8Protocol = 0;
+uint8_t Led_Status[8] = {0};
+
+/*--------------------------------------------------------------------------*/
+/**
+ * @brief       USBD Interrupt Service Routine
+ *
+ * @param[in]   None
+ *
+ * @return      None
+ *
+ * @details     This function is the USBD ISR
+ */
 
 void USBD_IRQHandler(void)
 {
@@ -31,7 +42,6 @@ void USBD_IRQHandler(void)
         {
             /* USB Plug In */
             USBD_ENABLE_USB();
-
         }
         else
         {
@@ -67,29 +77,8 @@ void USBD_IRQHandler(void)
         {
             /* Enable USB and enable PHY */
             USBD_ENABLE_USB();
-
             g_u8Suspend = 0;
         }
-
-#ifdef SUPPORT_LPM
-
-        if (u32State & USBD_STATE_L1SUSPEND)
-        {
-            /*
-               TODO: Implement LPM SUSPEND flag here.
-                     Recommend implementing the power-saving function in main loop.
-            */
-        }
-
-        if (u32State & USBD_STATE_L1RESUME)
-        {
-            /*
-               TODO: Implement LPM RESUME flag here.
-            */
-        }
-
-#endif
-
     }
 
     if (u32IntSts & USBD_INTSTS_NEVWKIF_Msk)
@@ -289,11 +278,13 @@ void HID_ClassRequest(void)
         {
             case SET_REPORT:
             {
-                if (buf[3] == 3)
+                if (buf[3] == 2)
                 {
-                    /* Request Type = Feature */
+                    /* Request Type = Output */
                     USBD_SET_DATA1(EP1);
-                    USBD_SET_PAYLOAD_LEN(EP1, 0);
+                    USBD_PrepareCtrlOut(Led_Status, buf[6]);
+                    /* Status stage */
+                    USBD_PrepareCtrlIn(0, 0);
                 }
 
                 break;

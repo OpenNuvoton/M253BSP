@@ -16,6 +16,21 @@
 #define HCLK_DIV            1
 #define PLL_CLOCK           48000000
 
+void ISP_CLK_SysTickDelay(uint32_t us)
+{
+    SysTick->LOAD = us * CyclesPerUs;
+    SysTick->VAL  = 0x0UL;
+    SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk;
+
+    /* Waiting for down-count to zero */
+    while ((SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk) == 0UL)
+    {
+    }
+
+    /* Disable SysTick counter */
+    SysTick->CTRL = 0UL;
+}
+
 uint32_t CLK_GetPLLClockFreq(void)
 {
     return PLL_CLOCK;
@@ -41,7 +56,6 @@ void SYS_Init(void)
     CLK->APBCLK0 |= CLK_APBCLK0_USBDCKEN_Msk;
     CLK->AHBCLK |= CLK_AHBCLK_ISPCKEN_Msk;
 }
-
 
 /*---------------------------------------------------------------------------------------------------------*/
 /*  Main Function                                                                                          */

@@ -59,11 +59,7 @@ const uint8_t HID_KeyboardReportDescriptor[] =
 const uint8_t gu8DeviceDescriptor[] = {
     LEN_DEVICE,  /* bLength */
     DESC_DEVICE, /* bDescriptorType */
-#ifdef SUPPORT_LPM
-    0x01, 0x02, /* bcdUSB => 0x0201 to support LPM */
-#else
     0x10, 0x01, /* bcdUSB */
-#endif
     0x00,             /* bDeviceClass */
     0x00,             /* bDeviceSubClass */
     0x00,             /* bDeviceProtocol */
@@ -214,11 +210,7 @@ const S_USBD_INFO_T gsInfo =
     (uint8_t *) gu8ConfigDescriptor,
     (uint8_t **)gpu8UsbString,
     (uint8_t **)gpu8UsbHidReport,
-#ifdef SUPPORT_LPM
-    (uint8_t *) gu8BosDescriptor,
-#else
-    0,
-#endif
+     NULL,
     (uint32_t *)gu32UsbHidReportLen,
     (uint32_t *)gu32ConfigHidDescIdx,
 };

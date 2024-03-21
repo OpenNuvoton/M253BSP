@@ -13,6 +13,21 @@
 #define TRIM_INIT           (SYS_BASE+0x118)
 #define PLL_CLOCK           48000000
 
+void ISP_CLK_SysTickDelay(uint32_t us)
+{
+    SysTick->LOAD = us * CyclesPerUs;
+    SysTick->VAL  = 0x0UL;
+    SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk;
+
+    /* Waiting for down-count to zero */
+    while ((SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk) == 0UL)
+    {
+    }
+
+    /* Disable SysTick counter */
+    SysTick->CTRL = 0UL;
+}
+
 /* This is a dummy implementation to replace the same function in clk.c for size limitation. */
 uint32_t CLK_GetPLLClockFreq(void)
 {
@@ -70,7 +85,7 @@ int32_t main(void)
     MSC_Init();
 
     /* Start of USBD_Start() */
-    CLK_SysTickDelay(100000);
+    ISP_CLK_SysTickDelay(100000);
 
 
     /* Disable software-disconnect function */

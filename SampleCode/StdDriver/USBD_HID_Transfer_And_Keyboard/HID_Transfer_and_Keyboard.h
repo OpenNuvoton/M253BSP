@@ -57,6 +57,15 @@
 #define INT_OUT_EP_NUM      0x02
 #define HID_KB_EP_NUM       0x03
 
+/*!<USB HID HID LED */
+#define HID_LED_NumLock         0x01
+#define HID_LED_CapsLock        0x02
+#define HID_LED_ScrollLock      0x04
+#define HID_LED_Compose         0x08
+#define HID_LED_Kana            0x10
+#define HID_LED_Constatnt       0xE0
+#define HID_LED_ALL             0xFF
+
 /* Define Descriptor information */
 #define HID_DEFAULT_INT_IN_INTERVAL     1
 #define USBD_SELF_POWERED               0
