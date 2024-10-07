@@ -42,8 +42,6 @@
 */
 #define SET_LXT       0
 
-
-
 #define GPIO_P0_TO_P15      0xFFFF
 
 void PowerDownFunction(void);
@@ -52,8 +50,6 @@ void PorSetting(void);
 int32_t LircSetting(void);
 int32_t LxtSetting(void);
 void SYS_Init(void);
-void UART4_Init(void);
-
 
 /*---------------------------------------------------------------------------------------------------------*/
 /*  Function for System Entry to Power Down Mode                                                           */
@@ -197,26 +193,11 @@ void SYS_Init(void)
     /* Enable all GPIO clock */
     CLK->AHBCLK |= CLK_AHBCLK_GPACKEN_Msk | CLK_AHBCLK_GPBCKEN_Msk | CLK_AHBCLK_GPCCKEN_Msk | CLK_AHBCLK_GPFCKEN_Msk;
 
-    /* Enable UART4 module clock */
-    CLK_EnableModuleClock(UART4_MODULE);
+    /* Debug UART clock setting */
+    UartDebugCLK();
 
-    /* Select UART4 module clock source as HIRC and UART4 module clock divider as 1 */
-    CLK_SetModuleClock(UART4_MODULE, CLK_CLKSEL3_UART4SEL_HIRC, CLK_CLKDIV4_UART4(1));
-
-    /* Init UART0 multi-function pins, RXD(PB.12) and TXD(PB.13) */
+    /* Init UART4 multi-function pins, RXD(PA.2) and TXD(PA.3) */
     UartDebugMFP();
-}
-
-/*---------------------------------------------------------------------------------------------------------*/
-/* Init UART                                                                                               */
-/*---------------------------------------------------------------------------------------------------------*/
-void UART4_Init(void)
-{
-    /* Reset UART0 */
-    SYS_ResetModule(UART4_RST);
-
-    /* Configure UART0 and set UART0 baud rate */
-    UART_Open(UART4, 115200);
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
@@ -235,8 +216,8 @@ int32_t main(void)
     /* Lock protected registers */
     SYS_LockReg();
 
-    /* Init UART0 for printf */
-    UART4_Init();
+    /* Init Debug UART */
+    UartDebugInit();
 
     printf("\n\nCPU @ %d Hz\n", SystemCoreClock);
     printf("+-------------------------------------------------------------------+\n");

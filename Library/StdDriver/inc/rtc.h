@@ -259,6 +259,7 @@ void RTC_DisableInt(uint32_t u32IntFlagMask);
 
 #ifdef __cplusplus
 }
+
 #endif
 
 #endif /* __RTC_H__ */

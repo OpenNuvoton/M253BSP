@@ -12,6 +12,7 @@
 #include "NuMicro.h"
 #include "dfu_transfer.h"
 
+#define DetectPin           PA0
 #define TRIM_INIT           (SYS_BASE + 0x118)
 #define HCLK_DIV            1
 #define PLL_CLOCK           48000000
@@ -54,7 +55,11 @@ void SYS_Init(void)
 
     /* Enable module clock */
     CLK->APBCLK0 |= CLK_APBCLK0_USBDCKEN_Msk;
-    CLK->AHBCLK |= CLK_AHBCLK_ISPCKEN_Msk;
+    CLK->AHBCLK  |= (CLK_AHBCLK_ISPCKEN_Msk | CLK_AHBCLK_GPACKEN_Msk);
+
+    /* Set PA.0 to input mode */
+    PA->MODE &= ~(GPIO_MODE_MODE0_Msk);
+    SYS->GPA_MFPL &= ~(SYS_GPA_MFPL_PA0MFP_Msk) | SYS_GPA_MFPL_PA0MFP_GPIO;
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
@@ -91,7 +96,7 @@ int32_t main(void)
     /* Clear SOF */
     USBD_CLR_INT_FLAG(USBD_INTSTS_SOFIF_Msk);
 
-    while (1)
+    while (DetectPin == 0)
     {
         /* Start USB trim function if it is not enabled. */
         if ((SYS->HIRCTRIMCTL & SYS_HIRCTRIMCTL_FREQSEL_Msk) != 0x1)

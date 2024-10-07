@@ -50,6 +50,7 @@ void __set_SP(uint32_t _sp)
         "BX lr			 \n"
     );
 }
+
 #endif
 
 
@@ -111,6 +112,7 @@ void Hard_Fault_Handler(uint32_t stack[])
 
     while (1);
 }
+
 #endif
 
 int main()

@@ -329,11 +329,8 @@ Default_Handler:
     def_irq_handler	BOD_IRQHandler
     def_irq_handler	IRCTRIM_IRQHandler
     def_irq_handler	PWRWU_IRQHandler
-  //def_irq_handler	Default_Handler
     def_irq_handler	CLKFAIL_IRQHandler
-  //def_irq_handler	Default_Handler
     def_irq_handler	RTC_IRQHandler
-  //def_irq_handler	Default_Handler
     def_irq_handler	WDT_IRQHandler
     def_irq_handler	WWDT_IRQHandler
     def_irq_handler	EINT0_IRQHandler
@@ -348,16 +345,9 @@ Default_Handler:
     def_irq_handler	GPD_IRQHandler
     def_irq_handler	GPE_IRQHandler
     def_irq_handler	GPF_IRQHandler
-  //def_irq_handler	Default_Handler
     def_irq_handler	SPI0_IRQHandler
     def_irq_handler	CANFD0_IRQ0_IRQHandler
     def_irq_handler	CANFD0_IRQ1_IRQHandler
-  //def_irq_handler	Default_Handler
-  //def_irq_handler	Default_Handler
-  //def_irq_handler	Default_Handler
-  //def_irq_handler	Default_Handler
-  //def_irq_handler	Default_Handler
-  //def_irq_handler	Default_Handler
     def_irq_handler	TMR0_IRQHandler
     def_irq_handler	TMR1_IRQHandler
     def_irq_handler	TMR2_IRQHandler
@@ -367,10 +357,8 @@ Default_Handler:
     def_irq_handler	I2C0_IRQHandler
     def_irq_handler	I2C1_IRQHandler
     def_irq_handler	PDMA_IRQHandler
-  //def_irq_handler	Default_Handler
     def_irq_handler	EADC_INT0_IRQHandler
     def_irq_handler	EADC_INT1_IRQHandler
-  //def_irq_handler	Default_Handler
     def_irq_handler	BPWM0_IRQHandler
     def_irq_handler	EADC_INT2_IRQHandler
     def_irq_handler	EADC_INT3_IRQHandler
@@ -378,31 +366,6 @@ Default_Handler:
     def_irq_handler	UART3_IRQHandler
     def_irq_handler	USCI0_IRQHandler
     def_irq_handler	UART4_IRQHandler
-  //def_irq_handler	Default_Handler
     def_irq_handler	USBD_IRQHandler
-  //def_irq_handler	Default_Handler
-  //def_irq_handler	Default_Handler
-  //def_irq_handler	Default_Handler
-  //def_irq_handler	Default_Handler
-  //def_irq_handler	Default_Handler
-  //def_irq_handler	Default_Handler
-  //def_irq_handler	Default_Handler
-  //def_irq_handler	Default_Handler
-  //def_irq_handler	Default_Handler
-  //def_irq_handler	Default_Handler
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
 
     .end

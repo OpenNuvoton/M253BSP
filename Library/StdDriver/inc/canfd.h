@@ -278,6 +278,7 @@ typedef struct
         uint32_t au32Data[CANFD_MAX_MESSAGE_WORDS];    /*!< Word access to buffer data. */
         uint8_t  au8Data[CANFD_MAX_MESSAGE_BYTES];     /*!< Byte access to buffer data. */
     };
+
     uint8_t           u8MsgMarker;                     /*! Message marker (will be copied to TX Event FIFO element) */
     uint8_t           bFDFormat;                       /*! FD Format (1 = FD Format) */
     uint8_t           bBitRateSwitch;                  /*! Bit Rate Switch (1 = with Bit Rate Switch) */
@@ -311,6 +312,7 @@ typedef struct
             uint32_t SFEC      : 3;  /*!<Standard Filter Element Configuration */
             uint32_t SFT       : 2;  /*!<Standard Filter Type */
         };
+
         struct
         {
             uint32_t VALUE; /*!< Access to filter as a word. */
@@ -331,6 +333,7 @@ typedef struct
             uint32_t reserved1 : 1;
             uint32_t EFT       : 2;  /*!< Extended Filter Type. */
         };
+
         struct
         {
             uint32_t LOWVALUE;  /*!< Access to filter low word. */
@@ -428,6 +431,7 @@ uint32_t CANFD_ReadReg(__I uint32_t *pu32RegAddr);
 
 #ifdef __cplusplus
 }
+
 #endif
 
 #endif /* __CANFD_H__ */

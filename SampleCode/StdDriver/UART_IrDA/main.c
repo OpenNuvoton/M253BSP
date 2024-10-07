@@ -89,6 +89,7 @@ void UART1_Init(void)
     UART_Open(UART1, 57600);
 
 }
+
 /**
  *    @brief        Clear the UART Rx FIFO buffer function
  *

@@ -1,9 +1,9 @@
 /* Linker script to configure memory regions. */
 MEMORY
 {
-  FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 0x8000    /*32K */
-  RAM (rwx)  : ORIGIN = 0x20000800, LENGTH = 0x1000    /* 2K */
-  RAM2 (rwx)  : ORIGIN = 0x20001800, LENGTH = 0x800    /* 2K */
+  FLASH (rx)  : ORIGIN = 0x00000000, LENGTH = 0x8000    /*32K */
+  RAM   (rwx) : ORIGIN = 0x20000800, LENGTH = 0x1000    /* 2K */
+  RAM2  (rwx) : ORIGIN = 0x20001800, LENGTH = 0x800     /* 2K */
 }
 
 /* Library configurations */
@@ -134,6 +134,9 @@ SECTIONS
 		*(.data*)
 
 		. = ALIGN(4);
+		./Library/Library/fmc.o(.text*);
+
+		. = ALIGN(4);
 		/* preinit data */
 		PROVIDE_HIDDEN (__preinit_array_start = .);
 		KEEP(*(.preinit_array))
@@ -196,15 +199,4 @@ SECTIONS
 
 	/* Check if data + heap + stack exceeds RAM limit */
 	ASSERT(__StackLimit >= __HeapLimit, "region RAM overflowed with stack")
-}
-
-SECTIONS
-{
-	/*. = 0x20000000;*/
-	
-	/*.exe_sram : AT (__exidx_end)*/
-	.exe_sram : 
-	{
-		./Library/Library/fmc.o(.text*)
-	} > RAM2
 }

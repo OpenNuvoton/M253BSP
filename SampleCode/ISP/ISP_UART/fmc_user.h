@@ -1,6 +1,6 @@
 /***************************************************************************//**
  * @file     fmc_user.h
- * @brief    M251 series FMC driver header file
+ * @brief    M253 series FMC driver header file
  * @version  2.0.0
  *
  * SPDX-License-Identifier: Apache-2.0

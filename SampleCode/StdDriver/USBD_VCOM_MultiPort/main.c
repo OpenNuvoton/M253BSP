@@ -70,7 +70,6 @@ void SYS_Init(void)
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
 #if (VCOM_CNT>=1)
-    //Uart0DefaultMPF();
     /* Set PB.12 and PB.13 multi-function pins for UART0 RXD and TXD */
     SYS->GPB_MFPH = (SYS->GPB_MFPH & ~SYS_GPB_MFPH_PB12MFP_Msk) | SYS_GPB_MFPH_PB12MFP_UART0_RXD;
     SYS->GPB_MFPH = (SYS->GPB_MFPH & ~SYS_GPB_MFPH_PB13MFP_Msk) | SYS_GPB_MFPH_PB13MFP_UART0_TXD;
@@ -120,6 +119,7 @@ void UART0_Init(void)
     /* Enable UART0 RX Time-Out Interrupt and RX Data Available Interrupt */
     UART_EnableInt(UART0, UART_INTEN_RXTOIEN_Msk | UART_INTEN_THREIEN_Msk | UART_INTEN_RDAIEN_Msk);
 }
+
 #endif
 
 #if (VCOM_CNT>=2)
@@ -139,6 +139,7 @@ void UART1_Init(void)
     /* Enable UART1 RX Time-Out Interrupt and RX Data Available Interrupt */
     UART_EnableInt(UART1, UART_INTEN_RXTOIEN_Msk | UART_INTEN_THREIEN_Msk | UART_INTEN_RDAIEN_Msk);
 }
+
 #endif
 
 #if (VCOM_CNT>=3)
@@ -158,6 +159,7 @@ void UART2_Init(void)
     /* Enable UART2 RX Time-Out Interrupt and RX Data Available Interrupt */
     UART_EnableInt(UART2, UART_INTEN_RXTOIEN_Msk | UART_INTEN_THREIEN_Msk | UART_INTEN_RDAIEN_Msk);
 }
+
 #endif
 #if (VCOM_CNT>=4)
 void UART3_Init(void)
@@ -176,6 +178,7 @@ void UART3_Init(void)
     /* Enable UART3 RX Time-Out Interrupt and RX Data Available Interrupt */
     UART_EnableInt(UART3, UART_INTEN_RXTOIEN_Msk | UART_INTEN_THREIEN_Msk | UART_INTEN_RDAIEN_Msk);
 }
+
 #endif
 #if (VCOM_CNT>=5)
 void UART4_Init(void)
@@ -193,6 +196,7 @@ void UART4_Init(void)
     /* Enable UART4 RX Time-Out Interrupt and RX Data Available Interrupt */
     UART_EnableInt(UART4, UART_INTEN_RXTOIEN_Msk | UART_INTEN_THREIEN_Msk | UART_INTEN_RDAIEN_Msk);
 }
+
 #endif
 
 /*---------------------------------------------------------------------------------------------------------*/
@@ -275,30 +279,35 @@ void UART0_IRQHandler(void)
 {
     UART_IRQHandler(&tVCOM[IDX_VCOM0]);
 }
+
 #endif
 #if (VCOM_CNT>=2)
 void UART1_IRQHandler(void)
 {
     UART_IRQHandler(&tVCOM[IDX_VCOM1]);
 }
+
 #endif
 #if (VCOM_CNT>=3)
 void UART2_IRQHandler(void)
 {
     UART_IRQHandler(&tVCOM[IDX_VCOM2]);
 }
+
 #endif
 #if (VCOM_CNT>=4)
 void UART3_IRQHandler(void)
 {
     UART_IRQHandler(&tVCOM[IDX_VCOM3]);
 }
+
 #endif
 #if (VCOM_CNT>=5)
 void UART4_IRQHandler(void)
 {
     UART_IRQHandler(&tVCOM[IDX_VCOM4]);
 }
+
 #endif
 
 void VCOM_TransferData(void)

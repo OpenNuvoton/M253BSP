@@ -454,6 +454,7 @@ void USBD_IRQHandler(void)
 #endif
     }
 }
+
 #if (VCOM_CNT>=1)
 void EP3_Handler(void)
 {
@@ -477,6 +478,7 @@ void EP4_Handler(void)
         tVCOM[IDX_VCOM0].psCtrlVar->i8BulkOutReady = 1;
     }
 }
+
 #endif
 #if (VCOM_CNT>=2)
 void EP6_Handler(void)
@@ -501,6 +503,7 @@ void EP7_Handler(void)
         tVCOM[IDX_VCOM1].psCtrlVar->i8BulkOutReady = 1;
     }
 }
+
 #endif
 
 #if (VCOM_CNT>=3)
@@ -526,6 +529,7 @@ void EP10_Handler(void)
         tVCOM[IDX_VCOM2].psCtrlVar->i8BulkOutReady = 1;
     }
 }
+
 #endif
 #if (VCOM_CNT>=4)
 void EP12_Handler(void)
@@ -550,6 +554,7 @@ void EP13_Handler(void)
         tVCOM[IDX_VCOM3].psCtrlVar->i8BulkOutReady = 1;
     }
 }
+
 #endif
 #if (VCOM_CNT>=5)
 void EP15_Handler(void)
@@ -574,6 +579,7 @@ void EP16_Handler(void)
         tVCOM[IDX_VCOM4].psCtrlVar->i8BulkOutReady = 1;
     }
 }
+
 #endif
 
 

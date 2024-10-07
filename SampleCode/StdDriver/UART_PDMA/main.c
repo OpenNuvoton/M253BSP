@@ -287,6 +287,7 @@ void UART_PDMATest(void)
     }
 
 }
+
 /**
  * @brief       UART1 IRQ
  *

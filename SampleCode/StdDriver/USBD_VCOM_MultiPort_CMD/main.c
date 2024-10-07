@@ -120,6 +120,7 @@ void UART0_Init(void)
     /* Enable UART0 RX Time-Out Interrupt and RX Data Available Interrupt */
     UART_EnableInt(UART0, UART_INTEN_RXTOIEN_Msk | UART_INTEN_THREIEN_Msk | UART_INTEN_RDAIEN_Msk);
 }
+
 #endif
 
 #if (VCOM_CNT>=2)
@@ -139,6 +140,7 @@ void UART1_Init(void)
     /* Enable UART1 RX Time-Out Interrupt and RX Data Available Interrupt */
     UART_EnableInt(UART1, UART_INTEN_RXTOIEN_Msk | UART_INTEN_THREIEN_Msk | UART_INTEN_RDAIEN_Msk);
 }
+
 #endif
 
 #if (VCOM_CNT>=3)
@@ -158,6 +160,7 @@ void UART2_Init(void)
     /* Enable UART2 RX Time-Out Interrupt and RX Data Available Interrupt */
     UART_EnableInt(UART2, UART_INTEN_RXTOIEN_Msk | UART_INTEN_THREIEN_Msk | UART_INTEN_RDAIEN_Msk);
 }
+
 #endif
 #if (VCOM_CNT>=4)
 void UART3_Init(void)
@@ -176,6 +179,7 @@ void UART3_Init(void)
     /* Enable UART3 RX Time-Out Interrupt and RX Data Available Interrupt */
     UART_EnableInt(UART3, UART_INTEN_RXTOIEN_Msk | UART_INTEN_THREIEN_Msk | UART_INTEN_RDAIEN_Msk);
 }
+
 #endif
 #if (VCOM_CNT>=5)
     /* VCOM internal loopback*/
@@ -255,29 +259,34 @@ void UART_IRQHandler(VCOM_CONTROL_BLOCK_t *tVCOM)
     }
 
 }
+
 #if (VCOM_CNT>=1)
 void UART0_IRQHandler(void)
 {
     UART_IRQHandler(&tVCOM[IDX_VCOM0]);
 }
+
 #endif
 #if (VCOM_CNT>=2)
 void UART1_IRQHandler(void)
 {
     UART_IRQHandler(&tVCOM[IDX_VCOM1]);
 }
+
 #endif
 #if (VCOM_CNT>=3)
 void UART2_IRQHandler(void)
 {
     UART_IRQHandler(&tVCOM[IDX_VCOM2]);
 }
+
 #endif
 #if (VCOM_CNT>=4)
 void UART3_IRQHandler(void)
 {
     UART_IRQHandler(&tVCOM[IDX_VCOM3]);
 }
+
 #endif
 #if (VCOM_CNT>=5)
     /* VCOM4 internal loopback*/

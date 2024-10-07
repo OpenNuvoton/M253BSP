@@ -64,12 +64,19 @@ int32_t main(void)
 
     */
 
-    printf("\nPlease check boot from APROM with IAP first.\n\n");
-    printf("\tMulti-Boot Sample Code(0x%x)\n\n", FMC_GetVECMAP());
-
-
     /* Enable FMC ISP function */
     FMC_Open();
+
+    if (FMC_Read(FMC_CONFIG0_ADDR) & BIT6)
+    {
+        FMC_ENABLE_CFG_UPDATE();
+        printf("\nPlease reset chip to set \"Boot from APROM with IAP mode.\"\n\n");
+        FMC_Write(FMC_CONFIG0_ADDR, FMC_Read(FMC_CONFIG0_ADDR) & ~BIT6);
+
+        while (1);
+    }
+
+    printf("\tMulti-Boot Sample Code(0x%X)\n\n", FMC_GetVECMAP());
 
 #if defined(__BASE__)
     printf("Boot from 0\n");
@@ -87,10 +94,10 @@ int32_t main(void)
     printf("Boot from 0x10000\n");
 #endif
 #if defined(__LDROM__)
-    printf("Boot from 0x100000\n");
+    printf("Boot from LDROM\n");
 #endif
 
-    printf("VECMAP = 0x%x\n", FMC_GetVECMAP());
+    printf("VECMAP = 0x%X\n", FMC_GetVECMAP());
 
 
     printf("Select one boot image: \n");

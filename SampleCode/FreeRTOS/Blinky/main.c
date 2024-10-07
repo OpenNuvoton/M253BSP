@@ -68,13 +68,16 @@ int main(void)
     {
         main_blinky();
     }
+
 #else
     {
         main_full();
     }
+
 #endif
     return 0;
 }
+
 /*-----------------------------------------------------------*/
 
 static void prvSetupHardware(void)
@@ -83,6 +86,7 @@ static void prvSetupHardware(void)
     vParTestInitialise();
 
 }
+
 /*-----------------------------------------------------------*/
 
 void vApplicationMallocFailedHook(void)
@@ -101,6 +105,7 @@ void vApplicationMallocFailedHook(void)
 
     for (;;);
 }
+
 /*-----------------------------------------------------------*/
 
 void vApplicationIdleHook(void)
@@ -115,6 +120,7 @@ void vApplicationIdleHook(void)
     function, because it is the responsibility of the idle task to clean up
     memory allocated by the kernel to any task that has since been deleted. */
 }
+
 /*-----------------------------------------------------------*/
 
 void vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
@@ -137,6 +143,7 @@ void vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
 
 
 }
+
 /*-----------------------------------------------------------*/
 
 void vApplicationTickHook(void)
@@ -177,8 +184,10 @@ void vApplicationTickHook(void)
         demonstrate using queue sets from an ISR. */
         vQueueSetAccessQueueSetFromISR();
     }
+
 #endif /* mainCREATE_SIMPLE_BLINKY_DEMO_ONLY */
 }
+
 /*-----------------------------------------------------------*/
 
 #ifdef JUST_AN_EXAMPLE_ISR

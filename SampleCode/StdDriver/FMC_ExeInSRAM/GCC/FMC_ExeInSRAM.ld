@@ -1,9 +1,9 @@
 /* Linker script to configure memory regions. */
 MEMORY
 {
-  FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 0x8000    /* 32k */
-  RAM (rwx)  : ORIGIN = 0x20000000, LENGTH = 0x1800    /* 6k  */
-  RAM2 (rwx) : ORIGIN = 0x20001800, LENGTH = 0x600    /* 2k */
+  FLASH   (rx)  : ORIGIN = 0x00000000, LENGTH = 0x8000    /* 32k */
+  RAM     (rwx) : ORIGIN = 0x20002000, LENGTH = 0x2000    /* 8k  */
+  RAMCODE (rwx) : ORIGIN = 0x20000000, LENGTH = 0x2000    /* 8k  */
 }
 
 /* Library configurations */
@@ -45,176 +45,165 @@ ENTRY(Reset_Handler)
 
 SECTIONS
 {
-	.text :
-	{
-		KEEP(*(.vectors))
-		__Vectors_End = .;
-		__Vectors_Size = __Vectors_End - __Vectors;
-		__end__ = .;
+    .text :
+    {
+        KEEP(*(.vectors))
+        __Vectors_End = .;
+        __Vectors_Size = __Vectors_End - __Vectors;
+        __end__ = .;
 
-		/**(.text*)*/
+        *(EXCLUDE_FILE(./User/main.o ./Library/Library/*.o) .text*)
 
-        
-		KEEP(*(.init))
-		KEEP(*(.fini))
+        KEEP(*(.init))
+        KEEP(*(.fini))
 
-		/* .ctors */
-		*crtbegin.o(.ctors)
-		*crtbegin?.o(.ctors)
-		*(EXCLUDE_FILE(*crtend?.o *crtend.o) .ctors)
-		*(SORT(.ctors.*))
-		*(.ctors)
+        /* .ctors */
+        *crtbegin.o(.ctors)
+        *crtbegin?.o(.ctors)
+        *(EXCLUDE_FILE(*crtend?.o *crtend.o) .ctors)
+        *(SORT(.ctors.*))
+        *(.ctors)
 
-		/* .dtors */
- 		*crtbegin.o(.dtors)
- 		*crtbegin?.o(.dtors)
- 		*(EXCLUDE_FILE(*crtend?.o *crtend.o) .dtors)
- 		*(SORT(.dtors.*))
- 		*(.dtors)
-		*(.rodata*)
+        /* .dtors */
+        *crtbegin.o(.dtors)
+        *crtbegin?.o(.dtors)
+        *(EXCLUDE_FILE(*crtend?.o *crtend.o) .dtors)
+        *(SORT(.dtors.*))
+        *(.dtors)
 
+        *(.rodata*)
 
-		KEEP(*(.eh_frame*))
-	} > FLASH
+        KEEP(*(.eh_frame*))
+    } > FLASH
 
-	.ARM.extab :
-	{
-		*(.ARM.extab* .gnu.linkonce.armextab.*)
-	} > FLASH
+    .ARM.extab :
+    {
+        *(.ARM.extab* .gnu.linkonce.armextab.*)
+    } > FLASH
 
-	__exidx_start = .;
-	.ARM.exidx :
-	{
-		*(.ARM.exidx* .gnu.linkonce.armexidx.*)
-	} > FLASH
-	__exidx_end = .;
+    __exidx_start = .;
+    .ARM.exidx :
+    {
+        *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+    } > FLASH
+    __exidx_end = .;
 
-    
-	__ExeSramBase = .;
-	.ExeSramCode :
-	{
-	   . = ALIGN(4);
-		./User/main.o(.text*)
-		__ExeSramEnd = .; 
-	} > RAM2 AT > FLASH
-	
-    
+    /* To copy multiple ROM to RAM sections,
+     * uncomment .copy.table section and,
+     * define __STARTUP_COPY_MULTIPLE in startup_ARMCMx.S */
 
-	/* To copy multiple ROM to RAM sections,
-	 * uncomment .copy.table section and,
-	 * define __STARTUP_COPY_MULTIPLE in startup_ARMCMx.S */
-	 
     .copy.table :
-	{
-		. = ALIGN(4);
-		__copy_table_start__ = .;
-		LONG (__etext)
-		LONG (__data_start__)
-		LONG (__data_end__ - __data_start__)
-		LONG (__ExeSramBase)
-		LONG (0x20001800)
-		LONG (__ExeSramEnd - 0x20001800)
-		__copy_table_end__ = .;
-	} > FLASH
+    {
+        . = ALIGN(4);
+        __copy_table_start__ = .;
+        LONG (__etext)
+        LONG (__ramcode_start__)
+        LONG (__ramcode_end__ - __ramcode_start__)
+
+        LONG (__eramcode)
+        LONG (__data_start__)
+        LONG (__data_end__ - __data_start__)
+        __copy_table_end__ = .;
+    } > FLASH
 
 
-	/* To clear multiple BSS sections,
-	 * uncomment .zero.table section and,
-	 * define __STARTUP_CLEAR_BSS_MULTIPLE in startup_ARMCMx.S */
-	/*
-	.zero.table :
-	{
-		. = ALIGN(4);
-		__zero_table_start__ = .;
-		LONG (__bss_start__)
-		LONG (__bss_end__ - __bss_start__)
-		LONG (__bss2_start__)
-		LONG (__bss2_end__ - __bss2_start__)
-		__zero_table_end__ = .;
-	} > FLASH
-	*/
-	
-	/*. = 0x20000000;
-	
-	/*.exe_sram : AT (__exidx_end)*/
-	/*.exe_sram : 
-	{
-		./User/main.o(.text*)
-	} > RAM2  AT > FLASH*/
-    
-	__etext = .;
+    /* To clear multiple BSS sections,
+     * uncomment .zero.table section and,
+     * define __STARTUP_CLEAR_BSS_MULTIPLE in startup_ARMCMx.S */
+    /*
+    .zero.table :
+    {
+        . = ALIGN(4);
+        __zero_table_start__ = .;
+        LONG (__bss_start__)
+        LONG (__bss_end__ - __bss_start__)
+        LONG (__bss2_start__)
+        LONG (__bss2_end__ - __bss2_start__)
+        __zero_table_end__ = .;
+    } > FLASH
+    */
 
-	.data : AT (__etext)
-	{
-		__data_start__ = .;
-		*(vtable)
-		*(.data*)
-		
+    __etext = .;
 
-		. = ALIGN(4);
-		/* preinit data */
-		PROVIDE_HIDDEN (__preinit_array_start = .);
-		KEEP(*(.preinit_array))
-		PROVIDE_HIDDEN (__preinit_array_end = .);
+    .ramcode : AT (__etext)
+    {
+        . = ALIGN(4);
+        __ramcode_start__ = .;
 
-		. = ALIGN(4);
-		/* init data */
-		PROVIDE_HIDDEN (__init_array_start = .);
-		KEEP(*(SORT(.init_array.*)))
-		KEEP(*(.init_array))
-		PROVIDE_HIDDEN (__init_array_end = .);
+        ./User/main.o (.text*)
+        ./Library/Library/*.o (.text*)
 
+        . = ALIGN(4);
+        __ramcode_end__ = .;
+    } > RAMCODE
 
-		. = ALIGN(4);
-		/* finit data */
-		PROVIDE_HIDDEN (__fini_array_start = .);
-		KEEP(*(SORT(.fini_array.*)))
-		KEEP(*(.fini_array))
-		PROVIDE_HIDDEN (__fini_array_end = .);
+    __eramcode = __etext + (__ramcode_end__ - __ramcode_start__);
 
-		KEEP(*(.jcr*))
-		. = ALIGN(4);
-		/* All data end */
-		__data_end__ = .;
-		
-		
+    .data : AT (__eramcode)
+    {
+        __data_start__ = .;
+        *(vtable)
+        *(.data*)
 
-	} > RAM
-	
+        . = ALIGN(4);
+        /* preinit data */
+        PROVIDE_HIDDEN (__preinit_array_start = .);
+        KEEP(*(.preinit_array))
+        PROVIDE_HIDDEN (__preinit_array_end = .);
 
-	.bss :
-	{
-		. = ALIGN(4);
-		__bss_start__ = .;
-		*(.bss*)
-		*(COMMON)
-		. = ALIGN(4);
-		__bss_end__ = .;
-	} > RAM
+        . = ALIGN(4);
+        /* init data */
+        PROVIDE_HIDDEN (__init_array_start = .);
+        KEEP(*(SORT(.init_array.*)))
+        KEEP(*(.init_array))
+        PROVIDE_HIDDEN (__init_array_end = .);
 
-	.heap (COPY):
-	{
-		__HeapBase = .;
-		__end__ = .;
-		end = __end__;
-		KEEP(*(.heap*))
-		__HeapLimit = .;
-	} > RAM
+        . = ALIGN(4);
+        /* finit data */
+        PROVIDE_HIDDEN (__fini_array_start = .);
+        KEEP(*(SORT(.fini_array.*)))
+        KEEP(*(.fini_array))
+        PROVIDE_HIDDEN (__fini_array_end = .);
 
-	/* .stack_dummy section doesn't contains any symbols. It is only
-	 * used for linker to calculate size of stack sections, and assign
-	 * values to stack symbols later */
-	.stack_dummy (COPY):
-	{
-		KEEP(*(.stack*))
-	} > RAM
+        KEEP(*(.jcr*))
+        . = ALIGN(4);
+        /* All data end */
+        __data_end__ = .;
+    } > RAM
 
-	/* Set stack top to end of RAM, and stack limit move down by
-	 * size of stack_dummy section */
-	__StackTop = ORIGIN(RAM) + LENGTH(RAM);
-	__StackLimit = __StackTop - SIZEOF(.stack_dummy);
-	PROVIDE(__stack = __StackTop);
+    .bss :
+    {
+        . = ALIGN(4);
+        __bss_start__ = .;
+        *(.bss*)
+        *(COMMON)
+        . = ALIGN(4);
+        __bss_end__ = .;
+    } > RAM
 
-	/* Check if data + heap + stack exceeds RAM limit */
-	ASSERT(__StackLimit >= __HeapLimit, "region RAM overflowed with stack")
+    .heap (COPY):
+    {
+        __HeapBase = .;
+        __end__ = .;
+        end = __end__;
+        KEEP(*(.heap*))
+        __HeapLimit = .;
+    } > RAM
+
+    /* .stack_dummy section doesn't contains any symbols. It is only
+     * used for linker to calculate size of stack sections, and assign
+     * values to stack symbols later */
+    .stack_dummy (COPY):
+    {
+        KEEP(*(.stack*))
+    } > RAM
+
+    /* Set stack top to end of RAM, and stack limit move down by
+     * size of stack_dummy section */
+    __StackTop = ORIGIN(RAM) + LENGTH(RAM);
+    __StackLimit = __StackTop - SIZEOF(.stack_dummy);
+    PROVIDE(__stack = __StackTop);
+
+    /* Check if data + heap + stack exceeds RAM limit */
+    ASSERT(__StackLimit >= __HeapLimit, "region RAM overflowed with stack")
 }

@@ -299,6 +299,7 @@ uint32_t I2C_ReadMultiBytesTwoRegs(I2C_T *i2c, uint8_t u8SlaveAddr, uint16_t u16
 
 #ifdef __cplusplus
 }
+
 #endif
 #endif /* __I2C_H__ */
 

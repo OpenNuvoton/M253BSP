@@ -569,7 +569,7 @@ int32_t main(void)
     printf("Configure I2C0 as Master, and I2C1 as a slave.\n");
     printf("The I/O connection I2C0 to I2C1:\n");
     printf("I2C0_SDA(PB.4), I2C0_SCL(PB.5)\n");
-    printf("I2C1_SDA(PA.2), I2C1_SCL(PA.3)\n\n");
+    printf("I2C1_SDA(PB.2), I2C1_SCL(PB.3)\n\n");
 
     /* Init I2C0 */
     I2C0_Init();

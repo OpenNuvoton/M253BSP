@@ -10,6 +10,7 @@
 #include "M253_User.h"
 #include "massstorage.h"
 
+#define DetectPin           PB15
 #define TRIM_INIT           (SYS_BASE+0x118)
 #define PLL_CLOCK           48000000
 
@@ -61,7 +62,6 @@ void SYS_Init(void)
 
     /* Set PB.15 to input mode */
     PB->MODE &= ~(GPIO_MODE_MODE15_Msk);
-
     SYS->GPB_MFPH &= ~(SYS_GPB_MFPH_PB15MFP_Msk) | SYS_GPB_MFPH_PB15MFP_GPIO;
 }
 
@@ -107,7 +107,7 @@ int32_t main(void)
     USBD_CLR_INT_FLAG(USBD_INTSTS_SOFIF_Msk);
 
     /* Check if GPB.15 is low */
-    while (PB15 == 0)
+    while (DetectPin == 0)
     {
         /* Start USB trim function if it is not enabled. */
         if ((SYS->HIRCTRIMCTL & SYS_HIRCTRIMCTL_FREQSEL_Msk) != 0x1)
@@ -151,8 +151,8 @@ int32_t main(void)
     }
 
     /* Boot from APROM */
+    // FMC_ISPCTL_BS_Msk only works with Boot from APROM/LDROM without IAP mode.
     FMC->ISPCTL &= ~FMC_ISPCTL_BS_Msk;
+    /* Wait system reset */
     NVIC_SystemReset();
-
-    while (1);
 }

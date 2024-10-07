@@ -276,6 +276,7 @@ void UART4_Init(void)
     /* Enable UART4 RX Time-Out Interrupt and RX Data Available Interrupt */
     UART_EnableInt(UART4, UART_INTEN_TOCNTEN_Msk | UART_INTEN_RDAIEN_Msk);
 }
+
 /*---------------------------------------------------------------------------------------------------------*/
 /*  Main Function                                                                                          */
 /*---------------------------------------------------------------------------------------------------------*/

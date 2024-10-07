@@ -321,6 +321,7 @@ void PDMA_DisableInt(PDMA_T *pdma, uint32_t u32Ch, uint32_t u32Mask);
 
 #ifdef __cplusplus
 }
+
 #endif
 
 #endif /* __PDMA_H__ */

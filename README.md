@@ -1,12 +1,12 @@
 # M253 Series CMSIS BSP
 
-This BSP folder
+To experience the powerful features of M253 series in few minutes, please select the sample code to download and execute on the NuMaker-M253 board. Open the project files to build them with Keil® MDK, IAR, NuEclipse or VSCode, and then download and trace them on the NuMaker board to see how it works.
 
 
 ## .\Document\
 
 - CMSIS.html<br>
-	Document of CMSIS version 5.1.1.
+	Document of CMSIS version 6.1.0.
 
 - NuMicro M253 Series CMSIS BSP Driver Reference Guide.chm<br>
 	This document describes the usage of drivers in M253 BSP.
@@ -18,7 +18,7 @@ This BSP folder
 ## .\Library\
 
 - CMSIS<br>
-	Cortex® Microcontroller Software Interface Standard (CMSIS) V5.1.1 definitions by Arm® Corp.
+	Cortex® Microcontroller Software Interface Standard (CMSIS) V6.1.0 definitions by Arm® Corp.
 
 - Device<br>
 	CMSIS compliant device header file.

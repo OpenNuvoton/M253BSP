@@ -100,6 +100,7 @@ void AssertError(uint8_t *file, uint32_t line)
     /* Infinite loop */
     while (1) ;
 }
+
 #endif
 
 #ifndef NOT_USE_DBG_UART
@@ -115,13 +116,13 @@ void AssertError(uint8_t *file, uint32_t line)
 #endif
 void UartDebugMFP(void)
 {
-#if !defined(DEBUG_ENABLE_SEMIHOST) && !defined(OS_USE_SEMIHOSTING)
+#if (!defined(DEBUG_ENABLE_SEMIHOST) || (DEBUG_ENABLE_SEMIHOST == 1)) && !defined(OS_USE_SEMIHOSTING)
 
     /* Set GPA multi-function pins for UART RXD and TXD */
     SYS->GPA_MFPL = (SYS->GPA_MFPL & ~SYS_GPA_MFPL_PA2MFP_Msk) | SYS_GPA_MFPL_PA2MFP_UART4_RXD;
     SYS->GPA_MFPL = (SYS->GPA_MFPL & ~SYS_GPA_MFPL_PA3MFP_Msk) | SYS_GPA_MFPL_PA3MFP_UART4_TXD;
 
-#endif /* !defined(DEBUG_ENABLE_SEMIHOST) || !defined(OS_USE_SEMIHOSTING) */
+#endif /* (!defined(DEBUG_ENABLE_SEMIHOST) || (DEBUG_ENABLE_SEMIHOST == 1)) && !defined(OS_USE_SEMIHOSTING) */
 }
 
 /**
@@ -136,7 +137,7 @@ void UartDebugMFP(void)
 #endif
 void UartDebugCLK(void)
 {
-#if !defined(DEBUG_ENABLE_SEMIHOST) && !defined(OS_USE_SEMIHOSTING)
+#if (!defined(DEBUG_ENABLE_SEMIHOST) || (DEBUG_ENABLE_SEMIHOST == 1)) && !defined(OS_USE_SEMIHOSTING)
 
     /* Select UART clock source from HIRC */
     CLK_SetModuleClock(UART4_MODULE, CLK_CLKSEL3_UART4SEL_HIRC, CLK_CLKDIV4_UART4(1));
@@ -144,7 +145,7 @@ void UartDebugCLK(void)
     /* Enable UART clock */
     CLK_EnableModuleClock(UART4_MODULE);
 
-#endif /* !defined(DEBUG_ENABLE_SEMIHOST) && !defined(OS_USE_SEMIHOSTING) */
+#endif /* (!defined(DEBUG_ENABLE_SEMIHOST) || (DEBUG_ENABLE_SEMIHOST == 1)) && !defined(OS_USE_SEMIHOSTING) */
 }
 
 /**
@@ -159,7 +160,7 @@ void UartDebugCLK(void)
 #endif
 void UartDebugInit(void)
 {
-#if !defined(DEBUG_ENABLE_SEMIHOST) && !defined(OS_USE_SEMIHOSTING)
+#if (!defined(DEBUG_ENABLE_SEMIHOST) || (DEBUG_ENABLE_SEMIHOST == 1)) && !defined(OS_USE_SEMIHOSTING)
 
     /* Reset UART module */
     SYS->IPRST1 |= SYS_IPRST1_UART4RST_Msk;
@@ -168,6 +169,7 @@ void UartDebugInit(void)
     /* Init UART to 115200-8n1 for print message */
     UART_Open(UART4, 115200);
 
-#endif /* !defined(DEBUG_ENABLE_SEMIHOST) && !defined(OS_USE_SEMIHOSTING) */
+#endif /* (!defined(DEBUG_ENABLE_SEMIHOST) || (DEBUG_ENABLE_SEMIHOST == 1)) && !defined(OS_USE_SEMIHOSTING) */
 }
+
 #endif /* NOT_USE_DBG_UART */
