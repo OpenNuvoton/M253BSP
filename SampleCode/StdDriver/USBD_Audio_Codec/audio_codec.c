@@ -9,13 +9,13 @@
 #include "NuMicro.h"
 #include "usbd_audio.h"
 
-
-/**************************************/
-/* NAU8822 Setting                    */
-/**************************************/
-static __IO uint32_t g_u32EndFlag0 = 0;
-static volatile uint8_t g_u8IsI2CIdle = TRUE;
-
+#if NAU8822
+    /**************************************/
+    /* NAU8822 Setting                    */
+    /**************************************/
+    static __IO uint32_t g_u32EndFlag0 = 0;
+    static volatile uint8_t g_u8IsI2CIdle = TRUE;
+#endif
 void RecoveryFromArbLost(void)
 {
     I2C0->CTL0 &= ~I2C_CTL0_I2CEN_Msk;

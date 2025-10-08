@@ -70,6 +70,7 @@ extern volatile unsigned long ulRegTest1LoopCounter, ulRegTest2LoopCounter;
 
 void vRegTest1Task(void *pvParameters)
 {
+    (void)pvParameters;
     __asm volatile
     (
 #if !defined(__ICCARM__)
@@ -159,6 +160,7 @@ void vRegTest1Task(void *pvParameters)
 
 void vRegTest2Task(void *pvParameters)
 {
+    (void)pvParameters;
     __asm volatile
     (
 #if !defined(__ICCARM__)

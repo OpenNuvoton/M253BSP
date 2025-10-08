@@ -10,24 +10,16 @@
 #include <string.h>
 #include "NuMicro.h"
 
-#define I2S_TX_DMA_CH 1
-#define I2S_RXData_DMA_CH 2
+#define I2S_TX_DMA_CH   1
+#define I2S_RX_DMA_CH   2
 
 /*---------------------------------------------------------------------------------------------------------*/
 /* Global variables                                                                                        */
 /*---------------------------------------------------------------------------------------------------------*/
-#define BUFF_LEN 4
-#define CHECK_BUFF_LEN 32
+#define BUFF_LEN        4
+#define CHECK_BUFF_LEN  32
 
-typedef struct
-{
-    uint32_t CTL;
-    uint32_t SA;
-    uint32_t DA;
-    uint32_t FIRST;
-} DESC_TABLE_T;
-
-DESC_TABLE_T g_asDescTable_TX[2], g_asDescTable_DataRX[1];
+DSCT_T g_asDescTable_TX[2], g_asDescTable_DataRX[1];
 
 /* Function prototype declaration */
 void SYS_Init(void);
@@ -123,18 +115,18 @@ void SYS_Init(void)
 void PDMA_Init(void)
 {
     /* Enable PDMA channels */
-    PDMA_Open(PDMA, (1 << I2S_TX_DMA_CH) | (1 << I2S_RXData_DMA_CH));
+    PDMA_Open(PDMA, (1 << I2S_TX_DMA_CH) | (1 << I2S_RX_DMA_CH));
 
     /* Tx(Play) description */
     g_asDescTable_TX[0].CTL = ((BUFF_LEN - 1) << PDMA_DSCT_CTL_TXCNT_Pos) | PDMA_WIDTH_32 | PDMA_TBINTDIS_DISABLE | PDMA_SAR_INC | PDMA_DAR_FIX | PDMA_REQ_SINGLE | PDMA_OP_SCATTER;
     g_asDescTable_TX[0].SA = (uint32_t)&g_au32PcmTxBuff[0];
     g_asDescTable_TX[0].DA = (uint32_t)&SPI0->TX;
-    g_asDescTable_TX[0].FIRST = (uint32_t)&g_asDescTable_TX[1] - (PDMA->SCATBA);
+    g_asDescTable_TX[0].NEXT = (uint32_t)&g_asDescTable_TX[1] - (PDMA->SCATBA);
 
     g_asDescTable_TX[1].CTL = ((BUFF_LEN - 1) << PDMA_DSCT_CTL_TXCNT_Pos) | PDMA_WIDTH_32 | PDMA_SAR_INC | PDMA_DAR_FIX | PDMA_REQ_SINGLE | PDMA_OP_SCATTER;
     g_asDescTable_TX[1].SA = (uint32_t)&g_au32PcmTxBuff[1];
     g_asDescTable_TX[1].DA = (uint32_t)&SPI0->TX;
-    g_asDescTable_TX[1].FIRST = (uint32_t)&g_asDescTable_TX[0] - (PDMA->SCATBA);   //link to first description
+    g_asDescTable_TX[1].NEXT = (uint32_t)&g_asDescTable_TX[0] - (PDMA->SCATBA);   //link to first description
 
     /* Rx description */
     g_asDescTable_DataRX[0].CTL = ((CHECK_BUFF_LEN - 1) << PDMA_DSCT_CTL_TXCNT_Pos) | PDMA_WIDTH_32 | PDMA_SAR_FIX | PDMA_DAR_INC | PDMA_REQ_SINGLE | PDMA_OP_BASIC;
@@ -142,11 +134,11 @@ void PDMA_Init(void)
     g_asDescTable_DataRX[0].DA = (uint32_t)&g_au32PcmRxDataBuff[0];
 
     PDMA_SetTransferMode(PDMA, I2S_TX_DMA_CH, PDMA_SPI0_TX, 1, (uint32_t)&g_asDescTable_TX[0]);
-    PDMA_SetTransferMode(PDMA, I2S_RXData_DMA_CH, PDMA_SPI0_RX, 1, (uint32_t)&g_asDescTable_DataRX[0]);
+    PDMA_SetTransferMode(PDMA, I2S_RX_DMA_CH, PDMA_SPI0_RX, 1, (uint32_t)&g_asDescTable_DataRX[0]);
 
     /* Enable PDMA channel 1 interrupt */
     PDMA_EnableInt(PDMA, I2S_TX_DMA_CH, PDMA_INT_TRANS_DONE);
-    PDMA_EnableInt(PDMA, I2S_RXData_DMA_CH, PDMA_INT_TRANS_DONE);
+    PDMA_EnableInt(PDMA, I2S_RX_DMA_CH, PDMA_INT_TRANS_DONE);
 
     NVIC_EnableIRQ(PDMA_IRQn);
 }
@@ -157,6 +149,7 @@ void PDMA_Init(void)
 int32_t main(void)
 {
     uint32_t u32InitValue, u32DataCount;
+    volatile int32_t i32TimeoutCount = SystemCoreClock;
 
     /* Unlock protected registers */
     SYS_UnlockReg();
@@ -191,7 +184,7 @@ int32_t main(void)
     /* Enable I2S TX and RX functions */
     /* Sampling rate 16000 Hz; bit clock rate 512 kHz. */
     /* Master mode, 16-bit word width, stereo mode, I2S format. */
-    SPII2S_Open(SPI0, SPII2S_MODE_MASTER, 16000, SPII2S_DATABIT_32, SPII2S_STEREO, SPII2S_FORMAT_I2S);
+    SPII2S_Open(SPI0, SPII2S_MODE_MASTER, 16000, SPII2S_DATABIT_16, SPII2S_STEREO, SPII2S_FORMAT_I2S);
 
     /* Data initiation */
     u32InitValue = 0x50005000;
@@ -204,18 +197,30 @@ int32_t main(void)
     }
 
     g_u8TransDone = 1 ;
+
     PDMA_Init() ;
 
     /* Clear RX FIFO */
     SPII2S_CLR_RX_FIFO(SPI0);
 
-    /* Enable TX PDMA function and RX PDMA function */
-    SPII2S_ENABLE_TXDMA(SPI0);
-    SPII2S_ENABLE_RXDMA(SPI0);
-
-    /* Enable TX function and RX function */
-    SPII2S_ENABLE_RX(SPI0);
+    /* Enable TX function and TX PDMA function */
     SPII2S_ENABLE_TX(SPI0);
+    SPII2S_ENABLE_TXDMA(SPI0);
+
+    // Enable RX function and RX PDMA function for receiving data
+    SPII2S_ENABLE_RX(SPI0);
+
+    // Reset timeout count for checking RX FIFO level
+    i32TimeoutCount = SystemCoreClock;
+
+    // Wait until the RX FIFO level is greater than 0 or timeout occurs
+    while ((SPII2S_GET_RX_FIFO_LEVEL(SPI0) == 0) && (--i32TimeoutCount >= 0)) {}
+
+    // Clear the RX FIFO to ensure no stale data remains
+    SPII2S_CLR_RX_FIFO(SPI0);
+
+    // Enable RX DMA function for receiving data via DMA
+    SPII2S_ENABLE_RXDMA(SPI0);
 
     while (g_u8TransDone) ;
 

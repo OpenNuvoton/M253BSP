@@ -331,6 +331,8 @@ void TIMER_EnableFreqCounter(TIMER_T *timer,
                              uint32_t u32Timeout,
                              uint32_t u32EnableInt)
 {
+    (void) u32DropCount;
+    (void) u32Timeout;
     TIMER_T *ptimerTmp;    /* store the timer base to configure compare value */
 
     if (timer == TIMER0)

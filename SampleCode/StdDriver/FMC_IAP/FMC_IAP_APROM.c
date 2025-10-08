@@ -14,6 +14,10 @@ typedef void (FN_FUNC_PTR)(void);
 
 extern uint32_t  loaderImage1Base, loaderImage1Limit;
 
+#if defined (__ICCARM__)
+    #pragma section = "LoaderImage"
+#endif
+
 void SYS_Init(void)
 {
     /*---------------------------------------------------------------------------------------------------------*/
@@ -71,9 +75,15 @@ static int  LoadImage(uint32_t u32ImageBase, uint32_t u32ImageLimit, uint32_t u3
 {
     uint32_t   u32i, u32j, u32Data, u32ImageSize, *pu32Loader;
 
-    u32ImageSize = u32MaxSize;
+    u32ImageSize = (u32ImageLimit - u32ImageBase);
 
-    printf("Program image to flash address 0x%x...", u32FlashAddr);
+    if (u32ImageSize > u32MaxSize)
+    {
+        printf("Image size: %d bytes > Max image: %d bytes\n", u32ImageSize, u32MaxSize);
+        return -1;
+    }
+
+    printf("Program image of %d bytes to flash address 0x%x...", u32ImageSize, u32FlashAddr);
     pu32Loader = (uint32_t *)u32ImageBase;
 
     for (u32i = 0; u32i < u32ImageSize; u32i += FMC_FLASH_PAGE_SIZE)
@@ -180,8 +190,14 @@ int main(void)
             case '0':
                 FMC_EnableLDUpdate();
 
+#if defined (__ICCARM__)
+
+                if (LoadImage((uint32_t)&loaderImage1Base, (uint32_t)__section_end("LoaderImage"),
+                              FMC_LDROM_BASE, FMC_LDROM_SIZE) != 0)
+#else
                 if (LoadImage((uint32_t)&loaderImage1Base, (uint32_t)&loaderImage1Limit,
                               FMC_LDROM_BASE, FMC_LDROM_SIZE) != 0)
+#endif
                 {
                     printf("Load image to LDROM failed!\n");
                     goto lexit;

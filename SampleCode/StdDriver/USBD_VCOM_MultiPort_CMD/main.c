@@ -232,7 +232,7 @@ void UART_IRQHandler(VCOM_CONTROL_BLOCK_t *tVCOM)
             //to avoid race condition between main program and IRQ handler
         {
             /* Fill the Tx FIFO */
-            int32_t size = tVCOM->psCtrlVar->u16ComTbytes;
+            uint32_t size = tVCOM->psCtrlVar->u16ComTbytes;
 
             if (size > tVCOM->psPeripheralInfo->u32TX_FIFO_SIZE)
             {
@@ -295,7 +295,7 @@ void UART3_IRQHandler(void)
 
 void VCOM_TransferData(void)
 {
-    int32_t i, i32Len;
+    uint32_t i, u32Len;
 
 #if VCOM_CNT == 1
     const uint32_t u32chidx = 0;
@@ -311,12 +311,12 @@ void VCOM_TransferData(void)
             /* Check whether we have new COM Rx data to send to USB or not */
             if (tVCOM[u32chidx].psCtrlVar->u16ComRbytes)
             {
-                i32Len = tVCOM[u32chidx].psCtrlVar->u16ComRbytes;
+                u32Len = tVCOM[u32chidx].psCtrlVar->u16ComRbytes;
 
-                if (i32Len > DATA_EP_MAX_PKT_SIZE)
-                    i32Len = DATA_EP_MAX_PKT_SIZE;
+                if (u32Len > DATA_EP_MAX_PKT_SIZE)
+                    u32Len = DATA_EP_MAX_PKT_SIZE;
 
-                for (i = 0; i < i32Len; i++)
+                for (i = 0; i < u32Len; i++)
                 {
                     tVCOM[u32chidx].psCtrlVar->au8RxBuf[i] = tVCOM[u32chidx].psCtrlVar->au8ComRbuf[tVCOM[u32chidx].psCtrlVar->u16ComRhead++];
 
@@ -325,20 +325,20 @@ void VCOM_TransferData(void)
                 }
 
                 __set_PRIMASK(1);
-                tVCOM[u32chidx].psCtrlVar->u16ComRbytes -= i32Len;
+                tVCOM[u32chidx].psCtrlVar->u16ComRbytes -= u32Len;
                 __set_PRIMASK(0);
 
-                tVCOM[u32chidx].psCtrlVar->u32TxSize = i32Len;
-                USBD_MemCopy((uint8_t *)(USBD_BUF_BASE + USBD_GET_EP_BUF_ADDR(GET_BULK_IN_EP(u32chidx))), (uint8_t *)tVCOM[u32chidx].psCtrlVar->au8RxBuf, i32Len);
-                USBD_SET_PAYLOAD_LEN(GET_BULK_IN_EP(u32chidx), i32Len);
+                tVCOM[u32chidx].psCtrlVar->u32TxSize = u32Len;
+                USBD_MemCopy((uint8_t *)(USBD_BUF_BASE + USBD_GET_EP_BUF_ADDR(GET_BULK_IN_EP(u32chidx))), (uint8_t *)tVCOM[u32chidx].psCtrlVar->au8RxBuf, u32Len);
+                USBD_SET_PAYLOAD_LEN(GET_BULK_IN_EP(u32chidx), u32Len);
             }
             else
             {
                 /* Prepare a zero packet if previous packet size is DATA_EP_MAX_PKT_SIZE and
                    no more data to send at this moment to note Host the transfer has been done */
-                i32Len = USBD_GET_PAYLOAD_LEN(GET_BULK_IN_EP(u32chidx));
+                u32Len = USBD_GET_PAYLOAD_LEN(GET_BULK_IN_EP(u32chidx));
 
-                if (i32Len == DATA_EP_MAX_PKT_SIZE)
+                if (u32Len == DATA_EP_MAX_PKT_SIZE)
                     USBD_SET_PAYLOAD_LEN(GET_BULK_IN_EP(u32chidx), 0);
             }
         }
@@ -399,13 +399,13 @@ void VCOM_TransferData(void)
         /* Check whether we have new COM Rx data to send to USB or not */
         if (tVCOM[IDX_VCOM4].psCtrlVar->u16ComTbytes)
         {
-            i32Len = tVCOM[IDX_VCOM4].psCtrlVar->u16ComTbytes;
+            u32Len = tVCOM[IDX_VCOM4].psCtrlVar->u16ComTbytes;
 
 
-            if (i32Len > DATA_EP_MAX_PKT_SIZE)
-                i32Len = DATA_EP_MAX_PKT_SIZE;
+            if (u32Len > DATA_EP_MAX_PKT_SIZE)
+                u32Len = DATA_EP_MAX_PKT_SIZE;
 
-            for (i = 0; i < i32Len; i++)
+            for (i = 0; i < u32Len; i++)
             {
                 tVCOM[IDX_VCOM4].psCtrlVar->au8RxBuf[i] = tVCOM[IDX_VCOM4].psCtrlVar->au8ComTbuf[tVCOM[IDX_VCOM4].psCtrlVar->u16ComThead++];
 
@@ -414,20 +414,20 @@ void VCOM_TransferData(void)
             }
 
             __set_PRIMASK(1);
-            tVCOM[IDX_VCOM4].psCtrlVar->u16ComTbytes -= i32Len;
+            tVCOM[IDX_VCOM4].psCtrlVar->u16ComTbytes -= u32Len;
             __set_PRIMASK(0);
 
-            tVCOM[IDX_VCOM4].psCtrlVar->u32TxSize = i32Len;
-            USBD_MemCopy((uint8_t *)(USBD_BUF_BASE + USBD_GET_EP_BUF_ADDR(GET_BULK_IN_EP(IDX_VCOM4))), (uint8_t *)tVCOM[IDX_VCOM4].psCtrlVar->au8RxBuf, i32Len);
-            USBD_SET_PAYLOAD_LEN(GET_BULK_IN_EP(IDX_VCOM4), i32Len);
+            tVCOM[IDX_VCOM4].psCtrlVar->u32TxSize = u32Len;
+            USBD_MemCopy((uint8_t *)(USBD_BUF_BASE + USBD_GET_EP_BUF_ADDR(GET_BULK_IN_EP(IDX_VCOM4))), (uint8_t *)tVCOM[IDX_VCOM4].psCtrlVar->au8RxBuf, u32Len);
+            USBD_SET_PAYLOAD_LEN(GET_BULK_IN_EP(IDX_VCOM4), u32Len);
         }
         else
         {
             /* Prepare a zero packet if previous packet size is DATA_EP_MAX_PKT_SIZE
             and no more data to send at this moment to note Host the transfer has been done */
-            i32Len = USBD_GET_PAYLOAD_LEN(GET_BULK_IN_EP(IDX_VCOM4));
+            u32Len = USBD_GET_PAYLOAD_LEN(GET_BULK_IN_EP(IDX_VCOM4));
 
-            if (i32Len == DATA_EP_MAX_PKT_SIZE)
+            if (u32Len == DATA_EP_MAX_PKT_SIZE)
                 USBD_SET_PAYLOAD_LEN(GET_BULK_IN_EP(IDX_VCOM4), 0);
         }
     }

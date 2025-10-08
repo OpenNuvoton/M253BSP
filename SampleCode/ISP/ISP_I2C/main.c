@@ -15,6 +15,8 @@
 uint32_t Pclk0;
 uint32_t Pclk1;
 
+
+
 __WEAK uint32_t CLK_GetPLLClockFreq(void)
 {
     return FREQ_48MHZ;
@@ -88,9 +90,12 @@ _ISP:
     {
         if (bI2cDataReady == 1)
         {
+            /* Disable I2C IRQ until ParseCmd() is finished to prevent returning incomplete data prematurely */
+            NVIC_DisableIRQ(I2C1_IRQn);
             memcpy(cmd_buff, i2c_rcvbuf, 64);
             bI2cDataReady = 0;
             ParseCmd((unsigned char *)cmd_buff, 64);
+            NVIC_EnableIRQ(I2C1_IRQn);
         }
     }
 

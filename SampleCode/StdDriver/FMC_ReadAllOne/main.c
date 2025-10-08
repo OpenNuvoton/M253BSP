@@ -35,8 +35,7 @@ void SYS_Init(void)
 
 int32_t main(void)
 {
-    int         u32ret;                   /* return value */
-    uint32_t    u32Data;
+    uint32_t u32RetCode, u32Data;
 
     /* Unlock protected registers */
     SYS_UnlockReg();
@@ -78,9 +77,9 @@ int32_t main(void)
     FMC_Erase(FMC_LDROM_BASE);         /* Erase LDROM page 0. */
 
     /* Run and check flash contents are all 0xFFFFFFFF. */
-    u32ret = FMC_CheckAllOne(FMC_LDROM_BASE, FMC_FLASH_PAGE_SIZE);
+    u32RetCode = FMC_CheckAllOne(FMC_LDROM_BASE, FMC_FLASH_PAGE_SIZE);
 
-    if (u32ret == READ_ALLONE_YES)                  /* return value READ_ALLONE_YES means all flash contents are 0xFFFFFFFF */
+    if (u32RetCode == READ_ALLONE_YES) /* return value READ_ALLONE_YES means all flash contents are 0xFFFFFFFF */
         printf("READ_ALLONE_YES success.\n");    /* FMC_CheckAllOne() READ_ALLONE_YES passed on LDROM page 0. */
     else
         printf("READ_ALLONE_YES failed!\n");     /* FMC_CheckAllOne() READ_ALLONE_YES failed on LDROM page 0. */
@@ -88,9 +87,9 @@ int32_t main(void)
     FMC_Write(FMC_LDROM_BASE, 0);      /* program a 0 to LDROM to make it not all 0xFFFFFFFF. */
 
     /* Run and check flash contents are not all 0xFFFFFFFF. */
-    u32ret = FMC_CheckAllOne(FMC_LDROM_BASE, FMC_FLASH_PAGE_SIZE);
+    u32RetCode = FMC_CheckAllOne(FMC_LDROM_BASE, FMC_FLASH_PAGE_SIZE);
 
-    if (u32ret == READ_ALLONE_NOT)
+    if (u32RetCode == READ_ALLONE_NOT)
         printf("READ_ALLONE_NOT success.\n");   /* FMC_CheckAllOne() READ_ALLONE_NOT passed on LDROM page 0. */
     else
         printf("READ_ALLONE_NOT failed!\n");    /* FMC_CheckAllOne() READ_ALLONE_NOT failed on LDROM page 0. */

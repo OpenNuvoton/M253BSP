@@ -26,15 +26,7 @@ const uint32_t PDMA_TEST_LENGTH = 64;
     __attribute__((aligned(4))) uint8_t g_au8DestArray1[256];
 #endif
 
-typedef struct dma_desc_t
-{
-    uint32_t u32Ctl;
-    uint32_t u32Src;
-    uint32_t u32Dest;
-    uint32_t u32Offset;
-} DMA_DESC_T;
-
-DMA_DESC_T DMA_DESC[2];
+DSCT_T DMA_DESC[2];
 
 /**
  * @brief       DMA IRQ
@@ -165,7 +157,7 @@ int main(void)
 
         Total transfer length = PDMA_TEST_LENGTH * 32 bits
     ------------------------------------------------------------------------------------------------------*/
-    DMA_DESC[0].u32Ctl =
+    DMA_DESC[0].CTL =
         ((PDMA_TEST_LENGTH - 1) << PDMA_DSCT_CTL_TXCNT_Pos) | /* Transfer count is PDMA_TEST_LENGTH */ \
         PDMA_WIDTH_32 |   /* Transfer width is 32 bits(one word) */ \
         PDMA_SAR_INC |    /* Source increment size is 32 bits(one word) */ \
@@ -176,11 +168,11 @@ int main(void)
         PDMA_OP_SCATTER;  /* Operation mode is scatter-gather mode */
 
     /* Configure source address */
-    DMA_DESC[0].u32Src = u32Src;
+    DMA_DESC[0].SA = u32Src;
     /* Configure destination address */
-    DMA_DESC[0].u32Dest = u32Dst0;
+    DMA_DESC[0].DA = u32Dst0;
     /* Configure next descriptor table address */
-    DMA_DESC[0].u32Offset = (uint32_t)&DMA_DESC[1] - (PDMA->SCATBA); /* next descriptor table is table 2 */
+    DMA_DESC[0].NEXT = (uint32_t)&DMA_DESC[1] - (PDMA->SCATBA); /* next descriptor table is table 2 */
 
 
     /*------------------------------------------------------------------------------------------------------
@@ -211,7 +203,7 @@ int main(void)
 
         Total transfer length = PDMA_TEST_LENGTH * 32 bits
     ------------------------------------------------------------------------------------------------------*/
-    DMA_DESC[1].u32Ctl =
+    DMA_DESC[1].CTL =
         ((PDMA_TEST_LENGTH - 1) << PDMA_DSCT_CTL_TXCNT_Pos) | /* Transfer count is PDMA_TEST_LENGTH */ \
         PDMA_WIDTH_32 |   /* Transfer width is 32 bits(one word) */ \
         PDMA_SAR_INC |    /* Source increment size is 32 bits(one word) */ \
@@ -220,9 +212,9 @@ int main(void)
         PDMA_BURST_128 |  /* Burst size is 128. No effect in single transfer type */ \
         PDMA_OP_BASIC;    /* Operation mode is basic mode */
 
-    DMA_DESC[1].u32Src = u32Dst0;
-    DMA_DESC[1].u32Dest = u32Dst1;
-    DMA_DESC[1].u32Offset = 0; /* No next operation table. No effect in basic mode */
+    DMA_DESC[1].SA = u32Dst0;
+    DMA_DESC[1].DA = u32Dst1;
+    DMA_DESC[1].NEXT = 0; /* No next operation table. No effect in basic mode */
 
 
     /* Generate a software request to trigger transfer with PDMA channel 4 */

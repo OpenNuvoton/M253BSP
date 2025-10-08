@@ -149,6 +149,7 @@ void USPI_DisableAutoSS(USPI_T *psUSPI)
   */
 void USPI_EnableAutoSS(USPI_T *psUSPI, uint32_t u32SSPinMask, uint32_t u32ActiveLevel)
 {
+    (void)u32SSPinMask;
     psUSPI->LINECTL = (psUSPI->LINECTL & ~USPI_LINECTL_CTLOINV_Msk) | u32ActiveLevel;
     psUSPI->PROTCTL |= USPI_PROTCTL_AUTOSS_Msk;
 }

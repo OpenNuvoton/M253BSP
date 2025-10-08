@@ -22,15 +22,7 @@ uint32_t volatile g_u32IsTestOver = 0;
 uint32_t volatile g_u32TransferredCount = 0;
 uint32_t g_u32DMAConfig = 0;
 
-typedef struct dma_desc_t
-{
-    uint32_t u32Ctl;
-    uint32_t u32Src;
-    uint32_t u32Dest;
-    uint32_t u32Offset;
-} DMA_DESC_T;
-
-DMA_DESC_T DMA_DESC[2];
+DSCT_T DMA_DESC[2];
 
 /**
  * @brief       DMA IRQ
@@ -53,8 +45,8 @@ void PDMA_IRQHandler(void)
         if (g_u32TransferredCount >= PDMA_TEST_COUNT)
         {
             /* Set PDMA into idle state by Descriptor table */
-            DMA_DESC[0].u32Ctl &= ~PDMA_DSCT_CTL_OPMODE_Msk;
-            DMA_DESC[1].u32Ctl &= ~PDMA_DSCT_CTL_OPMODE_Msk;
+            DMA_DESC[0].CTL &= ~PDMA_DSCT_CTL_OPMODE_Msk;
+            DMA_DESC[1].CTL &= ~PDMA_DSCT_CTL_OPMODE_Msk;
             g_u32IsTestOver = 1;
         }
 
@@ -186,13 +178,13 @@ int main(void)
 
         Total transfer length = 1 * 32 bits
     ------------------------------------------------------------------------------------------------------*/
-    DMA_DESC[0].u32Ctl = g_u32DMAConfig;
+    DMA_DESC[0].CTL = g_u32DMAConfig;
     /* Configure source address */
-    DMA_DESC[0].u32Src = (uint32_t)g_au32SrcArray0; /* Ping-Pong buffer 1 */
+    DMA_DESC[0].SA = (uint32_t)g_au32SrcArray0; /* Ping-Pong buffer 1 */
     /* Configure destination address */
-    DMA_DESC[0].u32Dest = (uint32_t)&g_au32DestArray[0];
+    DMA_DESC[0].DA = (uint32_t)&g_au32DestArray[0];
     /* Configure next descriptor table address */
-    DMA_DESC[0].u32Offset = (uint32_t)&DMA_DESC[1] - (PDMA->SCATBA); /* next operation table is table 2 */
+    DMA_DESC[0].NEXT = (uint32_t)&DMA_DESC[1] - (PDMA->SCATBA); /* next operation table is table 2 */
 
     /*------------------------------------------------------------------------------------------------------
       Descriptor table 2 configuration:
@@ -218,13 +210,13 @@ int main(void)
 
         Total transfer length = 1 * 32 bits
     ------------------------------------------------------------------------------------------------------*/
-    DMA_DESC[1].u32Ctl = g_u32DMAConfig;
+    DMA_DESC[1].CTL = g_u32DMAConfig;
     /* Configure source address */
-    DMA_DESC[1].u32Src = (uint32_t)g_au32SrcArray1; /* Ping-Pong buffer 2 */
+    DMA_DESC[1].SA = (uint32_t)g_au32SrcArray1; /* Ping-Pong buffer 2 */
     /* Configure destination address */
-    DMA_DESC[1].u32Dest = (uint32_t)&g_au32DestArray[0];
+    DMA_DESC[1].DA = (uint32_t)&g_au32DestArray[0];
     /* Configure next descriptor table address */
-    DMA_DESC[1].u32Offset = (uint32_t)&DMA_DESC[0] - (PDMA->SCATBA); /* next operation table is table 1 */
+    DMA_DESC[1].NEXT = (uint32_t)&DMA_DESC[0] - (PDMA->SCATBA); /* next operation table is table 1 */
 
 
     /* Enable transfer done interrupt */

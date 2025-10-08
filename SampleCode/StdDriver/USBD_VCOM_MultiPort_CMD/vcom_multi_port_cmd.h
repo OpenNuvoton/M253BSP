@@ -210,7 +210,7 @@
 
 /*--------------------------------------------------------------------------*/
 #define RXBUFSIZE           512 /* RX buffer size */
-#define TXBUFSIZE           512 /* RX buffer size */
+#define TXBUFSIZE           512 /* TX buffer size */
 
 #define TX_FIFO_SIZE_0      16  /* TX Hardware FIFO size */
 #define TX_FIFO_SIZE_1      16  /* TX Hardware FIFO size */

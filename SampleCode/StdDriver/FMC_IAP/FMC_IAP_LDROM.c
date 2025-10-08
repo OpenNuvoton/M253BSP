@@ -43,11 +43,13 @@ void SYS_Init(void)
  *  Set stack base address to SP register.
  */
 #ifdef __ARMCC_VERSION                 /* for Keil compiler */
-void __set_SP(uint32_t _sp)
+void __set_SP(uint32_t u32SP)
 {
+    (void)u32SP;
+
     __ASM(
         "MSR MSP, r0 \n"
-        "BX lr			 \n"
+        "BX lr       \n"
     );
 }
 
@@ -106,8 +108,10 @@ static void PutString(char *pi8Str)
  * @return      None
  * @details     Replace while(1) at the end of this function with chip reset if WDT is not enabled for end product
  */
-void Hard_Fault_Handler(uint32_t stack[])
+void Hard_Fault_Handler(uint32_t au32Stack[])
 {
+    (void)au32Stack;
+
     PutString("In Hard Fault Handler\n");
 
     while (1);

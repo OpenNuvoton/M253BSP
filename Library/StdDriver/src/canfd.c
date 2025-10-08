@@ -204,22 +204,22 @@ uint32_t CANFD_ReadReg(__I uint32_t *pu32RegAddr)
     uint32_t u32TimeOutCnt = CANFD_READ_REG_TIMEOUT;
     u32ReadReg = 0UL;
 
-	if (g_u32Workaround)
-	{
-		do
-		{
-			u32ReadReg = inpw(pu32RegAddr);
+    if (g_u32Workaround)
+    {
+        do
+        {
+            u32ReadReg = inpw(pu32RegAddr);
 
-			if (--u32TimeOutCnt == 0UL)
-			{
-				break;
-			}
-		} while (u32ReadReg == 0UL);
-	}
-	else
-	{
-		u32ReadReg = inpw(pu32RegAddr);
-	}
+            if (--u32TimeOutCnt == 0UL)
+            {
+                break;
+            }
+        } while (u32ReadReg == 0UL);
+    }
+    else
+    {
+        u32ReadReg = inpw(pu32RegAddr);
+    }
 
     return u32ReadReg;
 }
@@ -522,7 +522,7 @@ static uint32_t CANFD_CalculateTimingValues(CANFD_T *psCanfd, uint32_t u32Nomina
     /* observe baud rate maximums */
     if (u32NominalBaudRate > MAX_NOMINAL_BAUDRATE) u32NominalBaudRate = MAX_NOMINAL_BAUDRATE;
 
-    for (i32Ntq = MAX_TIME_QUANTA; i32Ntq >= MIN_TIME_QUANTA; i32Ntq--)
+    for (i32Ntq = MAX_TIME_QUANTA; i32Ntq >= (int32_t)MIN_TIME_QUANTA; i32Ntq--)
     {
         int i32Nclk = u32NominalBaudRate * i32Ntq;
 
@@ -558,7 +558,7 @@ static uint32_t CANFD_CalculateTimingValues(CANFD_T *psCanfd, uint32_t u32Nomina
                     }
 
                     /* calculate data settings */
-                    for (i32Dtq = MAX_TIME_QUANTA; i32Dtq >= MIN_TIME_QUANTA; i32Dtq--)
+                    for (i32Dtq = MAX_TIME_QUANTA; i32Dtq >= (int32_t)MIN_TIME_QUANTA; i32Dtq--)
                     {
                         i32Dclk = u32DataBaudRate * i32Dtq;
 
@@ -601,11 +601,11 @@ void CANFD_Open(CANFD_T *psCanfd, CANFD_FD_T *psCanfdStr)
 {
     uint32_t u32CanFdClock = 0;
 
-	/* Workaround for https://www.nuvoton.com/resource-download.jsp?tp_GUID=DA07-M253&currentFolder=/products/microcontrollers/arm-cortex-m23-mcus/m253-series/ */
-	if ((SYS->PDID == 0x00F250E0) || (SYS->PDID == 0x00F25000) || (SYS->PDID == 0x00F25001))
-	{
-		g_u32Workaround = 1UL;
-	}
+    /* Workaround for https://www.nuvoton.com/resource-download.jsp?tp_GUID=DA07-M253&currentFolder=/products/microcontrollers/arm-cortex-m23-mcus/m253-series/ */
+    if ((SYS->PDID == 0x00F250E0) || (SYS->PDID == 0x00F25000) || (SYS->PDID == 0x00F25001))
+    {
+        g_u32Workaround = 1UL;
+    }
 
     if (psCanfd == (CANFD_T *)CANFD0)
     {
@@ -1708,8 +1708,6 @@ void CANFD_GetBusErrCount(CANFD_T *psCanfd, uint8_t *pu8TxErrBuf, uint8_t *pu8Rx
  *
  * @param[in]   psCanfd        The pointer of the specified CAN FD module.
  * @param[in]   u8Enable       TRUE or FALSE.
- *
- * @return      None.
  *
  * @details     This function is used to switch between initial mode and normal mode.
  */

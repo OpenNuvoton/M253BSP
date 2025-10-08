@@ -34,7 +34,8 @@
  */
 uint32_t BPWM_ConfigCaptureChannel(BPWM_T *bpwm, uint32_t u32ChannelNum, uint32_t u32UnitTimeNsec, uint32_t u32CaptureEdge)
 {
-
+    (void) u32ChannelNum;
+    (void) u32CaptureEdge;
     uint32_t u32BPWMClockSrc = 0UL;
     uint32_t u32NearestUnitTimeNsec = 0UL;
     uint16_t u16Prescale = 1UL, u16CNR = 0xFFFFUL;
@@ -162,6 +163,7 @@ uint32_t BPWM_ConfigOutputChannel(BPWM_T *bpwm, uint32_t u32ChannelNum, uint32_t
  */
 void BPWM_Start(BPWM_T *bpwm, uint32_t u32ChannelMask)
 {
+    (void) u32ChannelMask;
     (bpwm)->CNTEN = BPWM_CNTEN_CNTEN0_Msk;
 }
 
@@ -176,6 +178,7 @@ void BPWM_Start(BPWM_T *bpwm, uint32_t u32ChannelMask)
  */
 void BPWM_Stop(BPWM_T *bpwm, uint32_t u32ChannelMask)
 {
+    (void) u32ChannelMask;
     (bpwm)->PERIOD = 0UL;
 }
 
@@ -190,6 +193,7 @@ void BPWM_Stop(BPWM_T *bpwm, uint32_t u32ChannelMask)
  */
 void BPWM_ForceStop(BPWM_T *bpwm, uint32_t u32ChannelMask)
 {
+    (void) u32ChannelMask;
     (bpwm)->CNTEN &= ~BPWM_CNTEN_CNTEN0_Msk;
 }
 
@@ -254,6 +258,7 @@ void BPWM_DisableADCTrigger(BPWM_T *bpwm, uint32_t u32ChannelNum)
  */
 void BPWM_ClearADCTriggerFlag(BPWM_T *bpwm, uint32_t u32ChannelNum, uint32_t u32Condition)
 {
+    (void) u32Condition;
     (bpwm)->STATUS = (BPWM_STATUS_EADCTRG0_Msk << u32ChannelNum);
 }
 
@@ -469,6 +474,8 @@ uint32_t BPWM_GetDutyIntFlag(BPWM_T *bpwm, uint32_t u32ChannelNum)
  */
 void BPWM_EnablePeriodInt(BPWM_T *bpwm, uint32_t u32ChannelNum,  uint32_t u32IntPeriodType)
 {
+    (void) u32ChannelNum;
+    (void) u32IntPeriodType;
     (bpwm)->INTEN |= BPWM_INTEN_PIEN0_Msk;
 }
 
@@ -483,6 +490,7 @@ void BPWM_EnablePeriodInt(BPWM_T *bpwm, uint32_t u32ChannelNum,  uint32_t u32Int
  */
 void BPWM_DisablePeriodInt(BPWM_T *bpwm, uint32_t u32ChannelNum)
 {
+    (void) u32ChannelNum;
     (bpwm)->INTEN &= ~BPWM_INTEN_PIEN0_Msk;
 }
 
@@ -497,6 +505,7 @@ void BPWM_DisablePeriodInt(BPWM_T *bpwm, uint32_t u32ChannelNum)
  */
 void BPWM_ClearPeriodIntFlag(BPWM_T *bpwm, uint32_t u32ChannelNum)
 {
+    (void) u32ChannelNum;
     (bpwm)->INTSTS = BPWM_INTSTS_PIF0_Msk;
 }
 
@@ -514,6 +523,7 @@ void BPWM_ClearPeriodIntFlag(BPWM_T *bpwm, uint32_t u32ChannelNum)
  */
 uint32_t BPWM_GetPeriodIntFlag(BPWM_T *bpwm, uint32_t u32ChannelNum)
 {
+    (void) u32ChannelNum;
     return (((bpwm)->INTSTS & BPWM_INTSTS_PIF0_Msk) ? 1UL : 0UL);
 }
 
@@ -528,6 +538,7 @@ uint32_t BPWM_GetPeriodIntFlag(BPWM_T *bpwm, uint32_t u32ChannelNum)
  */
 void BPWM_EnableZeroInt(BPWM_T *bpwm, uint32_t u32ChannelNum)
 {
+    (void) u32ChannelNum;
     (bpwm)->INTEN |= BPWM_INTEN_ZIEN0_Msk;
 }
 
@@ -542,6 +553,7 @@ void BPWM_EnableZeroInt(BPWM_T *bpwm, uint32_t u32ChannelNum)
  */
 void BPWM_DisableZeroInt(BPWM_T *bpwm, uint32_t u32ChannelNum)
 {
+    (void) u32ChannelNum;
     (bpwm)->INTEN &= ~BPWM_INTEN_ZIEN0_Msk;
 }
 
@@ -556,6 +568,7 @@ void BPWM_DisableZeroInt(BPWM_T *bpwm, uint32_t u32ChannelNum)
  */
 void BPWM_ClearZeroIntFlag(BPWM_T *bpwm, uint32_t u32ChannelNum)
 {
+    (void) u32ChannelNum;
     (bpwm)->INTSTS = BPWM_INTSTS_ZIF0_Msk;
 }
 
@@ -573,6 +586,7 @@ void BPWM_ClearZeroIntFlag(BPWM_T *bpwm, uint32_t u32ChannelNum)
  */
 uint32_t BPWM_GetZeroIntFlag(BPWM_T *bpwm, uint32_t u32ChannelNum)
 {
+    (void) u32ChannelNum;
     return (((bpwm)->INTSTS & BPWM_INTSTS_ZIF0_Msk) ? 1UL : 0UL);
 }
 
@@ -625,6 +639,7 @@ void BPWM_DisableLoadMode(BPWM_T *bpwm, uint32_t u32ChannelNum, uint32_t u32Load
  */
 void BPWM_SetClockSource(BPWM_T *bpwm, uint32_t u32ChannelNum, uint32_t u32ClkSrcSel)
 {
+    (void) u32ChannelNum;
     (bpwm)->CLKSRC = (u32ClkSrcSel);
 }
 
@@ -642,6 +657,7 @@ void BPWM_SetClockSource(BPWM_T *bpwm, uint32_t u32ChannelNum, uint32_t u32ClkSr
  */
 uint32_t BPWM_GetWrapAroundFlag(BPWM_T *bpwm, uint32_t u32ChannelNum)
 {
+    (void) u32ChannelNum;
     return (((bpwm)->STATUS & BPWM_STATUS_CNTMAX0_Msk) ? 1UL : 0UL);
 }
 
@@ -656,6 +672,7 @@ uint32_t BPWM_GetWrapAroundFlag(BPWM_T *bpwm, uint32_t u32ChannelNum)
  */
 void BPWM_ClearWrapAroundFlag(BPWM_T *bpwm, uint32_t u32ChannelNum)
 {
+    (void) u32ChannelNum;
     (bpwm)->STATUS = BPWM_STATUS_CNTMAX0_Msk;
 }
 

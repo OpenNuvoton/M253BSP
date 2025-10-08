@@ -16,6 +16,7 @@
 #include "uart_transfer.h"
 
 
+
 void SYS_Init(void)
 {
     /* Enable Internal and External RC clock */

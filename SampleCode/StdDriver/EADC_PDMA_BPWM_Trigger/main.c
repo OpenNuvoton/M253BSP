@@ -202,13 +202,8 @@ void EADC_FunctionTest(void)
 
         BPWM_Start(BPWM0, BIT0);
 
-        while (1)
-        {
-            /* Wait PDMA interrupt (g_u32IsTestOver will be set at IRQ_Handler function) */
-            while (g_u32IsTestOver == 0);
-
-            break;
-        }
+        /* Wait PDMA interrupt (g_u32IsTestOver will be set at IRQ_Handler function) */
+        while (g_u32IsTestOver == 0);
 
         g_u32IsTestOver = 0;
 

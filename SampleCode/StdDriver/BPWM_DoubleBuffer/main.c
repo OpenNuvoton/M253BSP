@@ -26,6 +26,9 @@ void BPWM0_IRQHandler(void)
 {
     static int i8Toggle = 0;
 
+    // Clear channel 0 period interrupt flag
+    BPWM_ClearPeriodIntFlag(BPWM0, 0);
+
     // Update BPWM0 channel 0 period and duty
     if (i8Toggle == 0)
     {
@@ -39,8 +42,6 @@ void BPWM0_IRQHandler(void)
     }
 
     i8Toggle ^= 1;
-    // Clear channel 0 period interrupt flag
-    BPWM_ClearPeriodIntFlag(BPWM0, 0);
 }
 
 void SYS_Init(void)

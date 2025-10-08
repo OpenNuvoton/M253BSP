@@ -1,6 +1,6 @@
 # M253 Series CMSIS BSP
 
-To experience the powerful features of M253 series in few minutes, please select the sample code to download and execute on the NuMaker-M253 board. Open the project files to build them with Keil® MDK, IAR, NuEclipse or VSCode, and then download and trace them on the NuMaker board to see how it works.
+To experience the powerful features of M253 series in few minutes, please select the sample code to download and execute on the NuMaker-M253 board. Open the project files to build them with Keil® MDK, IAR, NuEclipse or VS Code, and then download and trace them on the NuMaker board to see how it works.
 
 
 ## .\Document\
@@ -13,6 +13,9 @@ To experience the powerful features of M253 series in few minutes, please select
 
 - NuMicro M253 Series CMSIS BSP Revision History.pdf<br>
 	This document shows the revision history of M253 BSP.
+
+- VSCode Quick Start Guide
+	This documents guide to install, configure and use VS Code.
 
 
 ## .\Library\
@@ -38,7 +41,7 @@ To experience the powerful features of M253 series in few minutes, please select
 	It also shows the Link Register (LR), which contains the return address of the last function call. It can show the status where CPU comes from to get to this point.
 
 - ISP<br>
-	Sample codes for In-System-Programming.
+	Sample code for In-System-Programming.
 
 - PowerManagement<br>
 	Power management sample code.

@@ -697,11 +697,15 @@ void MSC_ProcessCmd(void)
 
             case UFI_MODE_SENSE_6:
             {
-                uint32_t u32Data = 0x3;
-                g_u8BulkState = BULK_IN;
-                USBD_MemCopy((uint8_t *)((uint32_t)USBD_BUF_BASE + g_u32BulkBuf1), (uint8_t *)u32Data, 4);
-
+                /* Byte0 Mode Data Length = 03(Byte1~Byte3)
+                 * Byte1 Medium Type = 00
+                 * Byte2 Device-Specific = 00(WP=0)
+                 * Byte3 Block Descriptor Length = 00
+                 */
+                *(uint32_t *)(USBD_BUF_BASE + g_u32BulkBuf1) = 0x3;
                 USBD_SET_PAYLOAD_LEN(EP2, 4);
+                g_u8BulkState = BULK_IN;
+
                 return;
             }
         }

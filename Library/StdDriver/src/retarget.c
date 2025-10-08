@@ -104,6 +104,7 @@ enum { r0, r1, r2, r3, r12, lr, pc, psr};
  */
 static void DumpStack(uint32_t stack[])
 {
+    (void)stack;
     /*
         printf("r0 =0x%x\n", stack[r0]);
         printf("r1 =0x%x\n", stack[r1]);
@@ -120,7 +121,7 @@ static void DumpStack(uint32_t stack[])
 
 /* The static buffer is used to speed up the semihost */
 static char g_buf[16];
-static char g_buf_len = 0;
+static uint8_t g_buf_len = 0;
 
 /**
  *
@@ -134,6 +135,8 @@ static char g_buf_len = 0;
  */
 int32_t SH_Return(int32_t n32In_R0, int32_t n32In_R1, int32_t *pn32Out_R0)
 {
+    (void)n32In_R1;
+
     if (g_ICE_Connected)
     {
         if (pn32Out_R0)
@@ -172,6 +175,9 @@ __attribute__((weak)) void HardFault_Handler(void)
 int32_t SH_Return(int32_t n32In_R0, int32_t n32In_R1, int32_t *pn32Out_R0);
 int32_t SH_Return(int32_t n32In_R0, int32_t n32In_R1, int32_t *pn32Out_R0)
 {
+    (void)n32In_R0;
+    (void)n32In_R1;
+    (void)pn32Out_R0;
     return 0;
 }
 
@@ -240,10 +246,8 @@ uint32_t ProcessHardFault(uint32_t lr, uint32_t msp, uint32_t psp)
     printf("  HardFault!\n\n");
     DumpStack(sp);
 
-    /* Or *sp to remove compiler warning */
-    while (1U | *sp) {}
-
-    return lr;
+    // Halt here
+    while (1) {};
 }
 
 
@@ -338,7 +342,7 @@ void SendChar_ToUART(int ch)
  *
  * @param[in] ch : A character data writes to debug port
  *
- * @returns  Send value from UART debug port or semihost
+ * @returns  None
  *
  * @details  Send a target char to UART debug port or semihost.
  */
@@ -549,6 +553,7 @@ size_t __write(int handle, const unsigned char *buffer, size_t size)
 #else
 int fputc(int ch, FILE *stream)
 {
+    (void)stream;
     SendChar(ch);
     return ch;
 }
@@ -644,6 +649,7 @@ long __lseek(int handle, long offset, int whence)
 #else
 int fgetc(FILE *stream)
 {
+    (void)stream;
     return ((int)GetChar());
 }
 
@@ -665,6 +671,7 @@ int fgetc(FILE *stream)
  */
 int ferror(FILE *stream)
 {
+    (void)stream;
     return EOF;
 }
 
@@ -690,6 +697,8 @@ label:
 
 void _sys_exit(int return_code)
 {
+    (void)return_code;
+
     /* Check if link with ICE */
     if (SH_DoCommand(0x18, 0x20026, NULL) == 0)
     {

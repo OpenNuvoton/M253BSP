@@ -58,7 +58,7 @@ void EnterToPowerDown(uint32_t u32PDMode)
 
     if (u32PDMode == PD_MODE)
         CLK->PMUCTL |= CLK_PMUCTL_PDMSEL_PD;    //Power down
-    else if ((u32PDMode == FWPD_MODE))
+    else if (u32PDMode == FWPD_MODE)
         CLK->PMUCTL |= CLK_PMUCTL_PDMSEL_FWPD;  //Fast Wake Up
 
     CLK->PWRCTL &= ~(CLK_PWRCTL_PDEN_Msk | CLK_PWRCTL_PDWKIEN_Msk);

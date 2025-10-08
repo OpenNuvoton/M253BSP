@@ -33,6 +33,7 @@ int32_t g_EADC_i32ErrCode = 0;       /*!< EADC global error code */
   */
 void EADC_Open(EADC_T *eadc, uint32_t u32InputMode)
 {
+    (void)u32InputMode;
     uint32_t u32Delay = SystemCoreClock; /* 1 second */
 
     g_EADC_i32ErrCode = 0;

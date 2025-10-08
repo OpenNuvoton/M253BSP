@@ -736,6 +736,7 @@ void HID_GetOutReport(uint8_t *pu8EpBuf, uint32_t u32Size)
     uint32_t u32Pages;
     uint32_t u32PageCnt;
 
+    (void)u32Size;
     /* Get command information */
     u8Cmd        = g_sCmd.u8Cmd;
     u32StartPage = g_sCmd.u32Arg1;

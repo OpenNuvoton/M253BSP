@@ -1003,7 +1003,7 @@
                 </option>
                 <option>
                     <name>IlinkTrustzoneImportLibraryOut</name>
-                    <state>###Unitialized###</state>
+                    <state>CANFD_CAN_MonitorMode_import_lib.o</state>
                 </option>
                 <option>
                     <name>OILinkExtraOption</name>

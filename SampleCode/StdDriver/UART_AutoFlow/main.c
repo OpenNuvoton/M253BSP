@@ -141,8 +141,6 @@ void UART1_IRQHandler(void)
 /*---------------------------------------------------------------------------------------------------------*/
 void UART_TEST_HANDLE(void)
 {
-    volatile uint32_t u32IntSts = UART1->INTSTS;;
-
     /* Rx Ready or Time-out INT */
     if (UART_GET_INT_FLAG(UART1, UART_INTSTS_RDAINT_Msk) ||  UART_GET_INT_FLAG(UART1, UART_INTSTS_RXTOINT_Msk))
     {

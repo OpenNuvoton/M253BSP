@@ -128,8 +128,8 @@ void PDMA_Init(void)
     PDMA_SetBurstType(PDMA, 1, PDMA_REQ_SINGLE, 0);
 
 #ifdef ENABLE_PDMA_INTERRUPT
-    PDMA_EnableInt(PDMA, 0, 0);
-    PDMA_EnableInt(PDMA, 1, 0);
+    PDMA_EnableInt(PDMA, 0, PDMA_INT_TRANS_DONE);
+    PDMA_EnableInt(PDMA, 1, PDMA_INT_TRANS_DONE);
     NVIC_EnableIRQ(PDMA_IRQn);
     g_u32IsTestOver = 0;
 #endif

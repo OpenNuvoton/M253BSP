@@ -17,6 +17,8 @@
 #define REVEIVE_MODE            (0)
 #define TRANSMIT_MODE           (1)
 
+
+
 __WEAK uint32_t CLK_GetPLLClockFreq(void)
 {
     return FREQ_48MHZ;

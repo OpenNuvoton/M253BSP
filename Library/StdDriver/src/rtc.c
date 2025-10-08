@@ -132,11 +132,11 @@ void RTC_32KCalibration(int32_t i32FrequencyX10000)
            FREQADJ = 0~0x00001F00 (Frequency range : 32752Hz ~ 32783Hz)
     */
 
-    if (i32FrequencyX10000 >= (uint32_t)327840000)
+    if (i32FrequencyX10000 >= (int32_t)327840000)
     {
         u32Compensate = 0x1F3F;
     }
-    else if (i32FrequencyX10000 < (uint32_t)327520000)
+    else if (i32FrequencyX10000 < (int32_t)327520000)
     {
         u32Compensate = 0x0;
     }
@@ -145,7 +145,7 @@ void RTC_32KCalibration(int32_t i32FrequencyX10000)
         /*  Integer Part: 32773 => RTC_FREQADJ[12:8] = 0x15 */
         for (u32Index = 0; u32Index < 0x20 ; u32Index++)
         {
-            if ((i32FrequencyX10000 >= 327520000 + (u32Index * 10000)) && (i32FrequencyX10000 < 327520000 + ((u32Index + 1) * 10000)))
+            if ((i32FrequencyX10000 >= (int32_t)(327520000 + (u32Index * 10000))) && (i32FrequencyX10000 < (int32_t)(327520000 + ((u32Index + 1) * 10000))))
             {
                 u32Compensate += (u32Index << RTC_FREQADJ_INTEGER_Pos);
                 break;
