@@ -23,6 +23,8 @@ project:
             - --library_type=microlib --map --load_addr_map_info --symbols --xref
             - --info sizes --info totals --strict --summary_stderr --info summarysizes
             - --info unused --info veneers --callgraph
+          C-CPP:
+            - -Wconditional-uninitialized
         - for-compiler: GCC
           C:
             - -std=gnu11 -mthumb -masm-syntax-unified -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections
@@ -30,8 +32,10 @@ project:
             - -mthumb -fmessage-length=0 -fsigned-char --specs=nano.specs --specs=nosys.specs
             - -Wl,--gc-sections,-Map="$elf()$.map"
             - -Wl,--no-warn-rwx-segments
+          C-CPP:
+            - -Wmaybe-uninitialized
   linker:
-    - script: FMC_XOM.sct
+    - script: FMC_XOM.scf
       for-compiler: AC6
     - script: FMC_XOM.ld
       for-compiler: GCC
@@ -58,9 +62,9 @@ project:
         - file: ../xom_add.c
           optimize: none
           misc:
-          - for-compiler: AC6
-            C:
-              - -mexecute-only
-          - for-compiler: GCC
-            C:
-              - -mpure-code
+            - for-compiler: AC6
+              C:
+                - -mexecute-only
+            - for-compiler: GCC
+              C:
+                - -mpure-code

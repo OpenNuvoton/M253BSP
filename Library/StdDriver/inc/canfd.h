@@ -82,7 +82,7 @@ extern "C"
 #define CANFD_RX_FIFO1_EXT_MASK_HIGH(mask)           ((2UL << 30) | (mask & 0x1FFFFFFF))
 
 /**
- *    @brief        Get Monitors the Module’s CAN Communication State Flag
+ *    @brief        Get Monitors the Module's CAN Communication State Flag
  *
  *    @param[in]    canfd    The pointer of the specified CANFD module
  *
@@ -91,7 +91,7 @@ extern "C"
  *    @retval       2 Receiver - node is operating as receiver.
  *    @retval       3 Transmitter - node is operating as transmitter.
  *
- *    @details      This macro get the module’s CANFD communication state.
+ *    @details      This macro get the module's CANFD communication state.
  *    \hideinitializer
  */
 #define CANFD_GET_COMMUNICATION_STATE(canfd)    (((canfd)->PSR  & CANFD_PSR_ACT_Msk) >> CANFD_PSR_ACT_Pos)

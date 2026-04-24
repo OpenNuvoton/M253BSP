@@ -25,8 +25,10 @@ project:
             - --library_type=microlib --map --load_addr_map_info --symbols --xref
             - --info sizes --info totals --strict --summary_stderr --info summarysizes
             - --info unused --info veneers --callgraph
+          C-CPP:
+            - -Wconditional-uninitialized
   linker:
-    - script: ../../../../Library/Device/Nuvoton/M253/Source/ARM/LDROM.sct
+    - script: ../../../../Library/Device/Nuvoton/M253/Source/ARM/LDROM.scf
       for-compiler: AC6
   groups:
     - group: CMSIS

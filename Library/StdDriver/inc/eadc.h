@@ -122,7 +122,7 @@ extern int32_t g_EADC_i32ErrCode;
   * @details When A/D conversion is completed, the converted data is loaded into EADC_DATn (n=0~3, 16, 17) register,
   *         user can enable this bit to generate a PDMA data transfer request.
   */
-#define EADC_ENABLE_PDMA(eadc, u32ModuleNum) (eadc)->PDMACTL |= (0x1 << u32ModuleNum)
+#define EADC_ENABLE_PDMA(eadc, u32ModuleNum) (eadc)->PDMACTL |= (0x1 << (u32ModuleNum))
 
 
 /**
@@ -131,7 +131,7 @@ extern int32_t g_EADC_i32ErrCode;
   * @param[in] u32ModuleNum Decides the sample module number, valid value are from 0 to 3.
   * @details This macro is used to disable PDMA transfer.
   */
-#define EADC_DISABLE_PDMA(eadc, u32ModuleNum) (eadc)->PDMACTL &= ~(0x1 << u32ModuleNum)
+#define EADC_DISABLE_PDMA(eadc, u32ModuleNum) (eadc)->PDMACTL &= ~(0x1 << (u32ModuleNum))
 
 
 /**
@@ -648,7 +648,7 @@ extern int32_t g_EADC_i32ErrCode;
 /*---------------------------------------------------------------------------------------------------------*/
 void EADC_Open(EADC_T *eadc, uint32_t u32InputMode);
 void EADC_Close(EADC_T *eadc);
-void EADC_ConfigSampleModule(EADC_T *eadc, uint32_t u32ModuleNum, uint32_t u32TriggerSource, uint32_t u32Channel);
+void EADC_ConfigSampleModule(EADC_T *eadc, uint32_t u32ModuleNum, uint32_t u32TriggerSrc, uint32_t u32Channel);
 void EADC_SetTriggerDelayTime(EADC_T *eadc, uint32_t u32ModuleNum, uint32_t u32TriggerDelayTime, uint32_t u32DelayClockDivider);
 void EADC_SetExtendSampleTime(EADC_T *eadc, uint32_t u32ModuleNum, uint32_t u32ExtendSampleTime);
 

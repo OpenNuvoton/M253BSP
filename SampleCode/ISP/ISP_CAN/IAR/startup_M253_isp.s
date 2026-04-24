@@ -73,21 +73,21 @@ __vector_table
         DCD     SPI0_IRQHandler           ; 23: SPI0
         DCD     CANFD0_IRQ0_IRQHandler    ; 24: CAN FD0 interrupt 0
         DCD     CANFD0_IRQ1_IRQHandler    ; 25: CAN FD0 interrupt 1
-        DCD     DEFAULT_IRQHandler        ; 26: Reserved
-        DCD     DEFAULT_IRQHandler        ; 27: Reserved
-        DCD     DEFAULT_IRQHandler        ; 28: Reserved
-        DCD     DEFAULT_IRQHandler        ; 29: Reserved
-        DCD     DEFAULT_IRQHandler        ; 30: Reserved
-        DCD     DEFAULT_IRQHandler        ; 31: Reserved
-        DCD     TMR0_IRQHandler           ; 32: Timer 0
-        DCD     TMR1_IRQHandler           ; 33: Timer 1
-        DCD     TMR2_IRQHandler           ; 34: Timer 2
-        DCD     TMR3_IRQHandler           ; 35: Timer 3
-        DCD     UART0_IRQHandler          ; 36: UART0
-        DCD     UART1_IRQHandler          ; 37: UART1
-        DCD     I2C0_IRQHandler           ; 38: I2C0
-        DCD     I2C1_IRQHandler           ; 39: I2C1
-        DCD     PDMA_IRQHandler           ; 40: Peripheral DMA
+;        DCD     DEFAULT_IRQHandler        ; 26: Reserved
+;        DCD     DEFAULT_IRQHandler        ; 27: Reserved
+;        DCD     DEFAULT_IRQHandler        ; 28: Reserved
+;        DCD     DEFAULT_IRQHandler        ; 29: Reserved
+;        DCD     DEFAULT_IRQHandler        ; 30: Reserved
+;        DCD     DEFAULT_IRQHandler        ; 31: Reserved
+;        DCD     TMR0_IRQHandler           ; 32: Timer 0
+;        DCD     TMR1_IRQHandler           ; 33: Timer 1
+;        DCD     TMR2_IRQHandler           ; 34: Timer 2
+;        DCD     TMR3_IRQHandler           ; 35: Timer 3
+;        DCD     UART0_IRQHandler          ; 36: UART0
+;        DCD     UART1_IRQHandler          ; 37: UART1
+;        DCD     I2C0_IRQHandler           ; 38: I2C0
+;        DCD     I2C1_IRQHandler           ; 39: I2C1
+;        DCD     PDMA_IRQHandler           ; 40: Peripheral DMA
 ;        DCD     DEFAULT_IRQHandler        ; 41: Reserved
 ;        DCD     DEFAULT_IRQHandler        ; 42: EADC interrupt source 0
 ;        DCD     DEFAULT_IRQHandler        ; 43: EADC interrupt source 1

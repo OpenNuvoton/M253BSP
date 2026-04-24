@@ -192,7 +192,7 @@ typedef struct
      * |        |          |0 = CANFD0 power down mode Disabled.
      * |        |          |1 = CANFD0 power down mode Enabled.
      * |[7]     |CANFD0CKSTP|CANFD0 Clock Stop Acknowledgement (Read Only)
-     * |        |          |0 = CANFD0 clock didn’t stop.
+     * |        |          |0 = CANFD0 clock didn't stop.
      * |        |          |1 = CANFD0 clock stop.
      * @var SYS_T::BODCTL
      * Offset: 0x18  Brown-out Detector Control Register

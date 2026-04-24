@@ -98,7 +98,7 @@ extern "C"
 
 /* I2S Record Channel */
 #define SPII2S_MONO_RIGHT          (0UL)                               /*!< Record mono right channel \hideinitializer */
-#define SPII2S_MONO_LEFT           SPI_I2SCTL_RXLCH_Msk               /*!< Record mono left channel \hideinitializer */
+#define SPII2S_MONO_LEFT           (1UL)                               /*!< Record mono left channel \hideinitializer */
 
 /* I2S Channel */
 #define SPII2S_RIGHT               (0UL)                               /*!< Select right channel \hideinitializer */
@@ -364,9 +364,9 @@ extern "C"
 #define SPI_DISABLE(spi)   ((spi)->CTL &= ~SPI_CTL_SPIEN_Msk)
 
 /* Declare these inline functions here to avoid MISRA C 2004 rule 8.1 error */
-__STATIC_INLINE void SPII2S_ENABLE_TX_ZCD(SPI_T *i2s, uint32_t u32ChMask);
-__STATIC_INLINE void SPII2S_DISABLE_TX_ZCD(SPI_T *i2s, uint32_t u32ChMask);
-__STATIC_INLINE void SPII2S_SET_MONO_RX_CHANNEL(SPI_T *i2s, uint32_t u32Ch);
+static inline void SPII2S_ENABLE_TX_ZCD(SPI_T *i2s, uint32_t u32ChMask);
+static inline void SPII2S_DISABLE_TX_ZCD(SPI_T *i2s, uint32_t u32ChMask);
+static inline void SPII2S_SET_MONO_RX_CHANNEL(SPI_T *i2s, uint32_t u32Ch);
 
 /**
   * @brief  Enable zero cross detection function.
@@ -376,7 +376,7 @@ __STATIC_INLINE void SPII2S_SET_MONO_RX_CHANNEL(SPI_T *i2s, uint32_t u32Ch);
   *                    - \ref SPII2S_LEFT
   * @details This function will set RZCEN or LZCEN bit of SPI_I2SCTL register to enable zero cross detection function.
   */
-__STATIC_INLINE void SPII2S_ENABLE_TX_ZCD(SPI_T *i2s, uint32_t u32ChMask)
+static inline void SPII2S_ENABLE_TX_ZCD(SPI_T *i2s, uint32_t u32ChMask)
 {
     if (u32ChMask == SPII2S_RIGHT)
     {
@@ -396,7 +396,7 @@ __STATIC_INLINE void SPII2S_ENABLE_TX_ZCD(SPI_T *i2s, uint32_t u32ChMask)
   *                    - \ref SPII2S_LEFT
   * @details This function will clear RZCEN or LZCEN bit of SPI_I2SCTL register to disable zero cross detection function.
   */
-__STATIC_INLINE void SPII2S_DISABLE_TX_ZCD(SPI_T *i2s, uint32_t u32ChMask)
+static inline void SPII2S_DISABLE_TX_ZCD(SPI_T *i2s, uint32_t u32ChMask)
 {
     if (u32ChMask == SPII2S_RIGHT)
     {
@@ -513,11 +513,16 @@ __STATIC_INLINE void SPII2S_DISABLE_TX_ZCD(SPI_T *i2s, uint32_t u32ChMask)
   * @details This function selects the recording source channel of monaural mode.
   * \hideinitializer
   */
-__STATIC_INLINE void SPII2S_SET_MONO_RX_CHANNEL(SPI_T *i2s, uint32_t u32Ch)
+static inline void SPII2S_SET_MONO_RX_CHANNEL(SPI_T *i2s, uint32_t u32Ch)
 {
-    u32Ch == SPII2S_MONO_LEFT ?
-    (i2s->I2SCTL |= SPI_I2SCTL_RXLCH_Msk) :
-    (i2s->I2SCTL &= ~SPI_I2SCTL_RXLCH_Msk);
+    if (u32Ch == SPII2S_MONO_LEFT)
+    {
+        (i2s)->I2SCTL |= SPI_I2SCTL_RXLCH_Msk;
+    }
+    else
+    {
+        (i2s)->I2SCTL &= ~SPI_I2SCTL_RXLCH_Msk;
+    }
 }
 
 /**
@@ -576,24 +581,22 @@ __STATIC_INLINE void SPII2S_SET_MONO_RX_CHANNEL(SPI_T *i2s, uint32_t u32Ch)
   */
 #define SPII2S_GET_RX_FIFO_LEVEL(i2s) ( ((i2s)->I2SSTS & SPI_I2SSTS_RXCNT_Msk) >> SPI_I2SSTS_RXCNT_Pos )
 
-
-
 /* Function prototype declaration */
 uint32_t SPI_Open(SPI_T *spi, uint32_t u32MasterSlave, uint32_t u32SPIMode, uint32_t u32DataWidth, uint32_t u32BusClock);
-void SPI_Close(SPI_T *spi);
+void SPI_Close(const SPI_T *spi);
 void SPI_ClearRxFIFO(SPI_T *spi);
 void SPI_ClearTxFIFO(SPI_T *spi);
 void SPI_DisableAutoSS(SPI_T *spi);
 void SPI_EnableAutoSS(SPI_T *spi, uint32_t u32SSPinMask, uint32_t u32ActiveLevel);
 uint32_t SPI_SetBusClock(SPI_T *spi, uint32_t u32BusClock);
 void SPI_SetFIFO(SPI_T *spi, uint32_t u32TxThreshold, uint32_t u32RxThreshold);
-uint32_t SPI_GetBusClock(SPI_T *spi);
+uint32_t SPI_GetBusClock(const SPI_T *spi);
 void SPI_EnableInt(SPI_T *spi, uint32_t u32Mask);
 void SPI_DisableInt(SPI_T *spi, uint32_t u32Mask);
-uint32_t SPI_GetIntFlag(SPI_T *spi, uint32_t u32Mask);
+uint32_t SPI_GetIntFlag(const SPI_T *spi, uint32_t u32Mask);
 void SPI_ClearIntFlag(SPI_T *spi, uint32_t u32Mask);
-uint32_t SPI_GetStatus(SPI_T *spi, uint32_t u32Mask);
-uint32_t SPI_GetStatus2(SPI_T *spi, uint32_t u32Mask);
+uint32_t SPI_GetStatus(const SPI_T *spi, uint32_t u32Mask);
+uint32_t SPI_GetStatus2(const SPI_T *spi, uint32_t u32Mask);
 
 uint32_t SPII2S_Open(SPI_T *i2s, uint32_t u32MasterSlave, uint32_t u32SampleRate, uint32_t u32WordWidth, uint32_t u32Channels, uint32_t u32DataFormat);
 void SPII2S_Close(SPI_T *i2s);

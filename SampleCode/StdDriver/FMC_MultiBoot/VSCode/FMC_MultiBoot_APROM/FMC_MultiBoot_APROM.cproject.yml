@@ -19,6 +19,8 @@ project:
           Link:
             - --library_type=microlib --map --load_addr_map_info --symbols
             - --info sizes --info totals --strict --summary_stderr --info summarysizes
+          C-CPP:
+            - -Wconditional-uninitialized
         - for-compiler: GCC
           C:
             - -std=gnu11 -mthumb -masm-syntax-unified -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections
@@ -26,8 +28,10 @@ project:
             - -mthumb -fmessage-length=0 -fsigned-char --specs=nano.specs --specs=nosys.specs
             - -Wl,--gc-sections,-Map="$elf()$.map"
             - -Wl,--no-warn-rwx-segments
+          C-CPP:
+            - -Wmaybe-uninitialized
     - setup: Options for FMC_MultiBoot_Base
-      output :
+      output:
         base-name: FMC_MultiBoot_Base
       for-context: .Base
       define:
@@ -36,11 +40,15 @@ project:
         - for-compiler: AC6
           Link:
             - --pd="-DFLASH_BASE=0x0"
+          C-CPP:
+            - -Wconditional-uninitialized
         - for-compiler: GCC
           Link:
             - -Wl,--defsym="FLASH_BASE=0x0"
+          C-CPP:
+            - -Wmaybe-uninitialized
     - setup: Options for FMC_MultiBoot_Boot0
-      output :
+      output:
         base-name: FMC_MultiBoot_Boot0
       for-context: .Boot0
       define:
@@ -49,11 +57,15 @@ project:
         - for-compiler: AC6
           Link:
             - --pd="-DFLASH_BASE=0x4000"
+          C-CPP:
+            - -Wconditional-uninitialized
         - for-compiler: GCC
           Link:
             - -Wl,--defsym="FLASH_BASE=0x4000"
+          C-CPP:
+            - -Wmaybe-uninitialized
     - setup: Options for FMC_MultiBoot_Boot1
-      output :
+      output:
         base-name: FMC_MultiBoot_Boot1
       for-context: .Boot1
       define:
@@ -62,11 +74,15 @@ project:
         - for-compiler: AC6
           Link:
             - --pd="-DFLASH_BASE=0x8000"
+          C-CPP:
+            - -Wconditional-uninitialized
         - for-compiler: GCC
           Link:
             - -Wl,--defsym="FLASH_BASE=0x8000"
+          C-CPP:
+            - -Wmaybe-uninitialized
     - setup: Options for FMC_MultiBoot_Boot2
-      output :
+      output:
         base-name: FMC_MultiBoot_Boot2
       for-context: .Boot2
       define:
@@ -75,11 +91,15 @@ project:
         - for-compiler: AC6
           Link:
             - --pd="-DFLASH_BASE=0xC000"
+          C-CPP:
+            - -Wconditional-uninitialized
         - for-compiler: GCC
           Link:
             - -Wl,--defsym="FLASH_BASE=0xC000"
+          C-CPP:
+            - -Wmaybe-uninitialized
     - setup: Options for FMC_MultiBoot_Boot3
-      output :
+      output:
         base-name: FMC_MultiBoot_Boot3
       for-context: .Boot3
       define:
@@ -88,11 +108,15 @@ project:
         - for-compiler: AC6
           Link:
             - --pd="-DFLASH_BASE=0x10000"
+          C-CPP:
+            - -Wconditional-uninitialized
         - for-compiler: GCC
           Link:
             - -Wl,--defsym="FLASH_BASE=0x10000"
+          C-CPP:
+            - -Wmaybe-uninitialized
   linker:
-    - script: ./FMC_MultiBoot.sct
+    - script: ./FMC_MultiBoot.scf
       for-compiler: AC6
     - script: ./FMC_MultiBoot.ld
       for-compiler: GCC
